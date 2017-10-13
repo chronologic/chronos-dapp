@@ -15,15 +15,8 @@ html(lang='en')
       .container
         .navbar-header
           button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
-          a.navbar-brand(href='#') Chronologic dApp
-          dropdown
-            button#accounts.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
-              | Choose Account
-              span.caret
-            |   
-            ul#listAccounts.dropdown-menu(aria-labelledby='dropdownMenu1')
-              li : gdshtf
-              li: gkug
+          a.navbar-brand(href='#') Chronologic dApp 
+          span#accountInUse.label.label-success(style="margin:15px 15px; float:left; font-size:15px !important;") Refresh to load Account
     .container(style='margin-top:80px;')
       .panel-body#meta-mask-required
       form
@@ -31,7 +24,7 @@ html(lang='en')
           .form-group
             label(for='name') Name
             input#name.form-control(type='text')
-          .form-group
+          .form-group 
             label(for='symbol') Symbol
             input#symbol.form-control(type='text')
           .form-group
@@ -66,21 +59,21 @@ html(lang='en')
             label(for='halvingCycle') Halving Cycle
             input#halvingCycle.form-control(type='text')
           .form-group
-            label(for='teamLockPeriodInSec') Team Lock Period In Sec
+            label(for='teamLockPeriodInSec') T  eam Lock Period In Sec
             input#teamLockPeriodInSec.form-control(type='text')
           .form-group
             label(for='minBalanceToSell') Minimum Balance To Sell
             input#minBalanceToSell.form-control(type='text')
-        .row
-          button.btn.btn-success(type='submit', style='float: none; margin: 0 auto;', onclick='send()')  Submit
-        .panel.panel-default
-            .panel-body
-                .form-group
-                    label(for='tokenABI') Token ABI
-                    input#tokenABI.form-control(type='text',value=tokenABI)
-                .form-group
-                    label(for='bytecode') Bytecode
-                    input#bytecode.form-control(type='text',value=bytecode_data)    
+      .col-md-2.col-md-offset-5
+        button.btn.btn-success.col-md-12(type='button', style='margin: 5px;', onclick='send()')  Submit
+    .panel.panel-default
+      .panel-body
+        .form-group
+          label(for='tokenABI') Token ABI
+          input#tokenABI.form-control(type='text',value=tokenABI)
+        .form-group
+          label(for='bytecode') Bytecode
+          input#bytecode.form-control(type='text',value=bytecode_data)    
     // /.container
     // Bootstrap core JavaScript
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
@@ -89,6 +82,7 @@ html(lang='en')
     // Latest compiled and minified JavaScript
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
     script(src='https://unpkg.com/sweetalert/dist/sweetalert.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.1/bluebird.min.js')
     script.
       // MetaMask injects the web3 library for us.
       var accounts;
@@ -96,24 +90,42 @@ html(lang='en')
       var bytecode = $("#bytecode").val();
       var TokenContract;
       var contract;
-      var _tokenName = $("#name").val();
-      var _tokenSymbol = $("#symbol").val();
-      var _tokenDecimals = $("#tokenDecimal").val();
+      //- var _tokenName = $("#name").val();
+      //- var _tokenSymbol = $("#symbol").val();
+      //- var _tokenDecimals = $("#tokenDecimal").val();
+      //- var _tokenInitialSupply = 0;
+      //- var _tokenMintable = true;
+
+      //- var _maxAddresses = $("#maxAddresses").val();
+      //- var _firstTeamContributorId = $("#firstTeamContributionId").val();
+      //- var _totalTeamContributorIds = $("#totalTeamContributionId").val();
+      //- var _totalPostIcoContributorIds = $("#totalPostIcoContributorIds").val();
+
+      //- var _minMintingPower = $("#minMintingPower").val();
+      //- var _maxMintingPower = $("#maxMintingPower").val();
+      //- var _halvingCycle = $("#halvingCycle").val();
+
+      //- var _DayInSecs = '84600';
+      //- var _minBalanceToSell = $("#teamLockPeriodInSec").val();
+      //- var _teamLockPeriodInSec = $("#minBalanceToSell").val();
+      var _tokenName = "Day";
+      var _tokenSymbol = "DAY";
+      var _tokenDecimals = 18;
       var _tokenInitialSupply = 0;
       var _tokenMintable = true;
 
-      var _maxAddresses = $("#maxAddresses").val();
-      var _firstTeamContributorId = $("#firstTeamContributionId").val();
-      var _totalTeamContributorIds = $("#totalTeamContributionId").val();
-      var _totalPostIcoContributorIds = $("#totalPostIcoContributorIds").val();
+      var _maxAddresses = 7;
+      var _firstTeamContributorId = 4;
+      var _totalTeamContributorIds = 2;
+      var _totalPostIcoContributorIds = 2;
 
-      var _minMintingPower = $("#minMintingPower").val();
-      var _maxMintingPower = $("#maxMintingPower").val();
-      var _halvingCycle = $("#halvingCycle").val();
+      var _minMintingPower = 500000000000000000;
+      var _maxMintingPower = 1000000000000000000;
+      var _halvingCycle = 88;
 
-      var _DayInSecs = '84600';
-      var _minBalanceToSell = $("#teamLockPeriodInSec").val();
-      var _teamLockPeriodInSec = $("#minBalanceToSell").val();
+      var _DayInSecs = 84600;
+      var _minBalanceToSell = 8888;
+      var _teamLockPeriodInSec = 15780000;
 
       window.onload = function() {
         var a = jQuery.Deferred(), 
@@ -130,68 +142,101 @@ html(lang='en')
           } 
         else 
           window.web3 = new Web3(web3.currentProvider);
-          web3.version.getNetwork((err, netId) => {
-          switch (netId) {
-            case "1":
-              swal({
-                title: "Web3 Connected",
-                text: "You are connected to Mainnet.",
-                icon: "warning" 
-              });
-              break
-            case "2":
-              swal({
-                title: "Web3 Connected",
-                text: "You are connected to deprecated network. Switch to Mainnet.",
-                icon: "warning" 
-              });
-              break
-            case "3":
-              swal({
-                title: "Web3 Connected",
-                text: "You are connected to Testnet. Switch to Mainnet.",
-                icon: "warning" 
-              });
-              break
-            default:
-              swal({
-                title: "Web3 Connected",
-                text: "You are connected to an unknown network",
-                icon: "warning" 
-              });
-          }
+          window.web3.version.getNetwork((err, netId) => {
+            console.log("netiD");
+            switch (netId) {
+              case "1":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              case "2":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to deprecated network. Switch to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              case "3":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Testnet. Switch to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              default:
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to an unknown network",
+                  icon: "warning" 
+                });
+            }
         }) 
+      }
+
+      function getAccountBalance(tokenInstance, accountAddress) {
+          return new Promise(function(resolve, reject) {
+              tokenInstance.balanceOf(accountAddress, function(error, result) {
+                  if (error) {
+                      reject(error);
+                  } else {
+                      resolve(result);
+                  }
+              });
+          })
       }
 
       function loadAccounts(){
         console.log("loading Accounts");
         accounts = web3.eth.accounts;
-          console.log("accounts",accounts); 
-          $.each(accounts, function (i, item) {
-              console.log("Appending "+item);
-              $( "#listAccounts" ).append(item);
-          });
+        console.log(accounts);
+        $("#accountInUse").html("Account "+accounts);
+      }
+
+      function checkBalance(){
+        console.log("checkBalance");
+        var tokenInstance = web3.eth.contract(abi).at("0x7941bc77E1d6BD4628467b6cD3650F20F745dB06");
+        var balance = getAccountBalance(tokenInstance,accounts[0]);
+        console.log("balance",balance.valueOf());
       }
 
       function initiate(){
         console.log("initiating..");
-        TokenContract = web3.eth.contract(abi,function(){
-          //- console.log("Contract from ABI");
-        });
+        //- TokenContract = new web3.eth.contract(abi,function(){
+        //-   //- console.log("Contract from ABI");
+        //- });
+        TokenContract = web3.eth.contract(abi);
       }
       function deploy(){
-        console.log("deploying..",web3.eth.accounts[0]);
-        contract = TokenContract.new(_tokenName, _tokenSymbol, _tokenInitialSupply, _tokenDecimals, _tokenMintable, 
-            _maxAddresses, _firstTeamContributorId, _totalTeamContributorIds, _totalPostIcoContributorIds, 
-            _minMintingPower, _maxMintingPower, _halvingCycle, _minBalanceToSell, _DayInSecs, _teamLockPeriodInSec,{from: web3.eth.accounts[0], gas: 1000000, data: bytecode});
+        console.log("deploying..",TokenContract) ;
+        TokenContract.new(
+          {
+            from: web3.eth.accounts[0], 
+            data: bytecode, 
+            gas: '4700000'
+          }, function (e, contract){
+              console.log(e, contract);
+              if (typeof contract.address !== 'undefined') {
+                console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+              }
+        });
+
+        //- contract = TokenContract.new(_tokenName, _tokenSymbol, _tokenInitialSupply, _tokenDecimals, _tokenMintable, 
+        //-     _maxAddresses, _firstTeamContributorId, _totalTeamContributorIds, _totalPostIcoContributorIds, 
+        //-     _minMintingPower, _maxMintingPower, _halvingCycle, _minBalanceToSell, _DayInSecs, _teamLockPeriodInSec, { from: accounts[0], gas: 100000000, data: bytecode });
+        //- console.log("tXhASH",contract.transactionHash);   
       }
       function respond(){
+        console.log("responding...");
+        console.log(JSON.strigify(contract));
       }
 
       function send(){
         var d = jQuery.Deferred(), 
         p=d.promise();
         //You can chain jQuery promises using .then
-        p.then(initiate).then(deploy).then(respond);
+        p.then(checkBalance).then(initiate).then(deploy).then(respond);
         d.resolve();
       }
