@@ -120,6 +120,8 @@ contract DayToken is  ReleasableToken, MintableToken, UpgradeableToken {
     string public symbol; 
 
     uint8 public decimals; 
+    
+    bool public _mintable = false;
 
     /**
         * Construct the token.
@@ -128,14 +130,11 @@ contract DayToken is  ReleasableToken, MintableToken, UpgradeableToken {
         *
         * @param _name Token name
         * @param _symbol Token symbol - should be all caps
-        * @param _initialSupply How many tokens we start with
-        * @param _decimals Number of decimal places
         * _mintable Are new tokens created over the crowdsale or do we distribute only the initial supply?
         */
-    function DayToken(string _name, string _symbol, uint _initialSupply, uint8 _decimals, 
-        bool _mintable, uint _maxAddresses, uint _firstTeamContributorId, uint _totalTeamContributorIds, 
+    function DayToken(string _name, string _symbol, uint _maxAddresses, uint _firstTeamContributorId, uint _totalTeamContributorIds, 
         uint _totalPostIcoContributorIds, uint256 _minMintingPower, uint256 _maxMintingPower, uint _halvingCycle, 
-        uint256 _minBalanceToSell, uint256 _dayInSecs, uint256 _teamLockPeriodInSec) 
+        uint256 _minBalanceToSell, uint256 _teamLockPeriodInSec) 
         UpgradeableToken(msg.sender) {
         
         // Create any address, can be transferred
@@ -144,8 +143,8 @@ contract DayToken is  ReleasableToken, MintableToken, UpgradeableToken {
         owner = msg.sender; 
         name = _name; 
         symbol = _symbol;  
-        totalSupply = _initialSupply; 
-        decimals = _decimals; 
+        totalSupply = 0; 
+        decimals = 18; 
         // Create initially all balance on the team multisig
         balances[owner] = totalSupply; 
         maxAddresses = _maxAddresses;
@@ -173,7 +172,7 @@ contract DayToken is  ReleasableToken, MintableToken, UpgradeableToken {
         // use setMintingDec to change this
         mintingDec = 19;
         minBalanceToSell = _minBalanceToSell;
-        DayInSecs = _dayInSecs;
+        DayInSecs = 86400;
         teamLockPeriodInSec = _teamLockPeriodInSec;
         
         if (totalSupply > 0) {
