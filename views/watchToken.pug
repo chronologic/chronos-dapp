@@ -1,0 +1,408 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    title Watch
+    // Latest compiled and minified CSS
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u', crossorigin='anonymous')
+    // Optional theme
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css', integrity='sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp', crossorigin='anonymous')
+  body
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      .container
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+          a.navbar-brand(href='#',value=tokenAddress)
+          span#accountInUse.label.label-light(style="margin:15px 15px; float:left; font-size:15px !important;") Refresh to load Account
+    .container(style='margin-top:80px;')
+        .row.panel.panel-default   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Contract Address
+                        |         
+                        p.card-text #{tokenAddress}
+            |
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Token Symbol
+                        |         
+                        p.card-text#_symbol DAY
+            |    
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Supply
+                        |         
+                        p.card-text 1000000
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Token Decimal
+                        |         
+                        p.card-text#_tokenDecimal 18
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Days in seconds
+                        |         
+                        p.card-text 86400
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Day Count
+                        |         
+                        p.card-text#_dayCount 11
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Chrono Era
+                        |         
+                        p.card-text#_halvingCycle 88
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Day Token Activated
+                        |         
+                        p.card-text#_dayTokenActivated True
+            |
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Max Addresses
+                        |         
+                        p.card-text#_maxAddresses 3333
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title First Contributor ID
+                        |         
+                        p.card-text#_firstContributorID 3220
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title First Post ICO Contributor ID
+                        |         
+                        p.card-text#_firstPostICOContributorID 1000000
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title First Team Contributor ID
+                        |         
+                        p.card-text#_firstTeamContributorID 18
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Maximum Minting Power
+                        |         
+                        p.card-text#_maxMintingPower 5 ETH
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Minimum Minting Power
+                        |         
+                        p.card-text#_minMintingPower 2 ETH
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Initial Block Timestamp
+                        |         
+                        p.card-text#_initialBlockTimestamp 39222302
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Team LockIn Period
+                        |         
+                        p.card-text#_teamLockingPeriod 1 year 6 months
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Normal Contributor ID
+                        |         
+                        p.card-text#_totalNormalContributorID 3117
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Normal Contributor ID Allocated
+                        |         
+                        p.card-text#_totalNormalContributorIDAllocated 13
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Team Contributor ID
+                        |         
+                        p.card-text#_totalTeamContributorID 2293
+            |   
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Team Contributor ID Allocated
+                        |         
+                        p.card-text#_totalTeamContributorIDAllocated 15            
+            |
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Post ICO Contributor ID
+                        |         
+                        p.card-text#_totalPostIcoContributorID 15            
+            |
+            .col-sm-4
+                .card
+                    .card-body
+                        h5.card-title Total Post ICO Contributor Id Allocated
+                        |         
+                        p.card-text#_totalPostIcoContributorIDAllocated 15
+            .col-sm-12(style="padding-bottom:10px;")
+                .card
+                    .card-body
+                       a.btn.btn-danger(href='#',onclick="release()", style="float:right;") Release Tokens                                                                
+        .row    
+            .col-sm-12.panel.panel-default
+                .card
+                    .card-body
+                        h4.card-title Allocate Time Mints
+                        .form-group
+                            label(for='toAddress') Receiver's Address
+                            input#toAddress.form-control(type='text')
+                        .form-group
+                            label(for='tokenAmount') Tokens
+                            input#tokenAmount.form-control(type='text')
+                        .form-group
+                            label(for='weiAmount') Wei Amount
+                            input#weiAmount.form-control(type='text')
+                        .form-group    
+                            label.form-check-label
+                                input.form-check-input(type='checkbox')
+                                |    Is this a team member? 
+                        .form-group      
+                            label.form-check-label
+                                input.form-check-input(type='checkbox')
+                                |   Is this a test address?     
+                        a.btn.btn-primary(href='#',onclick="allocate()") Allocate    
+
+        .panel.panel-default
+            .panel-body
+                .form-group
+                label(for='tokenABI') Token ABI
+                input#tokenABI.form-control(type='text',value=tokenABI)
+                .form-group
+                label(for='bytecode') Bytecode
+                input#bytecode.form-control(type='text',value=bytecode_data)    
+    // /.container
+    // Bootstrap core JavaScript
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    script(src='https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js')
+    script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js')
+    // Latest compiled and minified JavaScript
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+    script(src='https://unpkg.com/sweetalert/dist/sweetalert.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.1/bluebird.min.js')
+    
+    script.
+      // MetaMask injects the web3 library for us.
+      var accounts;
+      var abi = JSON.parse($("#tokenABI").val());
+      var bytecode = $("#bytecode").val();
+      var TokenContract;
+      var contract;
+      //- var _tokenName = $("#name").val();
+      //- var _tokenSymbol = $("#symbol").val();
+      //- var _tokenDecimals = $("#tokenDecimal").val();
+      //- var _tokenInitialSupply = 0;
+      //- var _tokenMintable = true;
+
+      //- var _maxAddresses = $("#maxAddresses").val();
+      //- var _firstTeamContributorId = $("#firstTeamContributionId").val();
+      //- var _totalTeamContributorIds = $("#totalTeamContributionId").val();
+      //- var _totalPostIcoContributorIds = $("#totalPostIcoContributorIds").val();
+
+      //- var _minMintingPower = $("#minMintingPower").val();
+      //- var _maxMintingPower = $("#maxMintingPower").val();
+      //- var _halvingCycle = $("#halvingCycle").val();
+
+      //- var _DayInSecs = '84600';
+      //- var _minBalanceToSell = $("#teamLockPeriodInSec").val();
+      //- var _teamLockPeriodInSec = $("#minBalanceToSell").val();
+      var _tokenName = "Day";
+      var _tokenSymbol = "DAY";
+      var _tokenDecimals = 18;
+      var _tokenInitialSupply = 0;
+      var _tokenMintable = true;
+
+      var _maxAddresses = 7;
+      var _firstTeamContributorId = 4;
+      var _totalTeamContributorIds = 2;
+      var _totalPostIcoContributorIds = 2;
+
+      var _minMintingPower = 500000000000000000;
+      var _maxMintingPower = 1000000000000000000;
+      var _halvingCycle = 88;
+
+      var _DayInSecs = 84600;
+      var _minBalanceToSell = 8888;
+      var _teamLockPeriodInSec = 15780000;
+
+      window.onload = function() {
+        var a = jQuery.Deferred(), 
+        b=a.promise();
+        //You can chain jQuery promises using .then
+        b.then(connectWeb3).then(loadAccounts);
+        a.resolve();
+      }
+      function watchToken(){
+        swal({
+          text: 'Network Address',
+          content: "input",
+          button: {
+            text: "Watch!",
+            closeModal: false,
+          },
+        })
+        .then(name => {
+          if (!name) throw null;
+        
+          return fetch(`https://itunes.apple.com/search?term=${name}&entity=movie`);
+        })
+        //- swal({
+        //-   title: 'Network Address',
+        //-   content: "input",
+        //-   showCancelButton: true,
+        //-   confirmButtonText: 'Submit',
+        //-   showLoaderOnConfirm: true,
+        //-   preConfirm: function (email) {
+        //-     return new Promise(function (resolve, reject) {
+        //-       setTimeout(function() {
+        //-         if (email === 'taken@example.com') {
+        //-           reject('This email is already taken.')
+        //-         } else {
+        //-           resolve()
+        //-         }
+        //-       }, 2000)
+        //-     })
+        //-   },
+        //-   allowOutsideClick: false
+        //- })
+      };
+
+      function connectWeb3(){
+        if (typeof web3 === 'undefined') {
+          document.getElementById('meta-mask-required').innerHTML = '<b>You need <a href="https://metamask.io/">MetaMask</a> browser plugin to run this contract</b>'
+          window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+          } 
+        else 
+          window.web3 = new Web3(web3.currentProvider);
+          window.web3.version.getNetwork((err, netId) => {
+            console.log("netiD");
+            switch (netId) {
+              case "1":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              case "2":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to deprecated network. Switch to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              case "3":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Testnet. Switch to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              default:
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to an unknown network",
+                  icon: "warning" 
+                });
+            }
+        }) 
+      }
+
+      function getAccountBalance(tokenInstance, accountAddress) {
+          return new Promise(function(resolve, reject) {
+              tokenInstance.balanceOf(accountAddress, function(error, result) {
+                  if (error) {
+                      reject(error);
+                  } else {
+                      resolve(result);
+                  }
+              });
+          })
+      }
+
+      function loadAccounts(){
+        console.log("loading Accounts");
+        accounts = web3.eth.accounts;
+        console.log(accounts);
+        $("#accountInUse").html("Account "+accounts);
+      }
+
+      function checkBalance(){
+        console.log("checkBalance");
+        var tokenInstance = web3.eth.contract(abi).at("0x7941bc77E1d6BD4628467b6cD3650F20F745dB06");
+        var balance = getAccountBalance(tokenInstance,accounts[0]);
+        console.log("balance",balance.valueOf());
+      }
+
+      function initiate(){
+        console.log("initiating..");
+        //- TokenContract = new web3.eth.contract(abi,function(){
+        //-   //- console.log("Contract from ABI");
+        //- });
+        TokenContract = web3.eth.contract(abi);
+      }
+      function deploy(){
+        console.log("deploying..",TokenContract) ;
+        TokenContract.new(
+          {
+            from: web3.eth.accounts[0], 
+            data: bytecode, 
+            gas: '4700000'
+          }, function (e, contract){
+              console.log(e, contract);
+              if (typeof contract.address !== 'undefined') {
+                console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+              }
+        });
+
+        //- contract = TokenContract.new(_tokenName, _tokenSymbol, _tokenInitialSupply, _tokenDecimals, _tokenMintable, 
+        //-     _maxAddresses, _firstTeamContributorId, _totalTeamContributorIds, _totalPostIcoContributorIds, 
+        //-     _minMintingPower, _maxMintingPower, _halvingCycle, _minBalanceToSell, _DayInSecs, _teamLockPeriodInSec, { from: accounts[0], gas: 100000000, data: bytecode });
+        //- console.log("tXhASH",contract.transactionHash);   
+      }
+      function respond(){
+        console.log("responding...");
+        console.log(JSON.strigify(contract));
+      }
+
+      function send(){
+        var d = jQuery.Deferred(), 
+        p=d.promise();
+        //You can chain jQuery promises using .then
+        p.then(checkBalance).then(initiate).then(deploy).then(respond);
+        d.resolve();
+      }
