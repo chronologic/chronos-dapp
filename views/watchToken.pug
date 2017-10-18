@@ -15,7 +15,7 @@ html(lang='en')
       .container
         .navbar-header
           button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
-          a.navbar-brand(href='#',value=tokenAddress)
+          a.navbar-brand(href='#')
           span#accountInUse.label.label-light(style="margin:15px 15px; float:left; font-size:15px !important;") Refresh to load Account
     .container(style='margin-top:80px;')
         .row.panel.panel-default   
@@ -24,130 +24,130 @@ html(lang='en')
                     .card-body
                         h5.card-title Contract Address
                         |         
-                        p.card-text #{tokenAddress}
+                        p.card-text#tokenAddress #{tokenAddress}
             |
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Token Symbol
                         |         
-                        p.card-text#_symbol DAY
+                        p.card-text#_symbol
             |    
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Total Supply
                         |         
-                        p.card-text 1000000
+                        p.card-text#_totalSupply
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Token Decimal
                         |         
-                        p.card-text#_tokenDecimal 18
+                        p.card-text#_tokenDecimal
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Days in seconds
                         |         
-                        p.card-text 86400
+                        p.card-text#_daysInSec
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Total Day Count
                         |         
-                        p.card-text#_dayCount 11
+                        p.card-text#_dayCount
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Chrono Era
                         |         
-                        p.card-text#_halvingCycle 88
+                        p.card-text#_halvingCycle
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Day Token Activated
                         |         
-                        p.card-text#_dayTokenActivated True
+                        p.card-text#_dayTokenActivated
             |
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Max Addresses
                         |         
-                        p.card-text#_maxAddresses 3333
+                        p.card-text#_maxAddresses
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title First Contributor ID
                         |         
-                        p.card-text#_firstContributorID 3220
+                        p.card-text#_firstContributorID
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title First Post ICO Contributor ID
                         |         
-                        p.card-text#_firstPostICOContributorID 1000000
+                        p.card-text#_firstPostICOContributorID
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title First Team Contributor ID
                         |         
-                        p.card-text#_firstTeamContributorID 18
+                        p.card-text#_firstTeamContributorID
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Maximum Minting Power
                         |         
-                        p.card-text#_maxMintingPower 5 ETH
+                        p.card-text#_maxMintingPower
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Minimum Minting Power
                         |         
-                        p.card-text#_minMintingPower 2 ETH
+                        p.card-text#_minMintingPower
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Initial Block Timestamp
                         |         
-                        p.card-text#_initialBlockTimestamp 39222302
+                        p.card-text#_initialBlockTimestamp
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Team LockIn Period
                         |         
-                        p.card-text#_teamLockingPeriod 1 year 6 months
+                        p.card-text#_teamLockingPeriod
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Total Normal Contributor ID
                         |         
-                        p.card-text#_totalNormalContributorID 3117
+                        p.card-text#_totalNormalContributorID
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Total Normal Contributor ID Allocated
                         |         
-                        p.card-text#_totalNormalContributorIDAllocated 13
+                        p.card-text#_totalNormalContributorIDAllocated
             |   
             .col-sm-4
                 .card
                     .card-body
                         h5.card-title Total Team Contributor ID
                         |         
-                        p.card-text#_totalTeamContributorID 2293
+                        p.card-text#_totalTeamContributorID
             |   
             .col-sm-4
                 .card
@@ -161,7 +161,7 @@ html(lang='en')
                     .card-body
                         h5.card-title Total Post ICO Contributor ID
                         |         
-                        p.card-text#_totalPostIcoContributorID 15            
+                        p.card-text#_totalPostIcoContributorID          
             |
             .col-sm-4
                 .card
@@ -187,6 +187,9 @@ html(lang='en')
                         .form-group
                             label(for='weiAmount') Wei Amount
                             input#weiAmount.form-control(type='text')
+                        .form-group
+                            label(for='timeMindId') Timemint ID
+                            input#timeMintId.form-control(type='text')   
                         .form-group    
                             label.form-check-label
                                 input.form-check-input(type='checkbox')
@@ -195,7 +198,7 @@ html(lang='en')
                             label.form-check-label
                                 input.form-check-input(type='checkbox')
                                 |   Is this a test address?     
-                        a.btn.btn-primary(href='#',onclick="allocate()") Allocate    
+                        a.btn.btn-primary(href='#',onclick="allocateTimemints()") Allocate    
 
         .panel.panel-default
             .panel-body
@@ -220,86 +223,350 @@ html(lang='en')
       var accounts;
       var abi = JSON.parse($("#tokenABI").val());
       var bytecode = $("#bytecode").val();
+      var tokenNetworkAddress = "0x7941bc77E1d6BD4628467b6cD3650F20F745dB06";
+       var tokenInstance;
       var TokenContract;
       var contract;
-      //- var _tokenName = $("#name").val();
-      //- var _tokenSymbol = $("#symbol").val();
-      //- var _tokenDecimals = $("#tokenDecimal").val();
-      //- var _tokenInitialSupply = 0;
-      //- var _tokenMintable = true;
 
-      //- var _maxAddresses = $("#maxAddresses").val();
-      //- var _firstTeamContributorId = $("#firstTeamContributionId").val();
-      //- var _totalTeamContributorIds = $("#totalTeamContributionId").val();
-      //- var _totalPostIcoContributorIds = $("#totalPostIcoContributorIds").val();
-
-      //- var _minMintingPower = $("#minMintingPower").val();
-      //- var _maxMintingPower = $("#maxMintingPower").val();
-      //- var _halvingCycle = $("#halvingCycle").val();
-
-      //- var _DayInSecs = '84600';
-      //- var _minBalanceToSell = $("#teamLockPeriodInSec").val();
-      //- var _teamLockPeriodInSec = $("#minBalanceToSell").val();
-      var _tokenName = "Day";
-      var _tokenSymbol = "DAY";
-      var _tokenDecimals = 18;
-      var _tokenInitialSupply = 0;
-      var _tokenMintable = true;
-
-      var _maxAddresses = 7;
-      var _firstTeamContributorId = 4;
-      var _totalTeamContributorIds = 2;
-      var _totalPostIcoContributorIds = 2;
-
-      var _minMintingPower = 500000000000000000;
-      var _maxMintingPower = 1000000000000000000;
-      var _halvingCycle = 88;
-
-      var _DayInSecs = 84600;
-      var _minBalanceToSell = 8888;
-      var _teamLockPeriodInSec = 15780000;
 
       window.onload = function() {
         var a = jQuery.Deferred(), 
         b=a.promise();
         //You can chain jQuery promises using .then
-        b.then(connectWeb3).then(loadAccounts);
+        b.then(connectWeb3).then(loadAccounts).then(getInstance).then(getAllValues);
         a.resolve();
       }
-      function watchToken(){
-        swal({
-          text: 'Network Address',
-          content: "input",
-          button: {
-            text: "Watch!",
-            closeModal: false,
-          },
-        })
-        .then(name => {
-          if (!name) throw null;
-        
-          return fetch(`https://itunes.apple.com/search?term=${name}&entity=movie`);
-        })
-        //- swal({
-        //-   title: 'Network Address',
-        //-   content: "input",
-        //-   showCancelButton: true,
-        //-   confirmButtonText: 'Submit',
-        //-   showLoaderOnConfirm: true,
-        //-   preConfirm: function (email) {
-        //-     return new Promise(function (resolve, reject) {
-        //-       setTimeout(function() {
-        //-         if (email === 'taken@example.com') {
-        //-           reject('This email is already taken.')
-        //-         } else {
-        //-           resolve()
-        //-         }
-        //-       }, 2000)
-        //-     })
-        //-   },
-        //-   allowOutsideClick: false
-        //- })
-      };
+
+      function getInstance(){
+        tokenInstance = window.web3.eth.contract(abi).at(tokenNetworkAddress);
+      }
+
+      function getSymbol(){
+          return new Promise(function(resolve, reject) {
+              tokenInstance.symbol.call(function(error, result) {
+                  if (error) {
+                      $('#_symbol').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_symbol').html(result);
+                       console.log(result);
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getTotalSupply(){
+          return new Promise(function(resolve, reject) {
+              tokenInstance.getTotalSupply.call(function(error, result) {
+                  if (error) {
+                      $('#_totalSupply').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalSupply').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTokenDecimal(){
+          return new Promise(function(resolve, reject) {
+              tokenInstance.decimals.call(function(error, result) {
+                  if (error) {
+                      $('#_tokenDecimal').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_tokenDecimal').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getDayInSec(){
+          new Promise(function(resolve,result){
+              tokenInstance.DayInSecs.call(function(error, result) {
+                  if (error) {
+                      $('#_daysInSec').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_daysInSec').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getFirstContributorID(){
+          return new Promise(function(resolve,result){
+              tokenInstance.firstContributorId.call(function(error, result) {
+                  if (error) {
+                      $('#_firstContributorID').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_firstContributorID  ').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getFirstPostIcoContributorId(){
+           return new Promise(function(resolve,result){
+              tokenInstance.firstPostIcoContributorId.call(function(error, result) {
+                  if (error) {
+                      $('#_firstPostIcoContributorID').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_firstPostIcoContributorID').html(result.valueOf());;
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getFirstTeamContributorId(){
+          return new Promise(function(resolve,result){
+              tokenInstance.firstTeamContributorId.call(function(error, result) {
+                  if (error) {
+                      $('#_firstTeamContributorID').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_firstTeamContributorID').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getDayCount(){
+          return new Promise(function(resolve,result){
+              tokenInstance.getDayCount.call(function(error, result) {
+                  if (error) {
+                      $('#_dayCount').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_dayCount').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalTeamContributorIdsAllocated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalTeamContributorIdsAllocated.call(function(error, result) {
+                  if (error) {
+                      $('#_totalTeamContributorIdsAllocated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalTeamContributorIdsAllocated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalTeamContributorIds(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalTeamContributorIds.call(function(error, result) {
+                  if (error) {
+                      $('#_totalTeamContributorIds').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalTeamContributorIds').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getTotalPostIcoContributorIdsAllocated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalPostIcoContributorIdsAllocated.call(function(error, result) {
+                  if (error) {
+                      $('#_totalPostIcoContributorIdsAllocated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalPostIcoContributorIdsAllocated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalPostIcoContributorIds(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalPostIcoContributorIds.call(function(error, result) {
+                  if (error) {
+                      $('#_totalPostIcoContributorIds').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalPostIcoContributorIds').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getTotalNormalContributorIdsAllocated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalNormalContributorIdsAllocated.call(function(error, result) {
+                  if (error) {
+                      $('#_totalNormalContributorIdsAllocated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalNormalContributorIdsAllocated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalNormalContributorIds(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalNormalContributorIds.call(function(error, result) {
+                  if (error) {
+                      $('#_totalNormalContributorIds').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalNormalContributorIds').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getTeamLockPeriodInSec(){
+          return new Promise(function(resolve,result){
+              tokenInstance.teamLockPeriodInSec.call(function(error, result) {
+                  if (error) {
+                      $('#_teamLockPeriodInSec').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_teamLockPeriodInSec').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function isReleased(){
+          return new Promise(function(resolve,result){
+              tokenInstance.released.call(function(error, result) {
+                  if (error) {
+                      $('#_released').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_released').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getMinMintingPower(){
+          return new Promise(function(resolve,result){
+              tokenInstance.minMintingPower.call(function(error, result) {
+                  if (error) {
+                      $('#_minMintingPower').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_minMintingPower').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getMaxMintingPower(){
+          return new Promise(function(resolve,result){
+              tokenInstance.maxMintingPower.call(function(error, result) {
+                  if (error) {
+                      $('#_maxMintingPower').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_maxMintingPower').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getMaxAddresses(){
+          return new Promise(function(resolve,result){
+              tokenInstance.maxAddresses.call(function(error, result) {
+                  if (error) {
+                      $('#_maxAddresses').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_maxAddresses').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getIsDayTokenActivated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.isDayTokenActivated.call(function(error, result) {
+                  if (error) {
+                      $('#_isDayTokenActivated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_isDayTokenActivated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getHalvingCycle(){
+          return new Promise(function(resolve,result){
+              tokenInstance.halvingCycle.call(function(error, result) {
+                  if (error) {
+                      $('#_halvingCycle').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_halvingCycle').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+    
+
+      function getAllValues(){
+          getSymbol();
+          getTotalSupply();
+          getTokenDecimal();
+          getDayInSec();
+          getFirstContributorID();
+          getFirstPostIcoContributorId();
+          getFirstTeamContributorId();
+          getDayCount();
+          getTotalTeamContributorIdsAllocated();
+          getTotalTeamContributorIds();
+          getTotalPostIcoContributorIdsAllocated();
+          getTotalPostIcoContributorIds();
+          getTotalNormalContributorIdsAllocated();
+          getTotalNormalContributorIds();
+          getTeamLockPeriodInSec();
+          isReleased();
+          getMinMintingPower();
+          getMaxMintingPower();
+          getMaxAddresses();
+          getIsDayTokenActivated();
+          getHalvingCycle();
+      }
+
+      function allocateTimemints(){
+          console.log("allocating timemints");
+          var accountTo = $('#toAddress').val();
+          var timeMintId = $('#timeMintId').val();
+          var tokenAmount = $('#tokenAmount').val();
+          var weiPrice = $('#weiAmount').val();
+          var txHash = tokenInstance.allocateNormalTimeMints(accountTo,0,timeMintId,tokenAmount,weiPrice, function(error, result){
+                if(!error)
+                    swal({
+                        title: "Transaction Mined",
+                        text: "TxHash "+result
+                    });
+                else
+                    console.error(error);
+            });
+      }
+      
 
       function connectWeb3(){
         if (typeof web3 === 'undefined') {
@@ -341,6 +608,7 @@ html(lang='en')
             }
         }) 
       }
+      
 
       function getAccountBalance(tokenInstance, accountAddress) {
           return new Promise(function(resolve, reject) {
@@ -361,48 +629,43 @@ html(lang='en')
         $("#accountInUse").html("Account "+accounts);
       }
 
-      function checkBalance(){
-        console.log("checkBalance");
-        var tokenInstance = web3.eth.contract(abi).at("0x7941bc77E1d6BD4628467b6cD3650F20F745dB06");
-        var balance = getAccountBalance(tokenInstance,accounts[0]);
-        console.log("balance",balance.valueOf());
-      }
+    //-   function checkBalance(){
+    //-     console.log("checkBalance");
+    //-     var tokenInstance = web3.eth.contract(abi).at("0x7941bc77E1d6BD4628467b6cD3650F20F745dB06");
+    //-     var balance = getAccountBalance(tokenInstance,accounts[0]);
+    //-     console.log("balance",balance.valueOf());
+    //-   }
 
-      function initiate(){
-        console.log("initiating..");
-        //- TokenContract = new web3.eth.contract(abi,function(){
-        //-   //- console.log("Contract from ABI");
-        //- });
-        TokenContract = web3.eth.contract(abi);
-      }
-      function deploy(){
-        console.log("deploying..",TokenContract) ;
-        TokenContract.new(
-          {
-            from: web3.eth.accounts[0], 
-            data: bytecode, 
-            gas: '4700000'
-          }, function (e, contract){
-              console.log(e, contract);
-              if (typeof contract.address !== 'undefined') {
-                console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
-              }
-        });
+    //-   function initiate(){
+    //-     console.log("initiating..");
+    //-     //- TokenContract = new web3.eth.contract(abi,function(){
+    //-     //-   //- console.log("Contract from ABI");
+    //-     //- });
+    //-     TokenContract = web3.eth.contract(abi);
+    //-   }
+    //-   function deploy(){
+    //-     console.log("deploying..",TokenContract) ;
+    //-     TokenContract.new(
+    //-       {
+    //-         from: web3.eth.accounts[0], 
+    //-         data: bytecode, 
+    //-         gas: '4700000'
+    //-       }, function (e, contract){
+    //-           console.log(e, contract);
+    //-           if (typeof contract.address !== 'undefined') {
+    //-             console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+    //-           }
+    //-     });
+    //-   }
+    //-   function respond(){
+    //-     console.log("responding...");
+    //-     console.log(JSON.strigify(contract));
+    //-   }
 
-        //- contract = TokenContract.new(_tokenName, _tokenSymbol, _tokenInitialSupply, _tokenDecimals, _tokenMintable, 
-        //-     _maxAddresses, _firstTeamContributorId, _totalTeamContributorIds, _totalPostIcoContributorIds, 
-        //-     _minMintingPower, _maxMintingPower, _halvingCycle, _minBalanceToSell, _DayInSecs, _teamLockPeriodInSec, { from: accounts[0], gas: 100000000, data: bytecode });
-        //- console.log("tXhASH",contract.transactionHash);   
-      }
-      function respond(){
-        console.log("responding...");
-        console.log(JSON.strigify(contract));
-      }
-
-      function send(){
-        var d = jQuery.Deferred(), 
-        p=d.promise();
-        //You can chain jQuery promises using .then
-        p.then(checkBalance).then(initiate).then(deploy).then(respond);
-        d.resolve();
-      }
+    //-   function send(){
+    //-     var d = jQuery.Deferred(), 
+    //-     p=d.promise();
+    //-     //You can chain jQuery promises using .then
+    //-     p.then(checkBalance).then(initiate).then(deploy).then(respond);
+    //-     d.resolve();
+    //-   }
