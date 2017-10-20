@@ -126,7 +126,7 @@ html(lang='en')
                     .card-body
                         h5.card-title Team LockIn Period
                         |         
-                        p.card-text#_teamLockingPeriod
+                        p.card-text#_teamLockPeriodInSec
             |   
             .col-sm-4
                 .card
@@ -169,7 +169,7 @@ html(lang='en')
                         h5.card-title Total Post ICO Contributor Id Allocated
                         |         
                         p.card-text#_totalPostIcoContributorIDAllocated 15
-            .col-sm-12(style="padding-bottom:10px;")
+            .col-sm-12#releaseButton(style="padding-bottom:10px;")
                 .card
                     .card-body
                        a.btn.btn-danger(href='#',onclick="release()", style="float:right;") Release Tokens                                                                
@@ -184,7 +184,7 @@ html(lang='en')
                         .form-group
                             label(for='tokenAmount') Tokens
                             input#tokenAmount.form-control(type='text')
-                        .form-group
+                        .form-group#weiBlock
                             label(for='weiAmount') Wei Amount
                             input#weiAmount.form-control(type='text')
                         .form-group
@@ -227,6 +227,8 @@ html(lang='en')
        var tokenInstance;
       var TokenContract;
       var contract;
+      var initialBlockTimestamp;
+      var baseNetworkURL;
 
 
       window.onload = function() {
@@ -265,15 +267,18 @@ html(lang='en')
           getMaxAddresses();
           getIsDayTokenActivated();
           getHalvingCycle();
+          getInitialBlockTimestamp();
       }
 
       function teamTimemints(){
           $('#isTeam').click(function(){
               if($(this).is(":checked")){
                 $('#testLabel').css("display","block");
+                $('#weiBlock').css("display","none");
             }
             else if($(this).is(":not(:checked)")){
                 $('#testLabel').css("display","none");
+                $('#weiBlock').css("display","block");
             }
         });
       }
@@ -317,7 +322,8 @@ html(lang='en')
                 if(!error)
                     swal({
                         title: "Timemint Allocation Tx Status",
-                        text: "TxHash "+result
+                        text: "TxHash "+result,
+                        icon: "success"
                     });
                 else
                     console.error(error);
@@ -339,8 +345,9 @@ html(lang='en')
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to Mainnet.",
-                  icon: "warning" 
+                  icon: "success" 
                 });
+                baseNetworkURL = "https://etherscan.io/"
                 break
               case "2":
                 swal({
@@ -348,6 +355,7 @@ html(lang='en')
                   text: "You are connected to deprecated network. Switch to Mainnet.",
                   icon: "warning" 
                 });
+                baseNetworkURL = "https://etherscan.io/"
                 break
               case "3":
                 swal({
@@ -355,6 +363,7 @@ html(lang='en')
                   text: "You are connected to Testnet. Switch to Mainnet.",
                   icon: "warning" 
                 });
+                baseNetworkURL = "https://ropsten.etherscan.io/"
                 break
               default:
                 swal({
@@ -384,6 +393,39 @@ html(lang='en')
         accounts = web3.eth.accounts;
         console.log(accounts);
         $("#accountInUse").html("Account "+accounts);
+      }
+
+      function release(){
+          if(initialBlockTimestamp)
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to allocate timemints after this!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                }).then(confirm => {
+                    if(confirm)
+                        var txHash = tokenInstance.releaseToken(initialBlockTimestamp, function(error, result){
+                            if(!error){
+                                txUrl = baseNetworkURL+"tx/"+result;
+                                swal({
+                                    title: "Token Release Tx Status",
+                                    text: 'TxHash '+result
+                                });
+                            }
+                            else
+                                swal({
+                                    title: "Could not complete transaction",
+                                    type:"error"
+                                });
+                        });
+                });
+            else     
+                swal({
+                    title: "Error Occured",
+                    type: 'warning',
+                    text: "Cannot release tokens"
+                });
       }
 
       function getSymbol(){
@@ -460,11 +502,11 @@ html(lang='en')
            return new Promise(function(resolve,result){
               tokenInstance.firstPostIcoContributorId.call(function(error, result) {
                   if (error) {
-                      $('#_firstPostIcoContributorID').html('Oops');;
+                      $('#_firstPostICOContributorID').html('Oops');;
                       reject(error);
                   }
                    else {
-                       $('#_firstPostIcoContributorID').html(result.valueOf());;
+                       $('#_firstPostICOContributorID').html(result.valueOf());;
                        resolve(result);}
               });
           });
@@ -501,11 +543,11 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.totalTeamContributorIdsAllocated.call(function(error, result) {
                   if (error) {
-                      $('#_totalTeamContributorIdsAllocated').html('Oops');
+                      $('#_totalTeamContributorIDAllocated').html('Oops');
                       reject(error);
                   }
                    else {
-                       $('#_totalTeamContributorIdsAllocated').html(result.valueOf());
+                       $('#_totalTeamContributorIDAllocated').html(result.valueOf());
                        resolve(result);}
               });
           });
@@ -514,11 +556,11 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.totalTeamContributorIds.call(function(error, result) {
                   if (error) {
-                      $('#_totalTeamContributorIds').html('Oops');
+                      $('#_totalTeamContributorID').html('Oops');
                       reject(error);
                   }
                    else {
-                       $('#_totalTeamContributorIds').html(result.valueOf());
+                       $('#_totalTeamContributorID').html(result.valueOf());
                        resolve(result);}
               });
           });
@@ -528,11 +570,11 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.totalPostIcoContributorIdsAllocated.call(function(error, result) {
                   if (error) {
-                      $('#_totalPostIcoContributorIdsAllocated').html('Oops');
+                      $('#_totalPostIcoContributorIDAllocated').html('Oops');
                       reject(error);
                   }
                    else {
-                       $('#_totalPostIcoContributorIdsAllocated').html(result.valueOf());
+                       $('#_totalPostIcoContributorIDAllocated').html(result.valueOf());
                        resolve(result);}
               });
           });
@@ -541,11 +583,11 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.totalPostIcoContributorIds.call(function(error, result) {
                   if (error) {
-                      $('#_totalPostIcoContributorIds').html('Oops');;
+                      $('#_totalPostIcoContributorID').html('Oops');;
                       reject(error);
                   }
                    else {
-                       $('#_totalPostIcoContributorIds').html(result.valueOf());
+                       $('#_totalPostIcoContributorID').html(result.valueOf());
                        resolve(result);}
               });
           });
@@ -555,11 +597,11 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.totalNormalContributorIdsAllocated.call(function(error, result) {
                   if (error) {
-                      $('#_totalNormalContributorIdsAllocated').html('Oops');
+                      $('#_totalNormalContributorIDAllocated').html('Oops');
                       reject(error);
                   }
                    else {
-                       $('#_totalNormalContributorIdsAllocated').html(result.valueOf());
+                       $('#_totalNormalContributorIDAllocated').html(result.valueOf());
                        resolve(result);}
               });
           });
@@ -568,11 +610,11 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.totalNormalContributorIds.call(function(error, result) {
                   if (error) {
-                      $('#_totalNormalContributorIds').html('Oops');
+                      $('#_totalNormalContributorID').html('Oops');
                       reject(error);
                   }
                    else {
-                       $('#_totalNormalContributorIds').html(result.valueOf());
+                       $('#_totalNormalContributorID').html(result.valueOf());
                        resolve(result);}
               });
           });
@@ -595,10 +637,13 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.released.call(function(error, result) {
                   if (error) {
+                      isReleased = false;
                       $('#_released').html('Oops');
                       reject(error);
                   }
                    else {
+                       isReleased = true;
+                       $('#releaseButton').css("display","none");
                        $('#_released').html(result.valueOf());
                        resolve(result);}
               });
@@ -647,11 +692,11 @@ html(lang='en')
           return new Promise(function(resolve,result){
               tokenInstance.isDayTokenActivated.call(function(error, result) {
                   if (error) {
-                      $('#_isDayTokenActivated').html('Oops');
+                      $('#_dayTokenActivated').html('Oops');
                       reject(error);
                   }
                    else {
-                       $('#_isDayTokenActivated').html(result.valueOf());
+                       $('#_dayTokenActivated').html(result.valueOf());
                        resolve(result);}
               });
           });
@@ -665,6 +710,21 @@ html(lang='en')
                   }
                    else {
                        $('#_halvingCycle').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getInitialBlockTimestamp(){
+          return new Promise(function(resolve,result){
+              tokenInstance.initialBlockTimestamp.call(function(error, result) {
+                  if (error) {
+                      $('#_initialBlockTimestamp').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       initialBlockTimestamp = result.valueOf();
+                       $('#_initialBlockTimestamp').html(result.valueOf());
                        resolve(result);}
               });
           });
