@@ -191,12 +191,12 @@ html(lang='en')
                             label(for='timeMindId') Timemint ID
                             input#timeMintId.form-control(type='text')   
                         .form-group    
-                            label.form-check-label
-                                input.form-check-input(type='checkbox')
+                            label#teamLabel.form-check-label
+                                input#isTeam.form-check-input(type='checkbox')
                                 |    Is this a team member? 
                         .form-group      
-                            label.form-check-label
-                                input.form-check-input(type='checkbox')
+                            label#testLabel.form-check-label(style='display:none')
+                                input#isTest.form-check-input(type='checkbox')
                                 |   Is this a test address?     
                         a.btn.btn-primary(href='#',onclick="allocateTimemints()") Allocate    
 
@@ -234,11 +234,156 @@ html(lang='en')
         b=a.promise();
         //You can chain jQuery promises using .then
         b.then(connectWeb3).then(loadAccounts).then(getInstance).then(getAllValues);
+        teamTimemints()
         a.resolve();
       }
 
       function getInstance(){
         tokenInstance = window.web3.eth.contract(abi).at(tokenNetworkAddress);
+      }
+    
+
+      function getAllValues(){
+          getSymbol();
+          getTotalSupply();
+          getTokenDecimal();
+          getDayInSec();
+          getFirstContributorID();
+          getFirstPostIcoContributorId();
+          getFirstTeamContributorId();
+          getDayCount();
+          getTotalTeamContributorIdsAllocated();
+          getTotalTeamContributorIds();
+          getTotalPostIcoContributorIdsAllocated();
+          getTotalPostIcoContributorIds();
+          getTotalNormalContributorIdsAllocated();
+          getTotalNormalContributorIds();
+          getTeamLockPeriodInSec();
+          isReleased();
+          getMinMintingPower();
+          getMaxMintingPower();
+          getMaxAddresses();
+          getIsDayTokenActivated();
+          getHalvingCycle();
+      }
+
+      function teamTimemints(){
+          $('#isTeam').click(function(){
+              if($(this).is(":checked")){
+                $('#testLabel').css("display","block");
+            }
+            else if($(this).is(":not(:checked)")){
+                $('#testLabel').css("display","none");
+            }
+        });
+      }
+
+      function allocateTimemints(){
+          if($('#isTeam').is(":checked")){
+                if($('#isTest').is(":checked")){
+                    allocateTeamTimemints(true);
+                }
+                else if($('#isTest').is(":not(:checked)"))
+                allocateTeamTimemints(false);
+            }
+            else if($('#isTeam').is(":not(:checked)")){
+                allocateNormalTimemints();
+            }
+      }
+
+      function allocateTeamTimemints(isTest){
+          var accountTo = $('#toAddress').val();
+          var timeMintId = $('#timeMintId').val();
+          var tokenAmount = $('#tokenAmount').val();
+          var weiPrice = $('#weiAmount').val();
+          var txHash = tokenInstance.addTeamTimeMints(accountTo,timeMintId,tokenAmount,isTest, function(error, result){
+                if(!error)
+                    swal({
+                        title: "Timemint Allocation Tx Status",
+                        text: "TxHash "+result
+                    });
+                else
+                    console.error(error);
+            });           
+      }
+
+      function allocateNormalTimemints(){
+          console.log("allocating timemints");
+          var accountTo = $('#toAddress').val();
+          var timeMintId = $('#timeMintId').val();
+          var tokenAmount = $('#tokenAmount').val();
+          var weiPrice = $('#weiAmount').val();
+          var txHash = tokenInstance.allocateNormalTimeMints(accountTo,0,timeMintId,tokenAmount,weiPrice, function(error, result){
+                if(!error)
+                    swal({
+                        title: "Timemint Allocation Tx Status",
+                        text: "TxHash "+result
+                    });
+                else
+                    console.error(error);
+            });
+      }
+      
+
+      function connectWeb3(){
+        if (typeof web3 === 'undefined') {
+          document.getElementById('meta-mask-required').innerHTML = '<b>You need <a href="https://metamask.io/">MetaMask</a> browser plugin to run this contract</b>'
+          window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+          } 
+        else 
+          window.web3 = new Web3(web3.currentProvider);
+          window.web3.version.getNetwork((err, netId) => {
+            console.log("netiD");
+            switch (netId) {
+              case "1":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              case "2":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to deprecated network. Switch to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              case "3":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Testnet. Switch to Mainnet.",
+                  icon: "warning" 
+                });
+                break
+              default:
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to an unknown network",
+                  icon: "warning" 
+                });
+            }
+        }) 
+      }
+      
+
+      function getAccountBalance(tokenInstance, accountAddress) {
+          return new Promise(function(resolve, reject) {
+              tokenInstance.balanceOf(accountAddress, function(error, result) {
+                  if (error) {
+                      reject(error);
+                  } else {
+                      resolve(result);
+                  }
+              });
+          })
+      }
+
+      function loadAccounts(){
+        console.log("loading Accounts");
+        accounts = web3.eth.accounts;
+        console.log(accounts);
+        $("#accountInUse").html("Account "+accounts);
       }
 
       function getSymbol(){
@@ -524,148 +669,3 @@ html(lang='en')
               });
           });
       }
-    
-
-      function getAllValues(){
-          getSymbol();
-          getTotalSupply();
-          getTokenDecimal();
-          getDayInSec();
-          getFirstContributorID();
-          getFirstPostIcoContributorId();
-          getFirstTeamContributorId();
-          getDayCount();
-          getTotalTeamContributorIdsAllocated();
-          getTotalTeamContributorIds();
-          getTotalPostIcoContributorIdsAllocated();
-          getTotalPostIcoContributorIds();
-          getTotalNormalContributorIdsAllocated();
-          getTotalNormalContributorIds();
-          getTeamLockPeriodInSec();
-          isReleased();
-          getMinMintingPower();
-          getMaxMintingPower();
-          getMaxAddresses();
-          getIsDayTokenActivated();
-          getHalvingCycle();
-      }
-
-      function allocateTimemints(){
-          console.log("allocating timemints");
-          var accountTo = $('#toAddress').val();
-          var timeMintId = $('#timeMintId').val();
-          var tokenAmount = $('#tokenAmount').val();
-          var weiPrice = $('#weiAmount').val();
-          var txHash = tokenInstance.allocateNormalTimeMints(accountTo,0,timeMintId,tokenAmount,weiPrice, function(error, result){
-                if(!error)
-                    swal({
-                        title: "Transaction Mined",
-                        text: "TxHash "+result
-                    });
-                else
-                    console.error(error);
-            });
-      }
-      
-
-      function connectWeb3(){
-        if (typeof web3 === 'undefined') {
-          document.getElementById('meta-mask-required').innerHTML = '<b>You need <a href="https://metamask.io/">MetaMask</a> browser plugin to run this contract</b>'
-          window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-          } 
-        else 
-          window.web3 = new Web3(web3.currentProvider);
-          window.web3.version.getNetwork((err, netId) => {
-            console.log("netiD");
-            switch (netId) {
-              case "1":
-                swal({
-                  title: "Web3 Connected",
-                  text: "You are connected to Mainnet.",
-                  icon: "warning" 
-                });
-                break
-              case "2":
-                swal({
-                  title: "Web3 Connected",
-                  text: "You are connected to deprecated network. Switch to Mainnet.",
-                  icon: "warning" 
-                });
-                break
-              case "3":
-                swal({
-                  title: "Web3 Connected",
-                  text: "You are connected to Testnet. Switch to Mainnet.",
-                  icon: "warning" 
-                });
-                break
-              default:
-                swal({
-                  title: "Web3 Connected",
-                  text: "You are connected to an unknown network",
-                  icon: "warning" 
-                });
-            }
-        }) 
-      }
-      
-
-      function getAccountBalance(tokenInstance, accountAddress) {
-          return new Promise(function(resolve, reject) {
-              tokenInstance.balanceOf(accountAddress, function(error, result) {
-                  if (error) {
-                      reject(error);
-                  } else {
-                      resolve(result);
-                  }
-              });
-          })
-      }
-
-      function loadAccounts(){
-        console.log("loading Accounts");
-        accounts = web3.eth.accounts;
-        console.log(accounts);
-        $("#accountInUse").html("Account "+accounts);
-      }
-
-    //-   function checkBalance(){
-    //-     console.log("checkBalance");
-    //-     var tokenInstance = web3.eth.contract(abi).at("0x7941bc77E1d6BD4628467b6cD3650F20F745dB06");
-    //-     var balance = getAccountBalance(tokenInstance,accounts[0]);
-    //-     console.log("balance",balance.valueOf());
-    //-   }
-
-    //-   function initiate(){
-    //-     console.log("initiating..");
-    //-     //- TokenContract = new web3.eth.contract(abi,function(){
-    //-     //-   //- console.log("Contract from ABI");
-    //-     //- });
-    //-     TokenContract = web3.eth.contract(abi);
-    //-   }
-    //-   function deploy(){
-    //-     console.log("deploying..",TokenContract) ;
-    //-     TokenContract.new(
-    //-       {
-    //-         from: web3.eth.accounts[0], 
-    //-         data: bytecode, 
-    //-         gas: '4700000'
-    //-       }, function (e, contract){
-    //-           console.log(e, contract);
-    //-           if (typeof contract.address !== 'undefined') {
-    //-             console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
-    //-           }
-    //-     });
-    //-   }
-    //-   function respond(){
-    //-     console.log("responding...");
-    //-     console.log(JSON.strigify(contract));
-    //-   }
-
-    //-   function send(){
-    //-     var d = jQuery.Deferred(), 
-    //-     p=d.promise();
-    //-     //You can chain jQuery promises using .then
-    //-     p.then(checkBalance).then(initiate).then(deploy).then(respond);
-    //-     d.resolve();
-    //-   }
