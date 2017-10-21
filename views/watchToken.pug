@@ -204,10 +204,10 @@ html(lang='en')
             .panel-body
                 .form-group
                 label(for='tokenABI') Token ABI
-                input#tokenABI.form-control(type='text',value=tokenABI)
+                input#tokenABI.form-control(type='text',value=dt2tokenABI)
                 .form-group
                 label(for='bytecode') Bytecode
-                input#bytecode.form-control(type='text',value=bytecode_data)    
+                input#bytecode.form-control(type='text',value=dt2bytecodeData)    
     // /.container
     // Bootstrap core JavaScript
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
@@ -223,19 +223,22 @@ html(lang='en')
       var accounts;
       var abi = JSON.parse($("#tokenABI").val());
       var bytecode = $("#bytecode").val();
-      var tokenNetworkAddress = "0x7941bc77E1d6BD4628467b6cD3650F20F745dB06";
-       var tokenInstance;
+      var tokenNetworkAddress = $('#tokenAddress').text();
+      console.log(tokenNetworkAddress);
+      var tokenInstance;
       var TokenContract;
       var contract;
       var initialBlockTimestamp;
       var baseNetworkURL;
-
+      var isReleased;
+      var tokenOwner;
+      var tokenNewOwner;
 
       window.onload = function() {
         var a = jQuery.Deferred(), 
         b=a.promise();
         //You can chain jQuery promises using .then
-        b.then(connectWeb3).then(loadAccounts).then(getInstance).then(getAllValues);
+        b.then(connectWeb3).then(loadAccounts).then(getInstance).then(getAllValues).then(checkOwnership);
         teamTimemints()
         a.resolve();
       }
@@ -268,6 +271,8 @@ html(lang='en')
           getIsDayTokenActivated();
           getHalvingCycle();
           getInitialBlockTimestamp();
+          getOwner();
+          getNewOwner();
       }
 
       function teamTimemints(){
@@ -638,14 +643,17 @@ html(lang='en')
               tokenInstance.released.call(function(error, result) {
                   if (error) {
                       isReleased = false;
+                      $('#releaseButton').css("display","block");
                       $('#_released').html('Oops');
                       reject(error);
                   }
                    else {
-                       isReleased = true;
-                       $('#releaseButton').css("display","none");
-                       $('#_released').html(result.valueOf());
-                       resolve(result);}
+                       if(result == true)
+                        $('#releaseButton').css("display","none");
+                       else
+                        $('#releaseButton').css("display","block");
+                        $('#_released').html(result.valueOf());
+                    resolve(result);}
               });
           });
       }
@@ -728,4 +736,64 @@ html(lang='en')
                        resolve(result);}
               });
           });
+      }
+
+      function getOwner(){
+          return new Promise(function(resolve,result){
+              tokenInstance.owner.call(function(error, result) {
+                  if (error) {
+                      reject(error);
+                  }
+                   else {
+                       tokenOwner = result.valueOf();
+                       console.log("owner",tokenOwner)
+                       resolve(result);}
+              });
+          });
+      }
+
+      function getNewOwner(){
+          return new Promise(function(resolve,result){
+              tokenInstance.newOwner.call(function(error, result) {
+                  if (error) {
+                      reject(error);
+                  }
+                   else {
+                       tokenNewOwner = result.valueOf();
+                       console.log("new owner",tokenNewOwner)
+                       resolve(result);}
+              });
+          });
+      }
+
+      function checkOwnership(){
+          setTimeout(function(){ 
+          console.log("to",tokenOwner);
+          console.log("tno",tokenNewOwner);
+          console.log("acc",accounts[0]);
+          if(tokenOwner != accounts[0] && tokenNewOwner === accounts[0]){
+              swal({
+                  title: "Accept Ownership",
+                  text: "Please accept the ownership of your new tokens",
+                  icon: "info",
+                  buttons: true 
+                }).then(confirm => {
+                    if(confirm)
+                        var txHash = tokenInstance.acceptOwnership(function(error, result){
+                            if(!error){
+                                txUrl = baseNetworkURL+"tx/"+result;
+                                swal({
+                                    title: "Tx Status",
+                                    text: 'TxHash '+result
+                                });
+                            }
+                            else
+                                swal({
+                                    title: "Could not complete transaction",
+                                    type:"error"
+                                });
+                        });
+                });
+          }
+          }, 2000);  
       }

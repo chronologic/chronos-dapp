@@ -1,19 +1,21 @@
 var express = require("express");
 var app     = express();
-var tokenABI = require('./tokenABI.json');
-var bytecode = require('./bytecode.json');
-var daytokenABI = require('./dayTokenABI.json');
-var daytokenbytecode = require('./dayTokenBytecode.json');
+var dayTokenAbi = require('./dayTokenABI.json');
+var dayTokenBytecode = require('./dayTokenBytecode.json');
+var daytoken2ABI = require('./DayToken2ABI.json');
+var daytoken2bytecode = require('./DayToken2Bytecode.json');
+var deployerABI = require('./DeployNewTokenABI.json');
+var deployerBytecode = require('./DeploynewTokenBytecode.json');
 
 app.set('view engine', 'pug');
 
 
 app.get('/', function (req, res) {
-    res.render('index', {'tokenABI':tokenABI, 'bytecode_data':bytecode.data});
+    res.render('index', {'dttokenABI':dayTokenAbi, 'dtbytecodeData':dayTokenBytecode.data,'deployerABI':deployerABI,'deployerBytecode':deployerBytecode});
   })
 
 app.get('/watch/:address', function (req, res) {
-    res.render('watchToken', {'tokenAddress':req.params.address,'tokenABI':daytokenABI, 'bytecode_data':daytokenbytecode.data});
+    res.render('watchToken', {'tokenAddress':req.params.address, 'dt2tokenABI':daytoken2ABI, 'dt2bytecodeData':daytoken2bytecode.data});
   })  
 
 app.listen(3000);
