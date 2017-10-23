@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Watch</title>
+    <!-- Latest compiled and minified CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"></button><a href="#" class="navbar-brand"></a><span id="accountInUse" style="margin:15px 15px; float:left; font-size:15px !important;" class="label label-light">Refresh to load Account</span>
+        </div>
+      </div>
+    </nav>
+    <div style="margin-top:80px;" class="container">
+      <div class="row panel panel-default">
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Contract Address</h5>
+              <p id="tokenAddress" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Token Symbol</h5>
+              <p id="_symbol" class="card-text"> </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Supply</h5>
+              <p id="_totalSupply" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Token Decimal</h5>
+              <p id="_tokenDecimal" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Days in seconds</h5>
+              <p id="_daysInSec" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Day Count</h5>
+              <p id="_dayCount" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Chrono Era</h5>
+              <p id="_halvingCycle" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Day Token Activated</h5>
+              <p id="_dayTokenActivated" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Max Addresses</h5>
+              <p id="_maxAddresses" class="card-text"> </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">First Contributor ID</h5>
+              <p id="_firstContributorID" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">First Post ICO Contributor ID</h5>
+              <p id="_firstPostICOContributorID" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">First Team Contributor ID</h5>
+              <p id="_firstTeamContributorID" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Maximum Minting Power</h5>
+              <p id="_maxMintingPower" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Minimum Minting Power</h5>
+              <p id="_minMintingPower" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Initial Block Timestamp</h5>
+              <p id="_initialBlockTimestamp" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Team LockIn Period</h5>
+              <p id="_teamLockPeriodInSec" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Normal Contributor ID</h5>
+              <p id="_totalNormalContributorID" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Normal Contributor ID Allocated</h5>
+              <p id="_totalNormalContributorIDAllocated" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Team Contributor ID</h5>
+              <p id="_totalTeamContributorID" class="card-text"> </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Team Contributor ID Allocated</h5>
+              <p id="_totalTeamContributorIDAllocated" class="card-text">15     </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Post ICO Contributor ID</h5>
+              <p id="_totalPostIcoContributorID" class="card-text">     </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Post ICO Contributor Id Allocated</h5>
+              <p id="_totalPostIcoContributorIDAllocated" class="card-text">15</p>
+            </div>
+          </div>
+        </div>
+        <div id="releaseButton" style="padding-bottom:10px;" class="col-sm-12">
+          <div class="card">
+            <div class="card-body"><a href="#" onclick="release()" style="float:right;" class="btn btn-danger">Release Tokens                                                                </a></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 panel panel-default">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Allocate Time Mints</h4>
+              <div class="form-group">
+                <label for="toAddress">Receiver's Address</label>
+                <input id="toAddress" type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="tokenAmount">Tokens</label>
+                <input id="tokenAmount" type="text" class="form-control">
+              </div>
+              <div id="weiBlock" class="form-group">
+                <label for="weiAmount">Wei Amount</label>
+                <input id="weiAmount" type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="timeMindId">Timemint ID</label>
+                <input id="timeMintId" type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label id="teamLabel" class="form-check-label">
+                  <input id="isTeam" type="checkbox" class="form-check-input">   Is this a team member?
+                </label>
+              </div>
+              <div class="form-group">
+                <label id="testLabel" style="display:none" class="form-check-label">
+                  <input id="isTest" type="checkbox" class="form-check-input">  Is this a test address?
+                </label>
+              </div><a href="#" onclick="allocateTimemints()" class="btn btn-primary">Allocate    </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="form-group"></div>
+          <label for="tokenABI">Token ABI</label>
+          <input id="tokenABI" type="text" class="form-control">
+          <div class="form-group"></div>
+          <label for="bytecode">Bytecode</label>
+          <input id="bytecode" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+    <!-- /.container-->
+    <!-- Bootstrap core JavaScript-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+    <!-- Latest compiled and minified JavaScript-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.1/bluebird.min.js"></script>
+    <script>
+      // MetaMask injects the web3 library for us.
+      var accounts;
+      var abi = JSON.parse($("#tokenABI").val());
+      var bytecode = $("#bytecode").val();
+      var tokenNetworkAddress = $('#tokenAddress').text();
+      console.log(tokenNetworkAddress);
+      var tokenInstance;
+      var TokenContract;
+      var contract;
+      var initialBlockTimestamp;
+      var baseNetworkURL;
+      var isReleased;
+      var tokenOwner;
+      var tokenNewOwner;
+      window.onload = function() {
+        var a = jQuery.Deferred(),
+        b=a.promise();
+        //You can chain jQuery promises using .then
+        b.then(connectWeb3).then(loadAccounts).then(getInstance).then(getAllValues).then(checkOwnership);
+        teamTimemints()
+        a.resolve();
+      }
+      function getInstance(){
+        tokenInstance = window.web3.eth.contract(abi).at(tokenNetworkAddress);
+      }
+      function getAllValues(){
+          getSymbol();
+          getTotalSupply();
+          getTokenDecimal();
+          getDayInSec();
+          getFirstContributorID();
+          getFirstPostIcoContributorId();
+          getFirstTeamContributorId();
+          getDayCount();
+          getTotalTeamContributorIdsAllocated();
+          getTotalTeamContributorIds();
+          getTotalPostIcoContributorIdsAllocated();
+          getTotalPostIcoContributorIds();
+          getTotalNormalContributorIdsAllocated();
+          getTotalNormalContributorIds();
+          getTeamLockPeriodInSec();
+          isReleased();
+          getMinMintingPower();
+          getMaxMintingPower();
+          getMaxAddresses();
+          getIsDayTokenActivated();
+          getHalvingCycle();
+          getInitialBlockTimestamp();
+          getOwner();
+          getNewOwner();
+      }
+      function teamTimemints(){
+          $('#isTeam').click(function(){
+              if($(this).is(":checked")){
+                $('#testLabel').css("display","block");
+                $('#weiBlock').css("display","none");
+            }
+            else if($(this).is(":not(:checked)")){
+                $('#testLabel').css("display","none");
+                $('#weiBlock').css("display","block");
+            }
+        });
+      }
+      function allocateTimemints(){
+          if($('#isTeam').is(":checked")){
+                if($('#isTest').is(":checked")){
+                    allocateTeamTimemints(true);
+                }
+                else if($('#isTest').is(":not(:checked)"))
+                allocateTeamTimemints(false);
+            }
+            else if($('#isTeam').is(":not(:checked)")){
+                allocateNormalTimemints();
+            }
+      }
+      function allocateTeamTimemints(isTest){
+          var accountTo = $('#toAddress').val();
+          var timeMintId = $('#timeMintId').val();
+          var tokenAmount = $('#tokenAmount').val();
+          var weiPrice = $('#weiAmount').val();
+          var txHash = tokenInstance.addTeamTimeMints(accountTo,timeMintId,tokenAmount,isTest, function(error, result){
+                if(!error)
+                    swal({
+                        title: "Timemint Allocation Tx Status",
+                        text: "TxHash "+result
+                    });
+                else
+                    console.error(error);
+            });
+      }
+      function allocateNormalTimemints(){
+          console.log("allocating timemints");
+          var accountTo = $('#toAddress').val();
+          var timeMintId = $('#timeMintId').val();
+          var tokenAmount = $('#tokenAmount').val();
+          var weiPrice = $('#weiAmount').val();
+          var txHash = tokenInstance.allocateNormalTimeMints(accountTo,0,timeMintId,tokenAmount,weiPrice, function(error, result){
+                if(!error)
+                    swal({
+                        title: "Timemint Allocation Tx Status",
+                        text: "TxHash "+result,
+                        icon: "success"
+                    });
+                else
+                    console.error(error);
+            });
+      }
+      function connectWeb3(){
+        if (typeof web3 === 'undefined') {
+          document.getElementById('meta-mask-required').innerHTML = '<b>You need <a href="https://metamask.io/">MetaMask</a> browser plugin to run this contract</b>'
+          window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+          }
+        else
+          window.web3 = new Web3(web3.currentProvider);
+          window.web3.version.getNetwork((err, netId) => {
+            console.log("netiD");
+            switch (netId) {
+              case "1":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Mainnet.",
+                  icon: "success"
+                });
+                baseNetworkURL = "https://etherscan.io/"
+                break
+              case "2":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to deprecated network. Switch to Mainnet.",
+                  icon: "warning"
+                });
+                baseNetworkURL = "https://etherscan.io/"
+                break
+              case "3":
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Testnet. Switch to Mainnet.",
+                  icon: "warning"
+                });
+                baseNetworkURL = "https://ropsten.etherscan.io/"
+                break
+              default:
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to an unknown network",
+                  icon: "warning"
+                });
+            }
+        })
+      }
+      function getAccountBalance(tokenInstance, accountAddress) {
+          return new Promise(function(resolve, reject) {
+              tokenInstance.balanceOf(accountAddress, function(error, result) {
+                  if (error) {
+                      reject(error);
+                  } else {
+                      resolve(result);
+                  }
+              });
+          })
+      }
+      function loadAccounts(){
+        console.log("loading Accounts");
+        accounts = web3.eth.accounts;
+        console.log(accounts);
+        $("#accountInUse").html("Account "+accounts);
+      }
+      function release(){
+          if(initialBlockTimestamp)
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to allocate timemints after this!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                }).then(confirm => {
+                    if(confirm)
+                        var txHash = tokenInstance.releaseToken(initialBlockTimestamp, function(error, result){
+                            if(!error){
+                                txUrl = baseNetworkURL+"tx/"+result;
+                                swal({
+                                    title: "Token Release Tx Status",
+                                    text: 'TxHash '+result
+                                });
+                            }
+                            else
+                                swal({
+                                    title: "Could not complete transaction",
+                                    type:"error"
+                                });
+                        });
+                });
+            else
+                swal({
+                    title: "Error Occured",
+                    type: 'warning',
+                    text: "Cannot release tokens"
+                });
+      }
+      function getSymbol(){
+          return new Promise(function(resolve, reject) {
+              tokenInstance.symbol.call(function(error, result) {
+                  if (error) {
+                      $('#_symbol').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_symbol').html(result);
+                       console.log(result);
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalSupply(){
+          return new Promise(function(resolve, reject) {
+              tokenInstance.getTotalSupply.call(function(error, result) {
+                  if (error) {
+                      $('#_totalSupply').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalSupply').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTokenDecimal(){
+          return new Promise(function(resolve, reject) {
+              tokenInstance.decimals.call(function(error, result) {
+                  if (error) {
+                      $('#_tokenDecimal').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_tokenDecimal').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getDayInSec(){
+          new Promise(function(resolve,result){
+              tokenInstance.DayInSecs.call(function(error, result) {
+                  if (error) {
+                      $('#_daysInSec').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_daysInSec').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getFirstContributorID(){
+          return new Promise(function(resolve,result){
+              tokenInstance.firstContributorId.call(function(error, result) {
+                  if (error) {
+                      $('#_firstContributorID').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_firstContributorID  ').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getFirstPostIcoContributorId(){
+           return new Promise(function(resolve,result){
+              tokenInstance.firstPostIcoContributorId.call(function(error, result) {
+                  if (error) {
+                      $('#_firstPostICOContributorID').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_firstPostICOContributorID').html(result.valueOf());;
+                       resolve(result);}
+              });
+          });
+      }
+      function getFirstTeamContributorId(){
+          return new Promise(function(resolve,result){
+              tokenInstance.firstTeamContributorId.call(function(error, result) {
+                  if (error) {
+                      $('#_firstTeamContributorID').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_firstTeamContributorID').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getDayCount(){
+          return new Promise(function(resolve,result){
+              tokenInstance.getDayCount.call(function(error, result) {
+                  if (error) {
+                      $('#_dayCount').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_dayCount').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalTeamContributorIdsAllocated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalTeamContributorIdsAllocated.call(function(error, result) {
+                  if (error) {
+                      $('#_totalTeamContributorIDAllocated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalTeamContributorIDAllocated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalTeamContributorIds(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalTeamContributorIds.call(function(error, result) {
+                  if (error) {
+                      $('#_totalTeamContributorID').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalTeamContributorID').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalPostIcoContributorIdsAllocated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalPostIcoContributorIdsAllocated.call(function(error, result) {
+                  if (error) {
+                      $('#_totalPostIcoContributorIDAllocated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalPostIcoContributorIDAllocated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalPostIcoContributorIds(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalPostIcoContributorIds.call(function(error, result) {
+                  if (error) {
+                      $('#_totalPostIcoContributorID').html('Oops');;
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalPostIcoContributorID').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalNormalContributorIdsAllocated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalNormalContributorIdsAllocated.call(function(error, result) {
+                  if (error) {
+                      $('#_totalNormalContributorIDAllocated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalNormalContributorIDAllocated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTotalNormalContributorIds(){
+          return new Promise(function(resolve,result){
+              tokenInstance.totalNormalContributorIds.call(function(error, result) {
+                  if (error) {
+                      $('#_totalNormalContributorID').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_totalNormalContributorID').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getTeamLockPeriodInSec(){
+          return new Promise(function(resolve,result){
+              tokenInstance.teamLockPeriodInSec.call(function(error, result) {
+                  if (error) {
+                      $('#_teamLockPeriodInSec').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_teamLockPeriodInSec').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function isReleased(){
+          return new Promise(function(resolve,result){
+              tokenInstance.released.call(function(error, result) {
+                  if (error) {
+                      isReleased = false;
+                      $('#releaseButton').css("display","block");
+                      $('#_released').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       if(result == true)
+                        $('#releaseButton').css("display","none");
+                       else
+                        $('#releaseButton').css("display","block");
+                        $('#_released').html(result.valueOf());
+                    resolve(result);}
+              });
+          });
+      }
+      function getMinMintingPower(){
+          return new Promise(function(resolve,result){
+              tokenInstance.minMintingPower.call(function(error, result) {
+                  if (error) {
+                      $('#_minMintingPower').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_minMintingPower').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getMaxMintingPower(){
+          return new Promise(function(resolve,result){
+              tokenInstance.maxMintingPower.call(function(error, result) {
+                  if (error) {
+                      $('#_maxMintingPower').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_maxMintingPower').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getMaxAddresses(){
+          return new Promise(function(resolve,result){
+              tokenInstance.maxAddresses.call(function(error, result) {
+                  if (error) {
+                      $('#_maxAddresses').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_maxAddresses').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getIsDayTokenActivated(){
+          return new Promise(function(resolve,result){
+              tokenInstance.isDayTokenActivated.call(function(error, result) {
+                  if (error) {
+                      $('#_dayTokenActivated').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_dayTokenActivated').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getHalvingCycle(){
+          return new Promise(function(resolve,result){
+              tokenInstance.halvingCycle.call(function(error, result) {
+                  if (error) {
+                      $('#_halvingCycle').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       $('#_halvingCycle').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getInitialBlockTimestamp(){
+          return new Promise(function(resolve,result){
+              tokenInstance.initialBlockTimestamp.call(function(error, result) {
+                  if (error) {
+                      $('#_initialBlockTimestamp').html('Oops');
+                      reject(error);
+                  }
+                   else {
+                       initialBlockTimestamp = result.valueOf();
+                       $('#_initialBlockTimestamp').html(result.valueOf());
+                       resolve(result);}
+              });
+          });
+      }
+      function getOwner(){
+          return new Promise(function(resolve,result){
+              tokenInstance.owner.call(function(error, result) {
+                  if (error) {
+                      reject(error);
+                  }
+                   else {
+                       tokenOwner = result.valueOf();
+                       console.log("owner",tokenOwner)
+                       resolve(result);}
+              });
+          });
+      }
+      function getNewOwner(){
+          return new Promise(function(resolve,result){
+              tokenInstance.newOwner.call(function(error, result) {
+                  if (error) {
+                      reject(error);
+                  }
+                   else {
+                       tokenNewOwner = result.valueOf();
+                       console.log("new owner",tokenNewOwner)
+                       resolve(result);}
+              });
+          });
+      }
+      function checkOwnership(){
+          setTimeout(function(){
+          console.log("to",tokenOwner);
+          console.log("tno",tokenNewOwner);
+          console.log("acc",accounts[0]);
+          if(tokenOwner != accounts[0] && tokenNewOwner === accounts[0]){
+              swal({
+                  title: "Accept Ownership",
+                  text: "Please accept the ownership of your new tokens",
+                  icon: "info",
+                  buttons: true
+                }).then(confirm => {
+                    if(confirm)
+                        var txHash = tokenInstance.acceptOwnership(function(error, result){
+                            if(!error){
+                                txUrl = baseNetworkURL+"tx/"+result;
+                                swal({
+                                    title: "Tx Status",
+                                    text: 'TxHash '+result
+                                });
+                            }
+                            else
+                                swal({
+                                    title: "Could not complete transaction",
+                                    type:"error"
+                                });
+                        });
+                });
+          }
+          }, 2000);
+      }
+    </script>
+  </body>
+</html>
