@@ -341,7 +341,11 @@
           var timeMintId = $('#timeMintId').val();
           var tokenAmount = $('#tokenAmount').val();
           var weiPrice = $('#weiAmount').val();
-          var txHash = tokenInstance.addTeamTimeMints(accountTo,timeMintId,tokenAmount,isTest, function(error, result){
+          var txHash = tokenInstance.addTeamTimeMints(accountTo,timeMintId,tokenAmount,isTest,{
+                        from: accounts[0],
+                        gas: 220000,
+                        value: 0
+                    }, function(error, result){
                 if(!error)
                     swal({
                         title: "Timemint Allocation Tx Status",
@@ -357,7 +361,11 @@
           var timeMintId = $('#timeMintId').val();
           var tokenAmount = $('#tokenAmount').val();
           var weiPrice = $('#weiAmount').val();
-          var txHash = tokenInstance.allocateNormalTimeMints(accountTo,0,timeMintId,tokenAmount,weiPrice, function(error, result){
+          var txHash = tokenInstance.allocateNormalTimeMints(accountTo,0,timeMintId,tokenAmount,weiPrice,{
+                        from: accounts[0],
+                        gas: 220000,
+                        value: 0
+                    }, function(error, result){
                 if(!error)
                     swal({
                         title: "Timemint Allocation Tx Status",
@@ -399,6 +407,7 @@
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to Testnet. Switch to Mainnet.",
+                  
                   icon: "warning"
                 });
                 baseNetworkURL = "https://ropsten.etherscan.io/"
@@ -439,7 +448,12 @@
                 dangerMode: true,
                 }).then(confirm => {
                     if(confirm)
-                        var txHash = tokenInstance.releaseToken(initialBlockTimestamp, function(error, result){
+                    var ts = Math.round((new Date()).getTime() / 1000);
+                        var txHash = tokenInstance.releaseToken(ts,{
+                        from: accounts[0],
+                        gas: 91000,
+                        value: 0
+                    }, function(error, result){
                             if(!error){
                                 txUrl = baseNetworkURL+"tx/"+result;
                                 swal({
@@ -794,7 +808,11 @@
                   buttons: true
                 }).then(confirm => {
                     if(confirm)
-                        var txHash = tokenInstance.acceptOwnership(function(error, result){
+                        var txHash = tokenInstance.acceptOwnership({
+                        from: accounts[0],
+                        gas: 36000,
+                        value: 0
+                    },function(error, result){
                             if(!error){
                                 txUrl = baseNetworkURL+"tx/"+result;
                                 swal({

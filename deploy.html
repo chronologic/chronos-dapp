@@ -192,7 +192,11 @@
                 //- var _DayInSecs = 84600;
                 //- var _minBalanceToSell = 8888;
                 //- var _teamLockPeriodInSec = 15780000;
-                var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec, function(error, result){
+                var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec,{
+                        from: accounts[0],
+                        gas: 4100000,
+                        value: 0
+                    },function(error, result){
                       if(result)
                       setStorage("Deployed",result);
                         swal({
