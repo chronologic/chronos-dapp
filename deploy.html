@@ -71,7 +71,7 @@
           </div>
         </div>
       </form>
-      <div class="col-md-2 col-md-offset-5">
+      <div class="col-md-2 col-md-offset-5">            
         <button type="button" style="margin: 5px;" onclick="send()" class="btn btn-success col-md-12"> Submit</button>
       </div>
     </div>
@@ -106,15 +106,17 @@
         .then(function (result){
           if(result.valueOf()<minFee){
             swal({
-                  title: "Allowance needed",
-                  text: "Please allow us to take 100 day tokens as fee",
+                  title: "DAY Tokens needed",
+                  text: "Please allow us to reserve 100 day tokens as fee",
                   icon: "info",
+                  closeOnClickOutside: false,
                   buttons: true
                 }).then(confirm => {
                     if(confirm)
                         var txHash = tokenInstance.approve(deployerAddress,minFee, function(error, result){
                             if(!error){
                                 txUrl = baseNetworkURL+"tx/"+result;
+                                setStorage("Release",result);
                                 swal({
                                     title: "Token Release Tx Status",
                                     text: 'TxHash '+result
@@ -189,13 +191,14 @@
                 //- var _teamLockPeriodInSec = 15780000;
                 var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec, function(error, result){
                       if(result)
+                      setStorage("Deployed",result);
                         swal({
                           title: "Transaction sent for mining",
                           text: "Tx Hash : "+result,
                           icon: "info",
                           buttons: true
                         })
-                        return awaitBlockConsensus(window.web3, result,"2", "200");
+                        return awaitBlockConsensus(window.web3, result,2, 200);
                   });
                 return awaitBlockConsensus(web3, txHash, 2, 200);
             }, function(error) {
@@ -245,6 +248,7 @@
           var _teamLockPeriodInSec = 15780000;
           var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec, function(error, result){
                 if(result)
+                setStorage("Deployed",result);
                   return awaitBlockConsensus(window.web3, result,"2", "200");
             });
       }
@@ -391,6 +395,23 @@
             poll();
             return promise;
         };
+        function setStorage(key,value){
+          if (typeof(Storage) !== "undefined") {
+            sessionStorage.setItem(key, value);
+          } else {
+            console.log("Could not store transaction details")
+          }
+        }
+
+        function getStorage(){
+          if (typeof(Storage) !== "undefined") {
+            for (i = 0; i < sessionStorage.length; i++) {
+                console.log(sessionStorage.key(i) + "=[" + sessionStorage.getItem(sessionStorage.key(i)) + "]");
+            }
+          } else {
+            console.log("Could not get transaction details")
+          }
+        }
     </script>
   </body>
 </html>
