@@ -15,7 +15,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"></button><a href="#" class="navbar-brand">Chronologic dApp </a><span id="accountInUse" style="margin:15px 15px; float:left; font-size:15px !important;" class="label label-light">Refresh to load Account</span>
+          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"></button><a href="index.html" class="navbar-brand">Chronologic dApp </a><span id="accountInUse" style="margin:15px 15px; float:left; font-size:15px !important;" class="label label-light">Refresh to load Account</span>
         </div><span id="watch" style="margin:15px 15px; float:right; font-size:15px !important;" onclick="watchToken()" class="label label-success">Watch a Token</span>
       </div>
     </nav>
@@ -128,6 +128,9 @@
                                     type:"error"
                                 });
                         });
+                    else{
+                        window.location.replace("index.html");
+                    }    
                 });
           }
         });
@@ -277,11 +280,6 @@
             console.log("netiD");
             switch (netId) {
               case "1":
-                swal({
-                  title: "Web3 Connected",
-                  text: "You are connected to Mainnet.",
-                  icon: "warning"
-                });
                 break
               case "2":
                 swal({
