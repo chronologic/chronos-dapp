@@ -199,8 +199,7 @@
                     },function(error,result){
                         if(result)
                             return awaitBlockConsensus(window.web3, result,2, 200).then(function(result){
-                                var qq = JSON.parse(result);
-                                console.log(qq);
+                                console.log("result",result);
                             }, function(error) {
                                 console.log('Could not fetch new balances', error);
                                 return Promise.reject(error);
