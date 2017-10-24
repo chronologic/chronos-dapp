@@ -82,7 +82,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Latest compiled and minified JavaScript-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.1/bluebird.min.js"></script>
     <script type="text/javascript"  src="DeployNewTokenABI.js"></script>
     <script type="text/javascript" src="dayTokenABI.js"></script>
@@ -108,17 +108,17 @@
             swal({
                   title: "DAY Tokens needed",
                   text: "Please allow us to reserve 100 day tokens as fee",
-                  icon: "info",
-                  closeOnClickOutside: false,
+                  type: "info",
+                  allowOutsideClick: false,
                   buttons: true
                 }).then(confirm => {
                     if(confirm)
                         var txHash = tokenInstance.approve(deployerAddress,minFee, function(error, result){
                             if(!error){
-                                // txUrl = baseNetworkURL+"tx/"+result;
+                                txUrl = baseNetworkURL+"tx/"+result;
                                 swal({
-                                    title: "Token Release Tx Status",
-                                    text: 'TxHash '+result
+                                    title: "Approve Tx",
+                                    html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>'
                                 });
                             }
                             else
@@ -175,21 +175,21 @@
                 var _DayInSecs = '84600';
                 var _minBalanceToSell = $("#teamLockPeriodInSec").val();
                 var _teamLockPeriodInSec = $("#minBalanceToSell").val();
-                //- var _tokenName = "Day";
-                //- var _tokenSymbol = "DAY";
-                //- var _tokenDecimals = 18;
-                //- var _tokenInitialSupply = 0;
-                //- var _tokenMintable = true;
-                //- var _maxAddresses = 7;
-                //- var _firstTeamContributorId = 4;
-                //- var _totalTeamContributorIds = 2;
-                //- var _totalPostIcoContributorIds = 2;
-                //- var _minMintingPower = 500000000000000000;
-                //- var _maxMintingPower = 1000000000000000000;
-                //- var _halvingCycle = 88;
-                //- var _DayInSecs = 84600;
-                //- var _minBalanceToSell = 8888;
-                //- var _teamLockPeriodInSec = 15780000;
+                // - var _tokenName = "Day";
+                // - var _tokenSymbol = "DAY";
+                // - var _tokenDecimals = 18;
+                // - var _tokenInitialSupply = 0;
+                // - var _tokenMintable = true;
+                // - var _maxAddresses = 7;
+                // - var _firstTeamContributorId = 4;
+                // - var _totalTeamContributorIds = 2;
+                // - var _totalPostIcoContributorIds = 2;
+                // - var _minMintingPower = 500000000000000000;
+                // - var _maxMintingPower = 1000000000000000000;
+                // - var _halvingCycle = 88;
+                // - var _DayInSecs = 84600;
+                // - var _minBalanceToSell = 8888;
+                // - var _teamLockPeriodInSec = 15780000;
 
             getDeployerInstance().then(function(deployerInstance) {
                 var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec,{
@@ -197,13 +197,31 @@
                         gas: 4100000,
                         value: 0
                     },function(error,result){
-                        if(result)
+                        if(result){
+                            txUrl = baseNetworkURL+"tx/"+result;
+                    
+                            swal({
+                            title: 'Please wait while the transaction is mined',
+                            html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>',
+                            allowOutsideClick:false,
+                            type: "info"
+                            })
                             return awaitBlockConsensus(window.web3, result,2, 200).then(function(result){
-                                console.log("result",result);
-                            }, function(error) {
-                                console.log('Could not fetch new balances', error);
-                                return Promise.reject(error);
-                            });
+                                console.log(result);
+                                var obj = result.logs;
+                                console.log(obj[2].address);
+                                txUrl = baseNetworkURL+"token/"+obj[2].address;
+                                swal({
+                                    title: 'Your token address is',
+                                    html: '<a target="_blank" href="'+txUrl+'">'+obj[2].address+'</a>',
+                                    allowOutsideClick:false,
+                                    type: "success"
+                                })
+                        }, function(error) {
+                            console.log('Could not fetch new balances', error);
+                            return Promise.reject(error);
+                        });
+                        }
                         else
                             return;    
                     });  
@@ -221,44 +239,7 @@
         p.then(transact);
         d.resolve();
       }
-    //   function deployNewToken(){
-    //       //- var _tokenName = $("#name").val();
-    //       //- var _tokenSymbol = $("#symbol").val();
-    //       //- var _maxAddresses = $("#maxAddresses").val();
-    //       //- var _firstTeamContributorId = $("#firstTeamContributionId").val();
-    //       //- var _totalTeamContributorIds = $("#totalTeamContributionId").val();
-    //       //- var _totalPostIcoContributorIds = $("#totalPostIcoContributorIds").val();
-    //       //- var _minMintingPower = $("#minMintingPower").val();
-    //       //- var _maxMintingPower = $("#maxMintingPower").val();
-    //       //- var _halvingCycle = $("#halvingCycle").val();
-    //       //- var _DayInSecs = '84600';
-    //       //- var _minBalanceToSell = $("#teamLockPeriodInSec").val();
-    //       //- var _teamLockPeriodInSec = $("#minBalanceToSell").val();
-    //       var _tokenName = "Day";
-    //       var _tokenSymbol = "DAY";
-    //       var _tokenDecimals = 18;
-    //       var _tokenInitialSupply = 0;
-    //       var _tokenMintable = true;
-    //       var _maxAddresses = 7;
-    //       var _firstTeamContributorId = 4;
-    //       var _totalTeamContributorIds = 2;
-    //       var _totalPostIcoContributorIds = 2;
-    //       var _minMintingPower = 500000000000000000;
-    //       var _maxMintingPower = 1000000000000000000;
-    //       var _halvingCycle = 88;
-    //       var _DayInSecs = 84600;
-    //       var _minBalanceToSell = 8888;
-    //       var _teamLockPeriodInSec = 15780000;
-    //       var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec, function(error, result){
-    //             if(result)
-    //               return awaitBlockConsensus(window.web3, result,2,2000);
-    //         }).then(function(result){
-    //             console.log(result);
-    //         },function(error) {
-    //             console.log('Could not fetch transaction', error);
-    //             return Promise.reject(error);
-    //         });
-    //   }
+    
       function watchToken(){
         swal({
           text: 'Network Address',
@@ -284,26 +265,29 @@
             console.log("netiD");
             switch (netId) {
               case "1":
+                baseNetworkURL = "https://etherscan.io/"
                 break
               case "2":
+                baseNetworkURL = "https://etherscan.io/"
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to deprecated network. Switch to Mainnet.",
-                  icon: "warning"
+                  type: "warning"
                 });
                 break
               case "3":
+                baseNetworkURL = "https://ropsten.etherscan.io/"
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to Testnet. Switch to Mainnet.",
-                  icon: "warning"
+                  type: "warning"
                 });
                 break
               default:
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to an unknown network",
-                  icon: "warning"
+                  type: "warning"
                 });
             }
         })

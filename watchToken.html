@@ -347,9 +347,10 @@
                 if(!error)
                     {
                     setStorage("Allocated tokens",result);
+                    txUrl = baseNetworkURL+"tx/"+result;
                     swal({
                         title: "Timemint Allocation Tx Status",
-                        text: "TxHash "+result
+                        html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>'
                     });
                     }
                 else
@@ -369,10 +370,11 @@
                     }, function(error, result){
                 if(!error){
                     setStorage("Allocated tokens",result);
+                    txUrl = baseNetworkURL+"tx/"+result;
                     swal({
                         title: "Timemint Allocation Tx Status",
-                        text: "TxHash "+result,
-                        icon: "success"
+                        html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>',
+                        type: "success"
                     });
                 }
                 else
@@ -394,7 +396,7 @@
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to Mainnet.",
-                  icon: "success"
+                  type: "success"
                 });
                 baseNetworkURL = "https://etherscan.io/"
                 break
@@ -402,7 +404,7 @@
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to deprecated network. Switch to Mainnet.",
-                  icon: "warning"
+                  type: "warning"
                 });
                 baseNetworkURL = "https://etherscan.io/"
                 break
@@ -411,7 +413,7 @@
                 //   title: "Web3 Connected",
                 //   text: "You are connected to Testnet. Switch to Mainnet.",
                   
-                //   icon: "warning"
+                //   type: "warning"
                 // });
                 baseNetworkURL = "https://ropsten.etherscan.io/"
                 break
@@ -419,7 +421,7 @@
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to an unknown network",
-                  icon: "warning"
+                  type: "warning"
                 });
             }
         })
@@ -445,7 +447,7 @@
             swal({
                 title: 'Are you sure?',
                 text: "You won't be able to allocate timemints after this!",
-                icon: "warning",
+                type: "warning",
                 buttons: true,
                 dangerMode: true,
                 }).then(confirm => {
@@ -460,7 +462,8 @@
                                 txUrl = baseNetworkURL+"tx/"+result;
                                 swal({
                                     title: "Token Release Tx Status",
-                                    text: 'TxHash '+result
+                                    type: "info",
+                                    html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>'
                                 });
                             }
                             else
@@ -801,7 +804,7 @@
               swal({
                   title: "Accept Ownership",
                   text: "Please accept the ownership of your new tokens",
-                  icon: "info",
+                  type: "info",
                   buttons: true
                 }).then(confirm => {
                     if(confirm)
@@ -814,7 +817,8 @@
                                 txUrl = baseNetworkURL+"tx/"+result;
                                 swal({
                                     title: "Tx Status",
-                                    text: 'TxHash '+result
+                                    type:"info",
+                                    html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>'
                                 });
                             }
                             else

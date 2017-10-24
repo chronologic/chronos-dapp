@@ -79,7 +79,7 @@
             swal({
                   title: "DAY Tokens needed",
                   text: "Please allow us to reserve 100 day tokens as fee",
-                  icon: "info",
+                  type: "info",
                   closeOnClickOutside: false,
                   buttons: true
                 }).then(confirm => {
@@ -156,28 +156,28 @@
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to Mainnet.",
-                  icon: "warning"
+                  type: "warning"
                 });
                 break
               case "2":
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to deprecated network. Switch to Mainnet.",
-                  icon: "warning"
+                  type: "warning"
                 });
                 break
               case "3":
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to Testnet. Switch to Mainnet.",
-                  icon: "warning"
+                  type: "warning"
                 });
                 break
               default:
                 swal({
                   title: "Web3 Connected",
                   text: "You are connected to an unknown network",
-                  icon: "warning"
+                  type: "warning"
                 });
             }
         })
