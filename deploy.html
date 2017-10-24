@@ -69,6 +69,10 @@
             <label for="minBalanceToSell">Minimum Balance To Sell</label>
             <input id="minBalanceToSell" type="text" class="form-control">
           </div>
+          <div class="form-group">
+                <label for="dayLengthinSec">Day Lenth in Seconds</label>
+                <input id="dayLengthinSec" type="text" class="form-control">
+              </div>
         </div>
       </form>
       <div class="col-md-2 col-md-offset-5">            
@@ -172,7 +176,7 @@
                 var _minMintingPower = $("#minMintingPower").val();
                 var _maxMintingPower = $("#maxMintingPower").val();
                 var _halvingCycle = $("#halvingCycle").val();
-                var _DayInSecs = '84600';
+                var _DayInSecs = $('#dayLengthinSec').val();
                 var _minBalanceToSell = $("#teamLockPeriodInSec").val();
                 var _teamLockPeriodInSec = $("#minBalanceToSell").val();
                 // - var _tokenName = "Day";
