@@ -39,6 +39,19 @@
             <button type="button" class="btn btn-success" onClick="proceed()" style="float:right;">Proceed</button>
           </div>          
         </div>
+       
+        <div class="page-header">
+            <h1>Transaction <small>history</small></h1>
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-body" id="historyStack">
+              <p><b>Allowance</b></p><p><a href="https://ropsten.etherscan.io/tx/0x72e0492019d5868e499577c31e0ee89de4956be4d7338b3ce628a2fe4f396884">0x0B482E31ff16143719414Afa1EF102C6B39178F4</a></p>
+              <hr>
+              <p><b>Deployed</b></p><p><a href="https://ropsten.etherscan.io/tx/0x72e0492019d5868e499577c31e0ee89de4956be4d7338b3ce628a2fe4f396884">0x0B482E31ff16143719414Afa1EF102C6B39178F4</a></p>
+              
+            </div>          
+          </div>  
     </div>
     <!-- /.container-->
     <!-- Bootstrap core JavaScript-->
@@ -59,6 +72,8 @@
       var minFee = "100000000000000000000"
    
       window.onload = function() {
+
+        loadHistory();
        
         var a = jQuery.Deferred(),
         b=a.promise();
@@ -85,7 +100,6 @@
                     if(confirm)
                         var txHash = tokenInstance.approve(deployerAddress,minFee, function(error, result){
                             if(!error){
-                                setstorage("Allowance",result)
                                 swal({
                                     title: "Token Release Tx Status",
                                     text: 'TxHash '+result
@@ -199,6 +213,7 @@
         console.log(accounts);
         $("#accountInUse").html("Account "+accounts);
       }
+      
       function awaitBlockConsensus(web3s, txhash, blockCount, timeout) {
             var txWeb3 = web3s;
             var startBlock = Number.MAX_SAFE_INTEGER;
@@ -253,6 +268,7 @@
                             rejecter(new Error("we ran out of gas, not confirmed!"));
                         } else {
                             pollState = stateEnum.confirmed;
+                            console.log("Success","We did not run out of gas");
                             resolver(receipt);
                         }
                     });
@@ -271,23 +287,6 @@
             poll();
             return promise;
         };
-        function setStorage(key,value){
-          if (typeof(Storage) !== "undefined") {
-            sessionStorage.setItem(key, value);
-          } else {
-            console.log("Could not store transaction details")
-          }
-        }
-
-        function getStorage(){
-          if (typeof(Storage) !== "undefined") {
-            for (i = 0; i < sessionStorage.length; i++) {
-                console.log(sessionStorage.key(i) + "=[" + sessionStorage.getItem(sessionStorage.key(i)) + "]");
-            }
-          } else {
-            console.log("Could not get transaction details")
-          }
-        }
     </script>
   </body>
 </html>
