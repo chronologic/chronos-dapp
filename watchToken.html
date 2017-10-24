@@ -797,9 +797,6 @@
       }
       function checkOwnership(){
           setTimeout(function(){
-          console.log("to",tokenOwner);
-          console.log("tno",tokenNewOwner);
-          console.log("acc",accounts[0]);
           if(tokenOwner != accounts[0] && tokenNewOwner === accounts[0]){
               swal({
                   title: "Accept Ownership",

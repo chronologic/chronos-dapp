@@ -70,7 +70,7 @@
             <input id="minBalanceToSell" type="text" class="form-control">
           </div>
           <div class="form-group">
-                <label for="dayLengthinSec">Day Lenth in Seconds</label>
+                <label for="dayLengthinSec">Day Length in Seconds</label>
                 <input id="dayLengthinSec" type="text" class="form-control">
               </div>
         </div>
@@ -179,21 +179,7 @@
                 var _DayInSecs = $('#dayLengthinSec').val();
                 var _minBalanceToSell = $("#teamLockPeriodInSec").val();
                 var _teamLockPeriodInSec = $("#minBalanceToSell").val();
-                // - var _tokenName = "Day";
-                // - var _tokenSymbol = "DAY";
-                // - var _tokenDecimals = 18;
-                // - var _tokenInitialSupply = 0;
-                // - var _tokenMintable = true;
-                // - var _maxAddresses = 7;
-                // - var _firstTeamContributorId = 4;
-                // - var _totalTeamContributorIds = 2;
-                // - var _totalPostIcoContributorIds = 2;
-                // - var _minMintingPower = 500000000000000000;
-                // - var _maxMintingPower = 1000000000000000000;
-                // - var _halvingCycle = 88;
-                // - var _DayInSecs = 84600;
-                // - var _minBalanceToSell = 8888;
-                // - var _teamLockPeriodInSec = 15780000;
+
 
             getDeployerInstance().then(function(deployerInstance) {
                 var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec,{
@@ -208,19 +194,15 @@
                             title: 'Please wait while the transaction is mined',
                             html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>',
                             allowOutsideClick:false,
-                            type: "info"
+                            type: "info",
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowEscapeKey:false
                             })
                             return awaitBlockConsensus(window.web3, result,2, 200).then(function(result){
-                                console.log(result);
                                 var obj = result.logs;
-                                console.log(obj[2].address);
-                                txUrl = baseNetworkURL+"token/"+obj[2].address;
-                                swal({
-                                    title: 'Your token address is',
-                                    html: '<a target="_blank" href="'+txUrl+'">'+obj[2].address+'</a>',
-                                    allowOutsideClick:false,
-                                    type: "success"
-                                })
+                                window.location.replace("watchToken.html?tad="+obj[2].address);
+                                
                         }, function(error) {
                             console.log('Could not fetch new balances', error);
                             return Promise.reject(error);
