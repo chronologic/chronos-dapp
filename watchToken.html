@@ -206,7 +206,7 @@
       </div>
       <div class="row">
         <div class="col-sm-12 panel panel-default">
-          <div class="card">
+          <div class="card" id="preReleaseAllocate" style="display:none;">
             <div class="card-body">
               <h4 class="card-title">Allocate Time Mints</h4>
               <div class="form-group">
@@ -237,6 +237,22 @@
               </div><a href="#" onclick="allocateTimemints()" class="btn btn-primary">Allocate    </a>
             </div>
           </div>
+
+
+          <div class="card" id="postReleaseAllocate" style="display:none;">
+                <div class="card-body">
+                  <h4 class="card-title">Allocate Time Mints</h4>
+                  <div class="form-group">
+                    <label for="toAddress">Receiver's Address</label>
+                    <input id="toAddress" type="text" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="timeMindId">Timemint ID</label>
+                    <input id="timeMintId" type="text" class="form-control">
+                  </div>
+                  <a href="#" onclick="postAllocateAuctionTimemints()" class="btn btn-primary">Allocate</a>
+                </div>
+              </div>
         </div>
       </div>
       <div class="page-header">
@@ -267,7 +283,7 @@
       var contract;
       var initialBlockTimestamp;
       var baseNetworkURL;
-      var isReleased;
+      var released;
       var tokenOwner;
       var tokenNewOwner;
       window.onload = function() {
@@ -280,11 +296,10 @@
         a.resolve();
       }
       function getInstance(){
-        console.log("day 2 abi",dayToken2ABI);  
         tokenInstance = window.web3.eth.contract(dayToken2ABI).at(tokenNetworkAddress);
       }
       function getAllValues(){
-        $('#tokenAddress').html(tokenAddress);
+        $('#tokenAddress').html(tokenNetworkAddress);
           getSymbol();
           getTotalSupply();
           getTokenDecimal();
@@ -381,6 +396,28 @@
                     console.error(error);
             });
       }
+      function postAllocateAuctionTimemints(){
+        console.log("allocating timemints");
+          var accountTo = $('#toAddress').val();
+          var timeMintId = $('#timeMintId').val();
+          var txHash = tokenInstance.postAllocateAuctionTimeMints(accountTo,0,timeMintId,{
+                        from: accounts[0],
+                        gas: 220000,
+                        value: 0
+                    }, function(error, result){
+                if(!error){
+                    setStorage("Allocated tokens",result);
+                    txUrl = baseNetworkURL+"tx/"+result;
+                    swal({
+                        title: "Timemint Allocation Tx Status",
+                        html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>',
+                        type: "success"
+                    });
+                }
+                else
+                    console.error(error);
+            });
+      }
       function connectWeb3(){
         console.log("connecting web3");  
         if (typeof web3 === 'undefined') {
@@ -393,11 +430,6 @@
             console.log("netiD");
             switch (netId) {
               case "1":
-                swal({
-                  title: "Web3 Connected",
-                  text: "You are connected to Mainnet.",
-                  type: "success"
-                });
                 baseNetworkURL = "https://etherscan.io/"
                 break
               case "2":
@@ -409,12 +441,11 @@
                 baseNetworkURL = "https://etherscan.io/"
                 break
               case "3":
-                // swal({
-                //   title: "Web3 Connected",
-                //   text: "You are connected to Testnet. Switch to Mainnet.",
-                  
-                //   type: "warning"
-                // });
+                swal({
+                  title: "Web3 Connected",
+                  text: "You are connected to Testnet. Switch to Mainnet.",
+                  type: "warning"
+                });
                 baseNetworkURL = "https://ropsten.etherscan.io/"
                 break
               default:
@@ -675,17 +706,24 @@
           return new Promise(function(resolve,result){
               tokenInstance.released.call(function(error, result) {
                   if (error) {
-                      isReleased = false;
+                      released = false;
                       $('#releaseButton').css("display","block");
                       $('#_released').html('Oops');
                       reject(error);
                   }
                    else {
-                       if(result == true)
+                       if(result == true){
+                        released = true;
                         $('#releaseButton').css("display","none");
-                       else
+                        $('#preReleaseAllocate').css("display","none");
+                        $('#postReleaseAllocate').css("display","block");
+                       }
+                       else{
                         $('#releaseButton').css("display","block");
+                        $('#preReleaseAllocate').css("display","block");
+                        $('#postReleaseAllocate').css("display","none");
                         $('#_released').html(result.valueOf());
+                       }
                     resolve(result);}
               });
           });
@@ -795,6 +833,7 @@
               });
           });
       }
+      
       function checkOwnership(){
           setTimeout(function(){
           if(tokenOwner != accounts[0] && tokenNewOwner === accounts[0]){

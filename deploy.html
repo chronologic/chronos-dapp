@@ -113,6 +113,7 @@
                   title: "DAY Tokens needed",
                   text: "Please allow us to reserve 100 day tokens as fee",
                   type: "info",
+                  showCancelButton: true,
                   allowOutsideClick: false,
                   buttons: true
                 }).then(confirm => {
@@ -130,11 +131,12 @@
                                     title: "Could not complete transaction",
                                     type:"error"
                                 });
-                        });
-                    else{
-                        window.location.replace("index.html");
-                    }    
-                });
+                        });   
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                      window.location.replace("index.html");
+                    }
+                  });
           }
         });
         a.resolve();
@@ -229,7 +231,7 @@
       function watchToken(){
         swal({
           text: 'Network Address',
-          content: "input",
+          input: 'text',
           button: {
             text: "Watch!",
             closeModal: false,
