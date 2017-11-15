@@ -1,0 +1,34 @@
+.step-icons {
+  @include image-2x('../static/step-icons@2x.png', 120px, 600px);
+  background-image: url(../static/step-icons.png);
+
+  &_token-setup {
+    width: 120px;
+    height: 120px;
+    background-position: 0 0;
+  }
+
+  &_timemint-setup {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -120px;
+  }
+
+  &_contract-setup {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -240px;
+  }
+
+  &_publish {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -360px;
+  }
+
+  &_watch {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -480px;
+  }
+}

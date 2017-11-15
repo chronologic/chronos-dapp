@@ -1,0 +1,17 @@
+.header {
+  @extend %full-width;
+  position: absolute;
+  top: 0;
+  height: $header-height;
+  background-size: cover;
+  background: center center;
+
+  .logo {
+    background-image: url(../static/colored-logo.png);
+    background-size: 119px 35px;
+    display: block;
+    width: 119px;
+  	height: 35px;
+    margin-top: ($header-height - 35px) / 2;
+  }
+}

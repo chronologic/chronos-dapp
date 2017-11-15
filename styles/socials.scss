@@ -1,0 +1,64 @@
+.socials {
+  font-size: 0;
+
+  .social {
+    transition: 0.3s background-color;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: fade-out(#fff, 0.8);
+
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+
+    &:hover {
+      background-color: fade-out(#fff, 0.6);
+    }
+
+    &:before {
+      @include image-2x('../static/socials@2x.png', 16px, 69px);
+      transform: translate(-50%, -50%);
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background-image: url(../static/socials.png);
+    }
+
+    &_github {
+      &:before {
+        width: 16px;
+        height: 19px;
+        background-position: 0 0;
+      }
+    }
+
+    &_web {
+      &:before {
+        width: 16px;
+        height: 19px;
+        background-position: 0 -19px;
+      }
+    }
+
+    &_telegram {
+      &:before {
+        width: 16px;
+        height: 17px;
+        background-position: 0 -38px;
+      }
+    }
+
+    &_twitter {
+      &:before {
+        width: 15px;
+        height: 12px;
+        background-position: 0 -55px;
+      }
+    }
+  }
+}
