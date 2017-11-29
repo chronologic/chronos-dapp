@@ -1,16 +1,44 @@
 import React, { Component } from 'react';
-
-import Link from 'next/link';
+import Router from 'next/router';
+import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../lib/consts';
+import { confirmFeeWithdraw, showError, showInfo } from '../lib/alerts';
 
+@inject('web3Service')
+@observer
 export default class Home extends Component {
+  onStart = async () => {
+    const { web3Service } = this.props;
+    if (
+      await web3Service.checkAllowance() ||
+      (await confirmFeeWithdraw() && await this.reserveTokens())
+    ) {
+      this.start();
+    }
+  };
+
+  async reserveTokens() {
+    const { web3Service } = this.props;
+    try {
+      const result = await web3Service.approveFee();
+      showInfo('Token Release Tx Status', `TxHash ${result}`);
+      this.start();
+    } catch (err) {
+      showError('Could not complete transaction');
+    }
+  }
+
+  start() {
+    Router.push('/step-1');
+  }
+
   render() {
     return (
       <div>
         <section className="home">
           <div className="crowdsale">
             <div className="container">
-              <h1 className="title">Welcome to the Chronos DAPP</h1>
+              <h1 className="title">Welcome to the Chronologic's DAPP</h1>
               <p className="description">
                 This DAPP (Descentralized App) allows anyone to create a his/hers own version of
                 minting token easily.<br />
@@ -18,9 +46,7 @@ export default class Home extends Component {
                 DAY token.
               </p>
               <div className="buttons">
-                <Link href="/step-1">
-                  <a className="button button_fill">Start</a>
-                </Link>
+                <button className="button button_fill" onClick={this.onStart}>Start</button>
               </div>
               <p className="description">
                 *This tool requires MetaMask extension. Besides, the ETH address which will create
@@ -34,14 +60,13 @@ export default class Home extends Component {
               {Object.entries(NAVIGATION_STEPS)
                 .map(([key, { iconClassName, description, title }]) => (
                   <div className="process-item" key={key}>
-                    <div className={`step-icons ${iconClassName}`}/>
+                    <div className={`step-icons ${iconClassName}`} />
                     <p className="title">{title}</p>
                     <p className="description">
                       {description}
                     </p>
                   </div>
-                )
-              )}
+                ))}
             </div>
           </div>
         </section>

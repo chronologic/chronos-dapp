@@ -5,8 +5,12 @@ import dayTokenABI from './abi/dayTokenABI';
 
 const TOKEN_CONTRACT_ADDRESS = '0x7941bc77E1d6BD4628467b6cD3650F20F745dB06';
 const DEPLOYER_ADDRESS = '0x0B482E31ff16143719414Afa1EF102C6B39178F4';
+const MIN_FEE = '100000000000000000000';
+
+let instance = null;
 
 export default class Web3Service {
+  initialized = false;
   web3 = null;
   tokenInstance = null;
   @observable connectedToMetaMask = null;
@@ -15,6 +19,17 @@ export default class Web3Service {
 
   constructor(props) {
     Object.assign(this, props);
+  }
+
+  @action
+  async init() {
+    if (!this.initialized) {
+      await this.connect();
+      this.initialized = true;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @action
@@ -43,16 +58,28 @@ export default class Web3Service {
   }
 
   @action
-  checkAllowance() {
-    return Bb.fromCallback((callback) => {
+  async checkAllowance() {
+    const result = await Bb.fromCallback((callback) => {
       this.tokenInstance.allowance.call(this.accounts[0], DEPLOYER_ADDRESS, callback);
     });
+    return result.valueOf() >= MIN_FEE;
   }
 
   @action
-  approve(amount) {
+  approveFee() {
     return Bb.fromCallback((callback) => {
-      this.tokenInstance.approve(DEPLOYER_ADDRESS, amount, callback);
+      this.tokenInstance.approve(DEPLOYER_ADDRESS, MIN_FEE, callback);
     });
+  }
+}
+
+export function initWeb3Service(isServer, source) {
+  if (isServer) {
+    return new Web3Service(source);
+  } else {
+    if (instance === null) {
+      instance = new Web3Service(source);
+    }
+    return instance;
   }
 }
