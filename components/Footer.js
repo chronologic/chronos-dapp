@@ -11,16 +11,16 @@ export default class Header extends Component {
             <a><div className="logo" /></a>
           </Link>
           <div className="socials">
-            <a href="https://twitter.com/tbd" className="social social_twitter">
+            <a href="https://chronologic.network" className="social social_web">
               <div />
             </a>
-            <a href="https://tbd" className="social social_web">
+            <a href="https://blog.chronologic.network " className="social social_blog">
               <div />
             </a>
-            <a href="https://t.me/tbd" className="social social_telegram">
+            <a href="https://chronologic.network/paper" className="social social_whitepaper">
               <div />
             </a>
-            <a href="https://github.com/tbd/" className="social social_github">
+            <a href="https://github.com/chronologic/" className="social social_github">
               <div />
             </a>
           </div>

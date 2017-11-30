@@ -14,7 +14,14 @@
   }
 
   .button-container {
-    margin: 40px 0;
+    margin: 40px auto;
+    width: 960px;
+  }
+
+  .guide-span {
+    display: block;
+    margin-top: 56px;
+    text-align: left;
   }
 
   .value {

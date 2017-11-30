@@ -32,32 +32,32 @@
     &_github {
       &:before {
         width: 16px;
-        height: 19px;
+        height: 14px;
         background-position: 0 0;
+      }
+    }
+
+    &_blog {
+      &:before {
+        width: 16px;
+        height: 17px;
+        background-position: 0 -15px;
+      }
+    }
+
+    &_whitepaper {
+      &:before {
+        width: 16px;
+        height: 17px;
+        background-position: 0 -31px;
       }
     }
 
     &_web {
       &:before {
-        width: 16px;
-        height: 19px;
-        background-position: 0 -19px;
-      }
-    }
-
-    &_telegram {
-      &:before {
-        width: 16px;
-        height: 17px;
-        background-position: 0 -38px;
-      }
-    }
-
-    &_twitter {
-      &:before {
         width: 15px;
-        height: 12px;
-        background-position: 0 -55px;
+        height: 15px;
+        background-position: 0 -48px;
       }
     }
   }

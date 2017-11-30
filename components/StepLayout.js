@@ -30,6 +30,9 @@ export default class StepLayout extends React.Component {
           <button className="button button_fill" onClick={onNext}>
             {nextTitle || 'Continue'}
           </button>
+          <span className="guide-span">
+            * If you need any additiona help deploying your own version of the DAY token, refer to <a href="#tbd">this guide</a>.
+          </span>
         </div>
       </section>
     );
