@@ -27,29 +27,8 @@ export default class Step3 extends AbstractStep {
     minimumBalance: true,
   };
 
-  properties = Object.assign(this.properties,{
-    maxAddresses: Object.assign(this.properties.maxAddresses,{
-        validator: this.isGreaterThanZero
-    }),
-    startingId: Object.assign(this.properties.startingId,{
-        validator: this.validateDigit
-    }),
-   totalMintingId: Object.assign(this.properties.totalMintingId,{
-       validator: this.validateDigit
-   }),
-   teamLockPeriod: Object.assign(this.properties.teamLockPeriod,{
-       validator: this.validateDigit
-   }),
-   postDeploymentMaxIds: Object.assign(this.properties.postDeploymentMaxIds,{
-       validator: this.validateDigit
-   }),
-   minimumBalance: Object.assign(this.properties.minimumBalance,{
-       validator: this.validateDigit
-   }),
- })
-
   render() {
-    
+
     return (
       <StepLayout
         activeStepKey={this.activeStepKey}
