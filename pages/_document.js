@@ -12,6 +12,11 @@ export default class MyDocument extends Document {
     };
   }
 
+  static async getStaticInitialProps (ctx) {
+    const props = await Document.getInitialProps(ctx)
+    return props
+  }
+
   render() {
     return (
       <html lang="en">
