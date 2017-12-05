@@ -24,7 +24,24 @@ export default class Step2 extends AbstractStep {
     mintingPeriod: true,
   };
 
+  properties = Object.assign(this.properties,{
+    minMintingPower: Object.assign(this.properties.minMintingPower,{
+        validator: this.validateDigit
+    }),
+    maxMintingPower: Object.assign(this.properties.maxMintingPower,{
+        validator: this.isGreaterThanZero
+    }),
+   halvingCycle: Object.assign(this.properties.halvingCycle,{
+       validator: this.isGreaterThanZero
+   }),
+   mintingPeriod: Object.assign(this.properties.mintingPeriod,{
+       validator: this.isGreaterThanZero
+   }),
+ })
+
+
   render() {
+
     return (
       <StepLayout
         activeStepKey={this.activeStepKey}
