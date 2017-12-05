@@ -2,6 +2,16 @@ const path = require('path');
 const glob = require('glob');
 
 module.exports = {
+  exportPathMap: function() {
+    return {
+      './': { page: '/' },
+      '/index': { page: '/index' },
+      '/step-1': { page: '/step-1' },
+      '/step-2': { page: '/step-2' },
+      '/step-3': { page: '/step-3'},
+      '/step-4': { page: '/step-4'}
+    }
+  },
   webpack: (config, { dev }) => {
     config.module.rules.push(
       {
