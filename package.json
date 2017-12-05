@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node server.js",
-    "build": "next build",
-    "export": "cross-env NODE_ENV=production next build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=production next export",
-    "postinstall": "next build",
+    "build": "rm -rf node_modules/.cache/babel-loader && next build",
+    "export": "cross-env NODE_ENV=production npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=production next export",
+    "postinstall": "npm run build",
+    "stage": "cross-env NODE_ENV=staging npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=staging next export",
     "start": "cross-env NODE_ENV=production node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -44,6 +45,7 @@
     "sweetalert": "^2.0.8"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2"
+    "babel-eslint": "^8.0.2",
+    "htmlescape": "^1.1.1"
   }
 }
