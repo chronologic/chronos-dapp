@@ -32,15 +32,6 @@ export default class AbstractStep extends React.Component {
     throw new Error('Implement me');
   }
 
-  validateDigit(value){
-    var tests = new RegExp('^\\d+$');
-    return tests.test(value);
-  }
-
-  isGreaterThanZero(value){
-    return  Number(value) > 0;
-  }
-
   validatePrevState() {
     const prevProps = [];
     for (let idx = this.activeStep.idx - 1; idx > 0; idx -= 1) {
