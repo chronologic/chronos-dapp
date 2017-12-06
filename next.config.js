@@ -3,7 +3,7 @@ const glob = require('glob');
 const stage = process.env.NODE_ENV === 'staging';
 
 module.exports = {
-  assetPrefix: stage? '/custom-day-dapp':'',
+  assetPrefix: stage? '/custom-day-dapp':'/',
   exportPathMap: function() {
     return {
       './': { page: '/' },
