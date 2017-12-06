@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node server.js",
     "build": "next build",
+    "deploy:staging" : "git subtree push --prefix out origin gh-pages",
     "export": "cross-env NODE_ENV=production npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=production next export",
     "postinstall": "npm run build",
     "stage": "cross-env NODE_ENV=staging npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=staging next export",
