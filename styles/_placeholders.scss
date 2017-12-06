@@ -16,8 +16,7 @@
 }
 
 %logos {
-  @include image-2x('../static/logos@2x.png', 119px, 60px);
+  @include image-2x('/static/logos@2x.png', 119px, 60px);
   display: block;
-  background-image: url(../static/logos.png);
+  background-image: url(/static/logos.png);
 }
-
