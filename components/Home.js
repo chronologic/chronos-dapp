@@ -7,7 +7,8 @@ import { confirmFeeWithdraw, showError, showInfo } from '../lib/alerts';
 @inject('web3Service')
 @observer
 export default class Home extends Component {
-  onStart = async () => {
+  onStart = async (eventInst) => {
+    eventInst.target.disabled = true;
     const { web3Service } = this.props;
     if (
       await web3Service.checkAllowance() ||

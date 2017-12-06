@@ -69,7 +69,8 @@ export default class AbstractStep extends React.Component {
     return validations[property];
   }
 
-  goNext = () => {
+  goNext = (eventInst) => {
+    eventInst.target.disabled = true;
     const { props: { store } } = this;
     const validations = Object.keys(this.properties).map(property => this.validate(property));
     if (!validations.some(validation => !validation)) {
