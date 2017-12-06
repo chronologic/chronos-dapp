@@ -16,6 +16,8 @@ export default class Home extends Component {
     ) {
       this.start();
     }
+    else
+      eventInst.target.disabled = false;
   };
 
   async reserveTokens() {

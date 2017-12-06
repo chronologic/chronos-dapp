@@ -83,6 +83,8 @@ export default class AbstractStep extends React.Component {
         query,
       });
     }
+    else
+      eventInst.target.disabled = false;
   };
 
   renderProperty(propertyData, otherProps = {}) {
