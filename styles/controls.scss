@@ -5,6 +5,7 @@
   border: none;
   border-radius: 32px;
   box-sizing: border-box;
+  cursor: pointer;
   padding: 0 15px;
   line-height: 36px;
   font-size: 13px;
@@ -20,6 +21,10 @@
     background-color: $accent-color;
     color: #fff;
   }
+}
+
+.button:disabled{
+     @include background-opacity($accent-color, 0.7);
 }
 
 .label {
