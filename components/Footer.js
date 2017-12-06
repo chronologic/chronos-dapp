@@ -7,7 +7,7 @@ export default class Header extends Component {
       <footer className="footer">
         <div className="container">
           <p className="rights">2017 ChronoLogic. All rights reserved.</p>
-          <Link href="/">
+          <Link href="/" as={ process.env.BACKEND_URL + '/'}>
             <a><div className="logo" /></a>
           </Link>
           <div className="socials">

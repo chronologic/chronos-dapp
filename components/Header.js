@@ -6,7 +6,7 @@ export default class Header extends Component {
     return (
       <header className="header">
         <div className="container">
-          <Link href="/">
+          <Link href="/" as={ process.env.BACKEND_URL + '/'}>
             <a className="logo"><div /></a>
           </Link>
         </div>
