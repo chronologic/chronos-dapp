@@ -1,7 +1,9 @@
 const path = require('path');
 const glob = require('glob');
+const stage = process.env.NODE_ENV === 'staging';
 
 module.exports = {
+  assetPrefix: stage? '/custom-day-dapp':'',
   exportPathMap: function() {
     return {
       './': { page: '/' },
@@ -13,6 +15,15 @@ module.exports = {
     }
   },
   webpack: (config, { dev }) => {
+
+    // Perform customizations to config DISABLE BABEL-LOADER CACHING
+    config.module.rules = config.module.rules.map(rule => {
+      if(rule.loader === 'babel-loader') {
+        rule.options.cacheDirectory = false
+      }
+      return rule
+    })
+
     config.module.rules.push(
       {
         test: /\.(css|scss)/,
