@@ -13,13 +13,19 @@ export default class Step4 extends AbstractStep {
     super('PUBLISH', props);
   }
 
+  getValidations() {
+    return {};
+  }
+
   goNext = () => {
     const validations = ALL_PROPERTIES.reduce((result, property) => {
-      result.push(this.validate(property));
+      result.push(this.validate(property.name));
       return result;
     }, []);
+    //console.log(validations,validations.some(validation => !validation))
     if (!validations.some(validation => !validation)) {
-      Router.push('/step-4');
+      //Router.push('/step-4');
+      throw new Error('Implement next stage');
     }
   };
 
