@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development node server.js",
     "build": "next build",
     "clean_babel": "rimraf node_modules/.cache/babel-loader",
-    "deploy:staging" : "git subtree push --prefix out origin gh-pages",
+    "deploy:staging": "git subtree push --prefix out origin gh-pages",
     "export": "cross-env NODE_ENV=production npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=production next export",
     "postinstall": "npm run build",
     "stage": "cross-env NODE_ENV=staging npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=staging next export",
@@ -44,7 +44,8 @@
     "react-dom": "^16.2.0",
     "reactstrap": "^5.0.0-alpha.4",
     "sass-loader": "^6.0.6",
-    "sweetalert": "^2.0.8"
+    "sweetalert": "^2.0.8",
+    "web3": "^0.20.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.2",
