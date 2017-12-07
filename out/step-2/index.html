@@ -563,38 +563,35 @@ body {
       background-color: rgba(255, 255, 255, 0.4); }
 
 .socials .social:before {
+      /*@include image-2x('./static/socials@2x.png', 16px, 69px);*/
       -webkit-transform: translate(-50%, -50%);
               transform: translate(-50%, -50%);
       content: '';
       position: absolute;
       left: 50%;
       top: 50%;
-      background-image: url(./static/socials.png); }
-
-@media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-        .socials .social:before {
-          background-image: "" url("./static/socials@2x.png");
-          background-size: 16px 69px; } }
+      background-size: 100% 100%;
+      /*background-image: url(./static/socials.png);*/ }
 
 .socials .social_github:before {
-      width: 16px;
-      height: 17px;
-      background-position: 0 -31px; }
+      width: 19px;
+      height: 20px;
+      background-image: url(./static/github.svg); }
 
 .socials .social_blog:before {
       width: 16px;
       height: 14px;
-      background-position: 0 0; }
+      background-image: url(./static/medium.svg); }
 
 .socials .social_whitepaper:before {
-      width: 16px;
-      height: 17px;
-      background-position: 0 -15px; }
+      width: 17px;
+      height: 19px;
+      background-image: url(./static/whitepaper.svg); }
 
 .socials .social_web:before {
-      width: 15px;
-      height: 15px;
-      background-position: 0 -48px; }
+      width: 20px;
+      height: 20px;
+      background-image: url(./static/website.svg); }
 
 .step-icons {
   background-image: url(./static/step-icons.png); }
@@ -628,8 +625,8 @@ body {
     width: 120px;
     height: 120px;
     background-position: 0 -480px; }
-</style><div><div id="__next"><div data-reactroot=""><div><header class="header"><div class="container"><a class="logo" href="/custom-day-dapp/"><div></div></a></div></header><section class="steps"><div class="steps-navigation"><div class="container"><div class="step-navigation">Token Setup</div><div class="step-navigation step-navigation_active">Timemint Setup</div><div class="step-navigation">Contract Setup</div><div class="step-navigation">Publish</div><div class="step-navigation">Watch Page</div></div></div><div class="steps-content container step_timemint-setup"><div class="about-step"><p class="title">Timemint Setup</p><p class="description">Setup minting and halving rate your contract will apply</p></div><div class="input-block-container"><div class="left"><label class="label">Minimum minting power</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div><div class="right"><label class="label">Max minting power</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div><div class="input-block-container"><div class="left"><label class="label">Halving cycle</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div><div class="right"><label class="label">Minting period in sec</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div></div><div class="button-container"><button class="button button_fill" disabled="">Continue</button><span class="guide-span">* If you need any additional help deploying your own version of the DAY token, refer to <a href="#tbd">this guide</a>.</span></div></section><footer class="footer"><div class="container"><p class="rights">2017 ChronoLogic. All rights reserved.</p><a href="/custom-day-dapp/"><div class="logo"></div></a><div class="socials"><a href="https://chronologic.network" class="social social_web"><div></div></a><a href="https://blog.chronologic.network " class="social social_blog"><div></div></a><a href="https://chronologic.network/paper" class="social social_whitepaper"><div></div></a><a href="https://github.com/chronologic/" class="social social_github"><div></div></a></div></div></footer></div></div></div><div id="__next-error"></div></div><div><script>
-          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/step-2","query":{},"buildId":"61cb86df-c0a8-4e38-a055-f492609908f6","buildStats":{"app.js":{"hash":"0a5eff60f97f2c5b65e1a5e3cc4963a5"}},"assetPrefix":"/custom-day-dapp","nextExport":true,"err":null,"chunks":[]}
+</style><div><div id="__next"><div data-reactroot=""><div><header class="header"><div class="container"><a class="logo" href="/chronos-dapp/"><div></div></a></div></header><section class="steps"><div class="steps-navigation"><div class="container"><div class="step-navigation">Token Setup</div><div class="step-navigation step-navigation_active">Timemint Setup</div><div class="step-navigation">Contract Setup</div><div class="step-navigation">Publish</div><div class="step-navigation">Watch Page</div></div></div><div class="steps-content container step_timemint-setup"><div class="about-step"><p class="title">Timemint Setup</p><p class="description">Setup minting and halving rate your contract will apply</p></div><div class="input-block-container"><div class="left"><label class="label">Minimum minting power</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div><div class="right"><label class="label">Max minting power</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div><div class="input-block-container"><div class="left"><label class="label">Halving cycle</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div><div class="right"><label class="label">Minting period in sec</label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div></div><div class="button-container"><button class="button button_fill" disabled="">Continue</button><span class="guide-span">* If you need any additional help deploying your own version of the DAY token, refer to <a href="#tbd">this guide</a>.</span></div></section><footer class="footer"><div class="container"><p class="rights">2017 ChronoLogic. All rights reserved.</p><a href="/chronos-dapp/"><div class="logo"></div></a><div class="socials"><a href="https://chronologic.network" class="social social_web"><div></div></a><a href="https://blog.chronologic.network " class="social social_blog"><div></div></a><a href="https://chronologic.network/paper" class="social social_whitepaper"><div></div></a><a href="https://github.com/chronologic/" class="social social_github"><div></div></a></div></div></footer></div></div></div><div id="__next-error"></div></div><div><script>
+          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/step-2","query":{},"buildId":"3328c3ca-d0ce-4e52-9d89-842b2ec7b24a","buildStats":{"app.js":{"hash":"fc8b607380dcad6d0f851a1826154322"}},"assetPrefix":"/chronos-dapp","nextExport":true,"err":null,"chunks":[]}
           module={}
           __NEXT_LOADED_PAGES__ = []
           __NEXT_LOADED_CHUNKS__ = []
@@ -641,4 +638,4 @@ body {
           __NEXT_REGISTER_CHUNK = function (chunkName, fn) {
             __NEXT_LOADED_CHUNKS__.push({ chunkName: chunkName, fn: fn })
           }
-        </script><script async="" id="__NEXT_PAGE__/step-2" type="text/javascript" src="/custom-day-dapp/_next/61cb86df-c0a8-4e38-a055-f492609908f6/page/step-2.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/custom-day-dapp/_next/61cb86df-c0a8-4e38-a055-f492609908f6/page/_error.js"></script><div></div><script type="text/javascript" src="/custom-day-dapp/_next/0a5eff60f97f2c5b65e1a5e3cc4963a5/app.js" async=""></script></div></body></html>
+        </script><script async="" id="__NEXT_PAGE__/step-2" type="text/javascript" src="/chronos-dapp/_next/3328c3ca-d0ce-4e52-9d89-842b2ec7b24a/page/step-2.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/chronos-dapp/_next/3328c3ca-d0ce-4e52-9d89-842b2ec7b24a/page/_error.js"></script><div></div><script type="text/javascript" src="/chronos-dapp/_next/fc8b607380dcad6d0f851a1826154322/app.js" async=""></script></div></body></html>
