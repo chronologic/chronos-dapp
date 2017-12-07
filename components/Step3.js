@@ -1,5 +1,3 @@
-@inject('web3Service')
-web3Service={this.web3Service}
 import React from 'react';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
