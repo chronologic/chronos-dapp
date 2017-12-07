@@ -1,3 +1,4 @@
+import Web3 from 'web3/index';
 import Bb from 'bluebird';
 import { action, observable, runInAction } from 'mobx';
 
@@ -37,15 +38,18 @@ export default class Web3Service {
     let { web3 } = this;
     if (!web3) {
       if (typeof window.web3 !== 'undefined') {
-        web3 = new window.Web3(window.web3.currentProvider);
+        web3 = new Web3(window.web3.currentProvider);
         this.connectedToMetaMask = true;
       } else {
-        web3 = new window.Web3(new window.Web3.providers.HttpProvider('http://localhost:8545'));
+        web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
         this.connectedToMetaMask = false;
       }
       window.web3 = web3;
       this.web3 = web3;
     }
+    if(!this.connectedToMetaMask || !this.web3.isConnected() )//Do not proceed if not connected to metamask
+      return;
+
     this.accounts = web3.eth.accounts;
     console.log('accounts', this.accounts);
     const netId =
