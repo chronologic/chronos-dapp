@@ -25,6 +25,7 @@
 
 .button:disabled{
      @include background-opacity($accent-color, 0.7);
+     cursor: auto;
 }
 
 .label {
