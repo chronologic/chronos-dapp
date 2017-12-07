@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
 
+@inject('web3Service')
 @inject('store')
 @observer
 export default class Step2 extends AbstractStep {
@@ -23,13 +24,15 @@ export default class Step2 extends AbstractStep {
     halvingCycle: true,
     mintingPeriod: true,
   };
-  
+
   render() {
 
+    const {web3Service} = this.props;
     return (
       <StepLayout
         activeStepKey={this.activeStepKey}
         onNext={this.goNext}
+        web3Disabled = {this.web3Disabled(web3Service) }
       >
         <div className="input-block-container">
           {this.renderProperty(this.properties.minMintingPower, { side: 'left' })}

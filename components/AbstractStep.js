@@ -28,6 +28,10 @@ export default class AbstractStep extends React.Component {
     this.validatePrevState();
   }
 
+  web3Disabled (web3Service){
+    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
+  }
+
   getValidations() {
     throw new Error('Implement me');
   }
@@ -70,6 +74,8 @@ export default class AbstractStep extends React.Component {
   }
 
   goNext = (eventInst) => {
+    if(this.web3Disabled() )
+      return;
     eventInst.target.disabled = true;
     const { props: { store } } = this;
     const validations = Object.keys(this.properties).map(property => this.validate(property));

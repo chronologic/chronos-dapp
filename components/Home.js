@@ -8,6 +8,8 @@ import { confirmFeeWithdraw, showError, showInfo } from '../lib/alerts';
 @observer
 export default class Home extends Component {
   onStart = async (eventInst) => {
+    if(this.web3Disabled() )
+      return;
     eventInst.target.disabled = true;
     const { web3Service } = this.props;
     if (
@@ -31,6 +33,11 @@ export default class Home extends Component {
     }
   }
 
+  web3Disabled (){
+    const {web3Service} = this.props;
+    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
+  }
+
   start() {
     Router.push('/step-1');
   }
@@ -49,7 +56,7 @@ export default class Home extends Component {
                 DAY token.
               </p>
               <div className="buttons">
-                <button className="button button_fill" onClick={this.onStart}>Start</button>
+                <button className="button button_fill" onClick={this.onStart} disabled={this.web3Disabled()} >Start</button>
               </div>
               <p className="description">
                 *This tool requires MetaMask extension. Besides, the ETH address which will create

@@ -4,11 +4,14 @@ import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../lib/consts';
 import StepNavigation from './StepNavigation';
 
+
 @inject('store')
+@inject('web3Service')
 @observer
 export default class StepLayout extends React.Component {
+
   render() {
-    const { props: { activeStepKey, onNext, nextTitle } } = this;
+    const { props: { activeStepKey, onNext, nextTitle, web3Disabled } } = this;
     const {
       title,
       description,
@@ -27,7 +30,7 @@ export default class StepLayout extends React.Component {
           {this.props.children}
         </div>
         <div className="button-container">
-          <button className="button button_fill" onClick={onNext}>
+          <button className="button button_fill" onClick={onNext} disabled={web3Disabled} >
             {nextTitle || 'Continue'}
           </button>
           <span className="guide-span">

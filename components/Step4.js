@@ -6,6 +6,7 @@ import { PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
 import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
 
+@inject('web3Service')
 @inject('store')
 @observer
 export default class Step4 extends AbstractStep {
@@ -16,18 +17,6 @@ export default class Step4 extends AbstractStep {
   getValidations() {
     return {};
   }
-
-  goNext = () => {
-    const validations = ALL_PROPERTIES.reduce((result, property) => {
-      result.push(this.validate(property.name));
-      return result;
-    }, []);
-    //console.log(validations,validations.some(validation => !validation))
-    if (!validations.some(validation => !validation)) {
-      //Router.push('/step-4');
-      throw new Error('Implement next stage');
-    }
-  };
 
   renderProperty(propertyData, otherProps = {}) {
     const { props: { store } } = this;
@@ -43,11 +32,14 @@ export default class Step4 extends AbstractStep {
   }
 
   render() {
+
+    const {web3Service} = this.props;
     return (
       <StepLayout
         activeStepKey={this.activeStepKey}
         onNext={this.goNext}
         nextTitle="Deploy"
+        web3Disabled = {this.web3Disabled(web3Service) }
       >
         <div className="input-block-container">
           {this.renderProperty(this.properties.tokenName, { side: 'left' })}
