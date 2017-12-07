@@ -16,6 +16,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html lang="en">
+        {<link rel="shortcut icon" href={process.env.BACKEND_URL + "/favicon.ico"} type="image/x-icon" />}
         <body>
           <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
           {this.props.customValue}
