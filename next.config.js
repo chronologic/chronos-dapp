@@ -1,9 +1,9 @@
 const path = require('path');
 const glob = require('glob');
-const stage = process.env.NODE_ENV === 'staging';
+const env = require('./env-config');
 
 module.exports = {
-  assetPrefix: stage? '/custom-day-dapp':'/',
+  assetPrefix: env['process.env.BACKEND_URL'],
   exportPathMap: function() {
     return {
       './': { page: '/' },
