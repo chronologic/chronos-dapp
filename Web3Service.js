@@ -51,6 +51,7 @@ export default class Web3Service {
       return;
 
     this.accounts = web3.eth.accounts;
+    web3.eth.defaultAccount = this.accounts[0];
     console.log('accounts', this.accounts);
     const netId =
       await Bb.fromCallback(callback => web3.version.getNetwork(callback));
@@ -70,10 +71,11 @@ export default class Web3Service {
   }
 
   @action
-  approveFee() {
-    return Bb.fromCallback((callback) => {
+  async approveFee() {
+    const result =  await Bb.fromCallback((callback) => {
       this.tokenInstance.approve(DEPLOYER_ADDRESS, MIN_FEE, callback);
     });
+    return result;
   }
 }
 
