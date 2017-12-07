@@ -74,10 +74,11 @@ export default class AbstractStep extends React.Component {
   }
 
   goNext = (eventInst) => {
+    var target = eventInst.target
     const {web3Service} = this.props;
     if(this.web3Disabled(web3Service) )
       return;
-    eventInst.target.disabled = true;
+    target.disabled = true;
     const { props: { store } } = this;
     const validations = Object.keys(this.properties).map(property => this.validate(property));
     if (!validations.some(validation => !validation)) {
@@ -91,7 +92,7 @@ export default class AbstractStep extends React.Component {
       });
     }
     else
-      eventInst.target.disabled = false;
+      target.disabled = false;
   };
 
   renderProperty(propertyData, otherProps = {}) {

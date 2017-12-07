@@ -10,7 +10,8 @@ export default class Home extends Component {
   onStart = async (eventInst) => {
     if(this.web3Disabled() )
       return;
-    eventInst.target.disabled = true;
+    var target = eventInst.target
+    target.disabled = true;
     const { web3Service } = this.props;
     if (
       await web3Service.checkAllowance() ||
@@ -19,13 +20,14 @@ export default class Home extends Component {
       this.start();
     }
     else
-      eventInst.target.disabled = false;
+      target.disabled = false;
   };
 
   async reserveTokens() {
     const { web3Service } = this.props;
     try {
       const result = await web3Service.approveFee();
+      console.log(result)
       showInfo('Token Release Tx Status', `TxHash ${result}`);
       this.start();
     } catch (err) {
