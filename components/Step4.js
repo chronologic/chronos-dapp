@@ -1,4 +1,5 @@
 import React from 'react';
+import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
 
@@ -15,8 +16,24 @@ export default class Step4 extends AbstractStep {
   }
 
   getValidations() {
-    return {};
+    return this._validations;
   }
+
+  @observable
+  _validations = {
+    tokenName: true,
+    symbol: true,
+    minMintingPower: true,
+    maxMintingPower: true,
+    halvingCycle: true,
+    mintingPeriod: true,
+    maxAddresses: true,
+    startingId: true,
+    totalMintingId: true,
+    teamLockPeriod: true,
+    postDeploymentMaxIds: true,
+    minimumBalance: true,
+  };
 
   renderProperty(propertyData, otherProps = {}) {
     const { props: { store } } = this;
