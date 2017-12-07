@@ -74,7 +74,8 @@ export default class AbstractStep extends React.Component {
   }
 
   goNext = (eventInst) => {
-    if(this.web3Disabled() )
+    const {web3Service} = this.props;
+    if(this.web3Disabled(web3Service) )
       return;
     eventInst.target.disabled = true;
     const { props: { store } } = this;
