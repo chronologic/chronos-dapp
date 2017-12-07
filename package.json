@@ -8,9 +8,10 @@
     "build": "next build",
     "clean_babel": "rimraf node_modules/.cache/babel-loader",
     "deploy:staging": "git subtree push --prefix out origin gh-pages",
-    "export": "cross-env NODE_ENV=production npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=production next export",
+    "export": "cross-env NODE_ENV=production npm run build && rm -rf out/* && cross-env NODE_ENV=production next export && npm run prep_deploy",
     "postinstall": "npm run build",
-    "stage": "cross-env NODE_ENV=staging npm run build && rm -rf out/* && cp .nojekyll out/.nojekyll && cross-env NODE_ENV=staging next export",
+    "prep_deploy": "cp .nojekyll out/.nojekyll && cp favicon.ico out/favicon.ico",
+    "stage": "cross-env NODE_ENV=staging npm run build && rm -rf out/* && cross-env NODE_ENV=staging next export && npm run prep_deploy ",
     "start": "cross-env NODE_ENV=production node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
