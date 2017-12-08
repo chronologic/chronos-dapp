@@ -61,9 +61,9 @@ export default class Home extends Component {
                 <button className="button button_fill" onClick={this.onStart} disabled={this.web3Disabled()} >Start</button>
               </div>
               <p className="description">
-                *This tool requires MetaMask extension. Besides, the ETH address which will create
+                *This tool requires <b><a href="https://metamask.io/" target="_blank">MetaMask</a> </b> extension. Besides, the ETH address which will create
                 the smart contract has to have an amount of ETH for the contract deployment and
-                also X DAY for fees. For more information read this article.
+                also X DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.
               </p>
             </div>
           </div>
