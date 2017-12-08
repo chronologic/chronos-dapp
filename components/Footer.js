@@ -11,19 +11,19 @@ export default class Header extends Component {
             <a><div className="logo" /></a>
           </Link>
           <div className="socials">
-            <a href="https://chronologic.network" className="social social_web">
+            <a href="https://chronologic.network" className="social social_web" title="Website">
               <div />
             </a>
-            <a href="https://blog.chronologic.network " className="social social_blog">
+            <a href="https://blog.chronologic.network " className="social social_blog" title="Blog">
               <div />
             </a>
-            <a href="https://chronologic.network/paper" className="social social_whitepaper">
+            <a href="https://chronologic.network/paper" className="social social_whitepaper" title="Whitepaper">
               <div />
             </a>
-            <a href="https://github.com/chronologic/" className="social social_github">
+            <a href="https://github.com/chronologic/" className="social social_github" title="Github">
               <div />
             </a>
-            <a href="#TBD" className="social social_help">
+            <a href="https://blog.chronologic.network/chronos-platform/home" className="social social_help" title="Training and Support">
               <div />
             </a>
           </div>
