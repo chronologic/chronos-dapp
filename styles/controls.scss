@@ -1,0 +1,76 @@
+.button {
+  display: inline-block;
+  transition: 0.3s background-color,
+              0.3s color;
+  border: none;
+  border-radius: 32px;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 0 15px;
+  line-height: 36px;
+  font-size: 13px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+
+  &-container {
+    text-align: center;
+  }
+
+  &_fill {
+    background-color: $accent-color;
+    color: #fff;
+  }
+}
+
+.button:disabled{
+     @include background-opacity($accent-color, 0.7);
+     cursor: auto;
+}
+
+.label {
+  display: block;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.loading{
+  display:block;
+  margin: 0 40%;
+
+  &_msg{
+    text-align:center;
+    margin: 0 auto 10px;
+  }
+
+  &_image{
+    text-align:center;
+    margin: 5px 40px;
+  }
+}
+
+.values {
+  display: block;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.input {
+  transition: 0.3s border-color;
+  width: 100%;
+  height: 36px;
+  margin-bottom: 15px;
+  outline: none;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0 10px;
+  color: #333;
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+
+  &:focus {
+    border-color: $accent-color;
+  }
+}

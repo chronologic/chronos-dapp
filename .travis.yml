@@ -1,3 +1,5 @@
+before_script:
+  "cd out"
 install: true
 language: generic
 deploy:

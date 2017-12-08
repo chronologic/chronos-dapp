@@ -1,0 +1,45 @@
+.steps {
+  pre {
+    display: block;
+    overflow: auto;
+    height: 200px;
+    padding: 15px;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    font-size: 14px;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .button-container {
+    margin: 40px auto;
+    width: 960px;
+  }
+
+  .guide-span {
+    display: block;
+    margin-top: 56px;
+    text-align: left;
+  }
+
+  .value {
+    margin-bottom: 10px;
+  }
+
+  .left,
+  .right,
+  .item {
+    margin-bottom: 25px;
+  }
+
+  .button {
+    padding-left: 30px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAUCAMAAACgaw2xAAAAMFBMVEX///////////////////////////////////////////////////////////////9Or7hAAAAAD3RSTlMAPT5BSUpRUt3f5ufp6vUxUI2NAAAASUlEQVR42rWROw7AMAxC3abN3+b+t80WZYAxb/STsAR2kr0+xnAgEhMVwryhTLpjvg5CFOugTCXc/sGj1PM7d12irl0Plb3taRdkbQmzeFkz0wAAAABJRU5ErkJggg==);
+    background-size: 12px 10px;
+    background-repeat: no-repeat;
+    background-position: left 10px center;
+    cursor: pointer;
+  }
+}

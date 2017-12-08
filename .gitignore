@@ -1,2 +1,11 @@
+# APP
+.next
+node_modules
+
+# Other
+*.log
+*.db
+.idea
 .DS_Store
-node_modules/
+*.map
+.sass-cache/*
