@@ -69,5 +69,15 @@
         background-position: 0 -48px;*/
       }
     }
+
+    &_help {
+      &:before {
+        width: 18px;
+        height: 18px;
+        background-image: url(./static/support.svg)
+        /*background-image: url(./static/website@2x.png)
+        background-position: 0 -48px;*/
+      }
+    }
   }
 }

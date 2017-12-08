@@ -23,6 +23,9 @@ export default class Header extends Component {
             <a href="https://github.com/chronologic/" className="social social_github">
               <div />
             </a>
+            <a href="#TBD" className="social social_help">
+              <div />
+            </a>
           </div>
         </div>
       </footer>
