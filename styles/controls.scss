@@ -35,6 +35,21 @@
   font-weight: bold;
 }
 
+.loading{
+  display:block;
+  margin: 0 40%;
+
+  &_msg{
+    text-align:center;
+    margin: 0 auto 10px;
+  }
+
+  &_image{
+    text-align:center;
+    margin: 5px 40px;
+  }
+}
+
 .values {
   display: block;
   text-transform: uppercase;

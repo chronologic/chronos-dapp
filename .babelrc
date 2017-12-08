@@ -15,9 +15,13 @@
         "extensions": ["css$", "scss$"]
       }
     ],
-    ["transform-define", "./env-config.js"]
+    ["transform-define", "./env-config.js"],
+    ["emotion"]
   ],
   "presets": [
+    "react",
+    "es2015",
+    "stage-0",
     "next/babel"
   ],
   "ignore": []
