@@ -11,7 +11,8 @@ module.exports = {
       '/step-1': { page: '/step-1' },
       '/step-2': { page: '/step-2' },
       '/step-3': { page: '/step-3'},
-      '/step-4': { page: '/step-4'}
+      '/step-4': { page: '/step-4'},
+      '/step-5': { page: '/step-5'}
     }
   },
   webpack: (config, { dev }) => {
