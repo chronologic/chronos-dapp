@@ -52,7 +52,7 @@ export default class Home extends Component {
             <div className="container">
               <h1 className="title">Welcome to the Chronologic's DAPP</h1>
               <p className="description">
-                This DAPP (Descentralized App) allows anyone to create a his/hers own version of
+                This DAPP (Decentralized App) allows anyone to create a his/hers own version of
                 minting token easily.<br />
                 The steps ahead will help you set up all features of your very own version of the
                 DAY token.
