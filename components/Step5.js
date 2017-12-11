@@ -60,7 +60,7 @@ export default class Step4 extends AbstractStep {
   };
 
   contractDeployed(){
-  {_state} = this;
+  //{_state} = this;
     //return _state.transactionHash && _state.minedBlock
     return false;
   }
