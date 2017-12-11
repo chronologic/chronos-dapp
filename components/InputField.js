@@ -13,6 +13,7 @@ export default class InputField extends React.Component {
     const {
       defaultValue,
       description,
+      info,
       disabled,
       errorMessage,
       onBlur,
@@ -23,10 +24,15 @@ export default class InputField extends React.Component {
       valid,
       value,
     } = this.props;
+    console.log(description)
+
     const error = !valid ? errorMessage : '';
     return (
       <div className={side}>
-        <label className="label">{title}</label>
+        <label className="label">{title}
+          {info &&
+            <a className="label_info" title={info}/> }
+        </label>
         <input
           disabled={disabled}
           type={type}

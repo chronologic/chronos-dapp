@@ -102,6 +102,7 @@ export default class AbstractStep extends React.Component {
       errorMessage,
       name,
       title,
+      description
     } = propertyData;
     return (
       <InputField
@@ -110,6 +111,7 @@ export default class AbstractStep extends React.Component {
         valid={validations[name]}
         title={title}
         value={store[name]}
+        description = {description}
         onBlur={() => this.validate(name)}
         onChange={e => this.change(name, e)}
         {...otherProps}
