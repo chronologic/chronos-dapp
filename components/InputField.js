@@ -31,7 +31,7 @@ export default class InputField extends React.Component {
       <div className={side}>
         <label className="label">{title}
           {info &&
-            <a className="label_info" title={info}/> }
+            <a className="label_info" data-tip={info}/> }
         </label>
         <input
           disabled={disabled}

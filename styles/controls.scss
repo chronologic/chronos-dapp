@@ -34,6 +34,7 @@
   text-transform: uppercase;
   font-weight: bold;
   &_info{
+    cursor: pointer;
     position:relative;
     bottom: -3px;
     display:inline-block;
