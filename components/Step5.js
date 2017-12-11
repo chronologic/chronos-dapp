@@ -33,7 +33,7 @@ export default class Step4 extends AbstractStep {
 
     try{
       const transaction = web3Service.deploy( this.fetchData() );
-      this.setState( Object.assign(this._state,{transactionHash:transaction});
+      //this.setState( Object.assign(this._state,{transactionHash:transaction});
     }
     catch(e){
       showError('Transaction Failed');
@@ -90,6 +90,10 @@ export default class Step4 extends AbstractStep {
       >
         <div className="input-block-container">
           <Boxloader {...{color:'#123abc',loading: true, size:13,msg:'Deploying...'}} />
+        </div>
+        <div className="input-block-container">
+        </div>
+        <div className="input-block-container">
         </div>
       </StepLayout>
     );
