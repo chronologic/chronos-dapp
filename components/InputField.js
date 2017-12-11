@@ -24,7 +24,6 @@ export default class InputField extends React.Component {
       valid,
       value,
     } = this.props;
-    console.log(description)
 
     const error = !valid ? errorMessage : '';
     return (
