@@ -64,6 +64,14 @@ export default class Web3Service {
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
     this.deployerInstance = web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS);
   }
+/*
+  @action
+  async checkBalance() {
+    const result = await Bb.fromCallback((callback) => {
+      this.tokenInstance.balanceOf.call(this.accounts[0], callback);
+    });
+    return result.valueOf() >= MIN_FEE;
+  }*/
 
   @action
   async checkAllowance() {
@@ -82,14 +90,42 @@ export default class Web3Service {
   }
 
   @action
-  async deploy() {
-    const result =  await this.sendTransaction();
-    console.log(result);
+  async fetchGasPrice(){
+    const result = await Bb.fromCallback( callback =>
+      web3.eth.getGasPrice(callback)
+    );
+    return result;
   }
 
   @action
-  async sendTransaction() {
-      console.log(this)
+  async deploy(contractData) {
+
+    let {web3,deployerInstance} = this;
+
+      var transactionOptions = {
+        gasPrice : (await this.fetchGasPrice()).plus(web3.toWei(2,'gwei')),
+      }
+
+      const hash = await Bb.fromCallback((callback)=>{
+        deployerInstance.createCustomDayToken(
+        contractData.tokenName,
+        contractData.symbol,
+        contractData.maxAddresses,
+        contractData.startingId,
+        contractData.totalMintingId,
+        contractData.postDeploymentMaxIds,
+        contractData.minMintingPower,
+        contractData.maxMintingPower,
+        contractData.halvingCycle,
+        contractData.minimumBalance,
+        contractData.mintingPeriod,
+        contractData.teamLockPeriod,
+        transactionOptions,
+        callback
+      )
+    });
+    console.log(hash);
+    return hash;
     /*
     console.log("deploying new token");
     var _tokenName = $("#name").val();

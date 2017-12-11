@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
 
 import { PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
+import {showError,showInfo} from '../lib/alerts';
 import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
 
@@ -22,10 +23,31 @@ export default class Step4 extends AbstractStep {
     notReady: true,
   }
 
+  _contractFields = ['tokenName', 'symbol',
+    'minMintingPower', 'maxMintingPower', 'halvingCycle', 'mintingPeriod',
+    'maxAddresses', 'startingId', 'totalMintingId',
+    'teamLockPeriod', 'postDeploymentMaxIds', 'minimumBalance']
+
   componentDidMount() {
     const {web3Service} = this.props;
-    console.log(this.props)
-    const deployer = web3Service.deploy();
+
+    try{
+      const transaction = web3Service.deploy( this.fetchData() );
+      this.setState( Object.assign(this._state,{transactionHash:transaction});
+    }
+    catch(e){
+      showError('Transaction Failed');
+      console.error(e);
+    }
+  }
+
+  fetchData(){
+    const { props: { store } } = this;
+    var data = {};
+    this._contractFields.map(function(field){
+      data[field] = store[field]
+    })
+    return data;
   }
 
   getValidations() {
@@ -38,6 +60,8 @@ export default class Step4 extends AbstractStep {
   };
 
   contractDeployed(){
+  {_state} = this;
+    //return _state.transactionHash && _state.minedBlock
     return false;
   }
 
