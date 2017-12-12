@@ -100,8 +100,8 @@ export default class Step4 extends AbstractStep {
           <Boxloader {...{color:'#123abc',loading: true, size:13,msg:!this._state.transactionHash?'Deploying...':'Awaiting Mining ...'}} />
          </div>
         }
-        {this._state.transactionHash &&
-          <div className="input-block-container ">
+        {this._state.notReady && this._state.transactionHash &&
+          <div className="input-block-container value">
             <label className="label">Transaction Hash : </label>
             <a target="_blank" href={EXPLORER+'/tx/'+this._state.transactionHash}>{this._state.transactionHash}</a>
           </div>
