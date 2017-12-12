@@ -5,6 +5,7 @@ import Router from 'next/router';
 
 import { PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
 import {showError,showInfo} from '../lib/alerts';
+import web3Config from '../lib/web3Utils';
 import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
 
@@ -29,11 +30,8 @@ export default class Step4 extends AbstractStep {
     'teamLockPeriod', 'postDeploymentMaxIds', 'minimumBalance']
 
   componentDidMount() {
-    const {web3Service} = this.props;
-
     try{
-      const transaction = web3Service.deploy( this.fetchData() );
-      //this.setState( Object.assign(this._state,{transactionHash:transaction});
+      this.runDeploy();
     }
     catch(e){
       showError('Transaction Failed');
@@ -48,6 +46,14 @@ export default class Step4 extends AbstractStep {
       data[field] = store[field]
     })
     return data;
+  }
+
+  async runDeploy(){
+      const {web3Service} = this.props;
+      const transaction = await web3Service.deploy( this.fetchData() );
+      this.setState( Object.assign(this._state,{transactionHash:transaction}) );
+
+
   }
 
   getValidations() {
@@ -80,6 +86,7 @@ export default class Step4 extends AbstractStep {
 
   render() {
     const {web3Service} = this.props;
+    const EXPLORER = web3Config[web3Config.active].EXPLORER;
 
     return (
       <StepLayout
@@ -88,11 +95,17 @@ export default class Step4 extends AbstractStep {
         nextTitle=""
         web3Disabled = {this.web3Disabled(web3Service) || this._state.notReady}
       >
-        <div className="input-block-container">
-          <Boxloader {...{color:'#123abc',loading: true, size:13,msg:'Deploying...'}} />
-        </div>
-        <div className="input-block-container">
-        </div>
+        {this._state.notReady &&
+         <div className="input-block-container">
+          <Boxloader {...{color:'#123abc',loading: true, size:13,msg:!this._state.transactionHash?'Deploying...':'Awaiting Mining ...'}} />
+         </div>
+        }
+        {this._state.transactionHash &&
+          <div className="input-block-container ">
+            <label className="label">Transaction Hash : </label>
+            <a target="_blank" href={EXPLORER+'/tx/'+this._state.transactionHash}>{this._state.transactionHash}</a>
+          </div>
+        }
         <div className="input-block-container">
         </div>
       </StepLayout>
