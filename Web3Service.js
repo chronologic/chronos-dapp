@@ -5,9 +5,12 @@ import { action, observable, runInAction } from 'mobx';
 import dayTokenABI from './abi/dayTokenABI';
 import deployerABI from './abi/deployerABI';
 
-const TOKEN_CONTRACT_ADDRESS = '0x7941bc77E1d6BD4628467b6cD3650F20F745dB06';
-const DEPLOYER_ADDRESS = '0x0B482E31ff16143719414Afa1EF102C6B39178F4';
-const MIN_FEE = '100000000000000000000';
+import web3Config from './lib/web3Utils.js'
+const Network = 'Ropsten';
+
+const TOKEN_CONTRACT_ADDRESS = web3Config[web3Config.active].TOKEN_CONTRACT_ADDRESS;
+const DEPLOYER_ADDRESS = web3Config[web3Config.active].DEPLOYER_ADDRESS;
+const MIN_FEE = web3Config[Network].MIN_FEE;
 
 let instance = null;
 
