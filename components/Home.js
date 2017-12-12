@@ -13,6 +13,12 @@ export default class Home extends Component {
     var target = eventInst.target
     target.disabled = true;
     const { web3Service } = this.props;
+
+    if(!await web3Service.checkBalance()){
+      showError('You do not have sufficient DAY tokens to use this Dapp');
+      return target.disabled = false;
+    }
+
     if (
       await web3Service.checkAllowance() ||
       (await confirmFeeWithdraw() && await this.reserveTokens())
