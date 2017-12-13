@@ -15,7 +15,7 @@ export default class Home extends Component {
     const { web3Service } = this.props;
 
     if(!await web3Service.checkBalance()){
-      showError('You do not have sufficient DAY tokens to use this Dapp');
+      showError('You need to have at least '++' DAY tokens to use this Dapp');
       return target.disabled = false;
     }
 
