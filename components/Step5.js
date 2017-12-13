@@ -51,9 +51,22 @@ export default class Step4 extends AbstractStep {
   async runDeploy(){
       const {web3Service} = this.props;
       const transaction = await web3Service.deploy( this.fetchData() );
-      this.setState( Object.assign(this._state,{transactionHash:transaction}) );
+      this.contractDeployed(transaction);
+  }
 
+  async awaitMined (transaction){
+     const {web3Service} = this.props;
+     const mined = await web3Service.trackTransaction(transaction);
+  }
 
+  async checkConfirmations (transaction){
+      const {web3Service} = this.props;
+      const confirmations = await web3Service.fetchConfirmations(transaction);
+      console.log(confirmations)
+      if(confirmations < 1 )
+        return await this.checkConfirmations(transaction);
+      else if(confirmations > 0)
+      this.setState( Object.assign(this._state,{notReady:false}) );
   }
 
   getValidations() {
@@ -61,14 +74,14 @@ export default class Step4 extends AbstractStep {
   }
 
   goNext = () => {
-
       throw new Error('Implement next stage');
   };
 
-  contractDeployed(){
-  //{_state} = this;
-    //return _state.transactionHash && _state.minedBlock
-    return false;
+  async contractDeployed(transaction){
+    this.setState( Object.assign(this._state,{transactionHash:transaction}) );
+    const mined = await this.awaitMined(transaction);
+    this.setState( Object.assign(this._state,{transactionReceipt:mined}) );
+    this.checkConfirmations(transaction);
   }
 
   renderProperty(propertyData, otherProps = {}) {

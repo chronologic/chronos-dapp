@@ -128,6 +128,57 @@ export default class Web3Service {
     });
     console.log(hash);
     return hash;
+  }
+
+  @action
+  async trackTransaction(hash){
+    let {deployerInstance,trackTransaction} = this;
+    let receipt;
+    var that = this;
+
+    if(!(receipt = await this.fetchReceipt(hash)) ){
+      let Promises = new Promise((resolve, reject) => {
+          setTimeout( async function(){
+            resolve(await that.trackTransaction(hash) );
+          },2000);
+        })
+      return  Promises;
+    }
+    else{
+      return receipt;
+    }
+  }
+
+  async fetchReceipt(hash){
+    let {web3} = this;
+    let receipt =  await Bb.fromCallback( callback=>
+      web3.eth.getTransactionReceipt(hash, callback) );
+      return receipt;
+  }
+
+  async fetchConfirmations(transaction){
+    const mined = await this.trackTransaction(transaction);
+    const block = await this.fetchBlockNumber();
+    const that = this;
+    if(!mined.blockNumber ){
+      let Promises = new Promise((resolve, reject) => {
+          setTimeout( async function(){
+            resolve(await that.fetchConfirmations(transaction) );
+          },2000);
+        })
+      return  Promises;
+    }
+    else{
+      return (block - mined.blockNumber);
+    }
+  }
+
+  async fetchBlockNumber(){
+    let{web3} = this;
+    let block = await Bb.fromCallback( callback =>
+    web3.eth.getBlockNumber(callback));
+    return block;
+  }
     /*
     console.log("deploying new token");
     var _tokenName = $("#name").val();
@@ -178,7 +229,6 @@ getDeployerInstance().then(function(deployerInstance) {
         console.log('Could not fetch new balances', error);
         return Promise.reject(error);
     });*/
-  }
 }
 
 export function initWeb3Service(isServer, source) {
