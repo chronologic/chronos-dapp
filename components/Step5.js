@@ -22,6 +22,7 @@ export default class Step4 extends AbstractStep {
   @observable
   _state = {
     notReady: true,
+    loadingData: false
   }
 
   _contractFields = ['tokenName', 'symbol',
@@ -65,8 +66,23 @@ export default class Step4 extends AbstractStep {
       console.log(confirmations)
       if(confirmations < 1 )
         return await this.checkConfirmations(transaction);
-      else if(confirmations > 0)
-      this.setState( Object.assign(this._state,{notReady:false}) );
+      else if(confirmations > 0){
+        this.setState( Object.assign(this._state,{notReady:false}) );
+        return transaction;
+      }
+  }
+
+  async fetchContractData (transaction){
+    this.setState( Object.assign(this._state,{loadingData:true}) );
+
+  }
+
+  async contractDeployed(transaction){
+    this.setState( Object.assign(this._state,{transactionHash:transaction}) );
+    const mined = await this.awaitMined(transaction);
+    this.setState( Object.assign(this._state,{transactionReceipt:mined}) );
+    const minedTransaction = this.checkConfirmations(transaction);
+    await this.fetchContractData(minedTransaction);
   }
 
   getValidations() {
@@ -76,13 +92,6 @@ export default class Step4 extends AbstractStep {
   goNext = () => {
       throw new Error('Implement next stage');
   };
-
-  async contractDeployed(transaction){
-    this.setState( Object.assign(this._state,{transactionHash:transaction}) );
-    const mined = await this.awaitMined(transaction);
-    this.setState( Object.assign(this._state,{transactionReceipt:mined}) );
-    this.checkConfirmations(transaction);
-  }
 
   renderProperty(propertyData, otherProps = {}) {
     const { props: { store } } = this;
@@ -113,7 +122,12 @@ export default class Step4 extends AbstractStep {
           <Boxloader {...{color:'#123abc',loading: true, size:13,msg:!this._state.transactionHash?'Deploying...':'Awaiting Minning ...'}} />
          </div>
         }
-        {this._state.notReady && this._state.transactionHash &&
+        {!this._state.notReady && this._state.loadingData &&
+          <div className="input-block-container center text-center">
+            <p className='loading_msg' >Successfully deployed.<br/> Please wait...</p>
+          </div>
+        }
+        {(this._state.notReady || this._state.loadingData) && this._state.transactionHash &&
           <div className="input-block-container value center text-center">
             <label className="label">Transaction Hash : </label>
             <a target="_blank" href={EXPLORER+'/tx/'+this._state.transactionHash}>{this._state.transactionHash}</a>
