@@ -6,11 +6,10 @@ import dayTokenABI from './abi/dayTokenABI';
 import deployerABI from './abi/deployerABI';
 
 import web3Config from './lib/web3Utils.js'
-const Network = 'Ropsten';
 
 const TOKEN_CONTRACT_ADDRESS = web3Config[web3Config.active].TOKEN_CONTRACT_ADDRESS;
 const DEPLOYER_ADDRESS = web3Config[web3Config.active].DEPLOYER_ADDRESS;
-const MIN_FEE = web3Config[Network].MIN_FEE;
+const MIN_FEE = web3Config[web3Config.active].MIN_FEE;
 
 let instance = null;
 

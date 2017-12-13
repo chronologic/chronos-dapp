@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../lib/consts';
 import { confirmFeeWithdraw, showError, showInfo } from '../lib/alerts';
 
+import web3Config from '../lib/web3Utils.js'
+
 @inject('web3Service')
 @observer
 export default class Home extends Component {
@@ -13,9 +15,10 @@ export default class Home extends Component {
     var target = eventInst.target
     target.disabled = true;
     const { web3Service } = this.props;
+    const MIN_FEE = web3Config[web3Config.active].MIN_FEE;
 
     if(!await web3Service.checkBalance()){
-      showError('You need to have at least '++' DAY tokens to use this Dapp');
+      showError('You need to have at least '+(MIN_FEE/10^18)+' DAY tokens to use this Dapp');
       return target.disabled = false;
     }
 
