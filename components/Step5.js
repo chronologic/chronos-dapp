@@ -105,7 +105,7 @@ export default class Step4 extends AbstractStep {
       <StepLayout
         activeStepKey={this.activeStepKey}
         onNext={this.goNext}
-        nextTitle=""
+        nextTitle={null}
         web3Disabled = {this.web3Disabled(web3Service) || this._state.notReady}
       >
         {this._state.notReady &&
