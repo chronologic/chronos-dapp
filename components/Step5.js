@@ -11,6 +11,19 @@ import StepLayout from './StepLayout';
 
 import Ringloader,{Boxloader} from '../lib/loader';
 
+const ContractData = data => {
+  console.log(data)
+  return(<div></div>)
+  let Data = [];
+  for(var d in data){
+    Data.push(<div className="input-block-container col-3">
+      <label className="label">{d+' : '}</label>
+      <p className='loading_msg' >{ this._state.contractInstance[d] }</p>
+    </div>)
+   }
+   return {Data};
+}
+
 @inject('web3Service')
 @inject('store')
 @observer
@@ -22,7 +35,8 @@ export default class Step4 extends AbstractStep {
   @observable
   _state = {
     notReady: true,
-    loadingData: false
+    loadingData: false,
+    contractInstance:{}
   }
 
   _contractFields = ['tokenName', 'symbol',
@@ -50,9 +64,9 @@ export default class Step4 extends AbstractStep {
   }
 
   async runDeploy(){
-      const {web3Service} = this.props;
-      const transaction = await web3Service.deploy( this.fetchData() );
-      this.contractDeployed(transaction);
+    const {web3Service} = this.props;
+    const transaction = await web3Service.deploy( this.fetchData() );
+    this.contractDeployed(transaction);
   }
 
   async awaitMined (transaction){
@@ -61,28 +75,31 @@ export default class Step4 extends AbstractStep {
   }
 
   async checkConfirmations (transaction){
-      const {web3Service} = this.props;
-      const confirmations = await web3Service.fetchConfirmations(transaction);
-      console.log(confirmations)
-      if(confirmations < 1 )
-        return await this.checkConfirmations(transaction);
-      else if(confirmations > 0){
-        this.setState( Object.assign(this._state,{notReady:false}) );
-        return transaction;
-      }
+    const {web3Service} = this.props;
+    const confirmations = await web3Service.fetchConfirmations(transaction);
+    console.log(confirmations)
+    if(confirmations < 1 )
+      return await this.checkConfirmations(transaction);
+    else if(confirmations > 0){
+      this.setState( Object.assign(this._state,{notReady:false}) );
+      return confirmations;
+    }
   }
 
-  async fetchContractData (transaction){
+  async fetchContractData (contractAddress){
+    const {web3Service} = this.props;
     this.setState( Object.assign(this._state,{loadingData:true}) );
-
+    console.log( contractAddress )
+    const data = await web3Service.getContractData(contractAddress);
+    this.setState( Object.assign(this._state,{contractInstance:data}) );
   }
 
   async contractDeployed(transaction){
     this.setState( Object.assign(this._state,{transactionHash:transaction}) );
     const mined = await this.awaitMined(transaction);
     this.setState( Object.assign(this._state,{transactionReceipt:mined}) );
-    const minedTransaction = this.checkConfirmations(transaction);
-    await this.fetchContractData(minedTransaction);
+    const confirmations = this.checkConfirmations(transaction);
+    await this.fetchContractData(mined.contractAddress);
   }
 
   getValidations() {
@@ -132,6 +149,9 @@ export default class Step4 extends AbstractStep {
             <label className="label">Transaction Hash : </label>
             <a target="_blank" href={EXPLORER+'/tx/'+this._state.transactionHash}>{this._state.transactionHash}</a>
           </div>
+        }
+        {!this._state.notReady && !this._state.loadingData &&
+          <ContractData {...this._state.contractInstance} />
         }
         <div className="input-block-container">
         </div>

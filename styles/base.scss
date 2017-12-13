@@ -40,6 +40,15 @@ body {
   float: right;
 }
 
+.col{
+  display:'inline-block';
+  &-3{
+    width:33%;
+    margin-right:0.33%;
+  }
+
+}
+
 .center{
   margin-left: auto;
   margin-right: auto;
