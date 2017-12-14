@@ -18,13 +18,13 @@ export default class Home extends Component {
     const MIN_FEE = web3Config[web3Config.active].MIN_FEE;
 
     if(!await web3Service.checkBalance()){
-      showError('You need to have at least '+(MIN_FEE/10^18)+' DAY tokens to use this Dapp');
+      showError('You need to have at least '+(MIN_FEE/(1e+18))+' DAY tokens to use this Dapp');
       return target.disabled = false;
     }
 
     if (
       await web3Service.checkAllowance() ||
-      (await confirmFeeWithdraw() && await this.reserveTokens())
+      (await confirmFeeWithdraw(MIN_FEE) && await this.reserveTokens())
     ) {
       this.start();
     }
@@ -54,16 +54,18 @@ export default class Home extends Component {
   }
 
   render() {
+    const MIN_FEE = web3Config[web3Config.active].MIN_FEE/(1e+18);
+
     return (
       <div>
         <section className="home">
           <div className="crowdsale">
             <div className="container">
-              <h1 className="title">Welcome to the Chronologic's DAPP</h1>
+              <h1 className="title">Welcome to the Chronologic's DAPP </h1>
               <p className="description">
-                This DAPP (Decentralized App) allows anyone to create a his/hers own version of
+                This DAPP (Decentralized App) allows anyone to create his/hers own version of
                 minting token easily.<br />
-                The steps ahead will help you set up all features of your very own version of the
+              The steps ahead will help you set up the features of your very own version of the
                 DAY token.
               </p>
               <div className="buttons">
@@ -72,7 +74,7 @@ export default class Home extends Component {
               <p className="description">
                 *This tool requires <b><a href="https://metamask.io/" target="_blank">MetaMask</a> </b> extension. Besides, the ETH address which will create
                 the smart contract has to have an amount of ETH for the contract deployment and
-                also X DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.
+                also {MIN_FEE} DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.
               </p>
             </div>
           </div>
