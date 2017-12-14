@@ -64,7 +64,8 @@ export default class Web3Service {
     });
     console.log('netId', this.netId);
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
-    this.deployerInstance = web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS);
+    this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
+    ,callback) );
   }
 
   @action
@@ -131,7 +132,7 @@ export default class Web3Service {
 
   @action
   async trackTransaction(hash){
-    let {deployerInstance,trackTransaction} = this;
+    //let {deployerInstance,trackTransaction} = this;
     let receipt;
     var that = this;
 
