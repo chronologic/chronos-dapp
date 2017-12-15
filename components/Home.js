@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Router from 'next/router';
 import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../lib/consts';
-import { confirmFeeWithdraw, showError, showInfo } from '../lib/alerts';
+import { confirmFeeWithdraw, showInsufficientBalalnce, showError, showInfo } from '../lib/alerts';
 
 import web3Config from '../lib/web3Utils.js'
 
@@ -18,18 +18,22 @@ export default class Home extends Component {
     const MIN_FEE = web3Config[web3Config.active].MIN_FEE;
 
     if(!await web3Service.checkBalance()){
-      showError('You need to have at least '+(MIN_FEE/(1e+18))+' DAY tokens to use this Dapp');
-      return target.disabled = false;
+      const preview = await showInsufficientBalalnce( (MIN_FEE/(1e+18)) );
+      if(preview == 'preview')
+        return this.start();
+      else
+        return target.disabled = false;
     }
-
-    if (
-      await web3Service.checkAllowance() ||
-      (await confirmFeeWithdraw(MIN_FEE) && await this.reserveTokens())
-    ) {
-      this.start();
+    else{
+      if (
+        await web3Service.checkAllowance() ||
+        (await confirmFeeWithdraw(MIN_FEE) && await this.reserveTokens())
+      ) {
+        this.start();
+      }
+      else
+        target.disabled = false;
     }
-    else
-      target.disabled = false;
   };
 
   async reserveTokens() {
