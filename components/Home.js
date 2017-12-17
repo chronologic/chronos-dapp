@@ -55,12 +55,11 @@ export default class Home extends Component {
   async getWeb3Fee(){
     const {web3Service} = this.props;
     const that = this;
-    console.log(web3Service.network)
     if( typeof web3Service.network !== 'undefined' && web3Service.network !== null)
       return this.setState({MIN_FEE: web3Config[web3Service.network].MIN_FEE });
     setTimeout(function(){
       return that.getWeb3Fee();
-    })
+    },200)
   }
 
   web3Disabled (){
@@ -73,7 +72,6 @@ export default class Home extends Component {
   }
 
   render() {
-    console.log(this.state.MIN_FEE)
 
     return (
       <div>
