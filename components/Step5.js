@@ -137,12 +137,12 @@ export default class Step4 extends AbstractStep {
       >
         {this._state.notReady &&
          <div className="input-block-container">
-          <Boxloader {...{color:'#123abc',loading: true, size:13,msg:!this._state.transactionHash?'Deploying...':'Awaiting Minning ...'}} />
+          <Boxloader {...{color:'#123abc',loading: true, size:13,msg:!this._state.transactionHash?'Deploying...':'Awaiting Mining ...'}} />
          </div>
         }
         {!this._state.notReady && this._state.loadingData &&
           <div className="input-block-container center text-center">
-            <p className='loading_msg' >Successfully deployed.<br/> Please wait...</p>
+            <p className='loading_msg' >Successfully deployed.<br/> Loading data ...</p>
           </div>
         }
         {(this._state.notReady || this._state.loadingData) && this._state.transactionHash &&
