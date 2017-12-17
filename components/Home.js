@@ -4,21 +4,21 @@ import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../lib/consts';
 import { confirmFeeWithdraw, showInsufficientBalalnce, showError, showInfo } from '../lib/alerts';
 
-import web3Config from '../lib/web3Utils.js'
+import web3Config from '../lib/web3Utils.js';
 
 @inject('web3Service')
 @observer
 export default class Home extends Component {
+  state = {MIN_FEE:null}
+
   onStart = async (eventInst) => {
     if(this.web3Disabled() )
       return;
     var target = eventInst.target
     target.disabled = true;
     const { web3Service } = this.props;
-    const MIN_FEE = web3Config[web3Config.active].MIN_FEE;
-
     if(!await web3Service.checkBalance()){
-      const preview = await showInsufficientBalalnce( (MIN_FEE/(1e+18)) );
+      const preview = await showInsufficientBalalnce( (this.state.MIN_FEE/(1e+18)) );
       if(preview == 'preview')
         return this.start();
       else
@@ -27,7 +27,7 @@ export default class Home extends Component {
     else{
       if (
         await web3Service.checkAllowance() ||
-        (await confirmFeeWithdraw(MIN_FEE) && await this.reserveTokens())
+        (await confirmFeeWithdraw(this.state.MIN_FEE) && await this.reserveTokens())
       ) {
         this.start();
       }
@@ -40,7 +40,6 @@ export default class Home extends Component {
     const { web3Service } = this.props;
     try {
       const result = await web3Service.approveFee();
-      console.log(result)
       showInfo('Token Release Tx Status', `TxHash ${result}`);
       this.start();
     } catch (err) {
@@ -48,9 +47,25 @@ export default class Home extends Component {
     }
   }
 
+
+  componentDidMount(){
+      this.getWeb3Fee();
+  }
+
+  async getWeb3Fee(){
+    const {web3Service} = this.props;
+    const that = this;
+    console.log(web3Service.network)
+    if( typeof web3Service.network !== 'undefined' && web3Service.network !== null)
+      return this.setState({MIN_FEE: web3Config[web3Service.network].MIN_FEE });
+    setTimeout(function(){
+      return that.getWeb3Fee();
+    })
+  }
+
   web3Disabled (){
     const {web3Service} = this.props;
-    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
+    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0) || !this.state.MIN_FEE
   }
 
   start() {
@@ -58,7 +73,7 @@ export default class Home extends Component {
   }
 
   render() {
-    const MIN_FEE = web3Config[web3Config.active].MIN_FEE/(1e+18);
+    console.log(this.state.MIN_FEE)
 
     return (
       <div>
@@ -78,7 +93,7 @@ export default class Home extends Component {
               <p className="description">
                 *This tool requires <b><a href="https://metamask.io/" target="_blank">MetaMask</a> </b> extension. Besides, the ETH address which will create
                 the smart contract has to have an amount of ETH for the contract deployment and
-                also {MIN_FEE} DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.
+                also {this.state.MIN_FEE/(1e+18)} DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.
               </p>
             </div>
           </div>
