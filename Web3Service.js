@@ -88,7 +88,7 @@ export default class Web3Service {
     return result.valueOf() >= MIN_FEE;
   }
 
-  @action
+
   async checkAllowance() {
     const result = await Bb.fromCallback((callback) => {
       this.tokenInstance.allowance.call(this.accounts[0], DEPLOYER_ADDRESS, callback);
@@ -96,7 +96,7 @@ export default class Web3Service {
     return result.valueOf() >= MIN_FEE;
   }
 
-  @action
+
   async approveFee() {
     const result =  await Bb.fromCallback((callback) => {
       this.tokenInstance.approve(DEPLOYER_ADDRESS, MIN_FEE, callback);
@@ -104,7 +104,7 @@ export default class Web3Service {
     return result;
   }
 
-  @action
+
   async fetchGasPrice(){
     const result = await Bb.fromCallback( callback =>
       web3.eth.getGasPrice(callback)
@@ -112,7 +112,7 @@ export default class Web3Service {
     return result;
   }
 
-  @action
+
   async deploy(contractData) {
       let {web3,deployerInstance} = this;
 
@@ -142,7 +142,7 @@ export default class Web3Service {
     return hash;
   }
 
-  @action
+
   async trackTransaction(hash){
     //let {deployerInstance,trackTransaction} = this;
     let receipt;
