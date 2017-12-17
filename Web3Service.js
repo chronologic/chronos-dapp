@@ -7,11 +7,10 @@ import deployerABI from './abi/deployerABI';
 
 import web3Config from './lib/web3Utils.js'
 
-const TOKEN_CONTRACT_ADDRESS = web3Config[web3Config.active].TOKEN_CONTRACT_ADDRESS;
-const DEPLOYER_ADDRESS = web3Config[web3Config.active].DEPLOYER_ADDRESS;
-const MIN_FEE = web3Config[web3Config.active].MIN_FEE;
-
 let instance = null;
+let TOKEN_CONTRACT_ADDRESS,
+DEPLOYER_ADDRESS,
+MIN_FEE;
 
 export default class Web3Service {
   initialized = false;
@@ -21,6 +20,7 @@ export default class Web3Service {
   @observable connectedToMetaMask = null;
   @observable accounts = null;
   @observable netId = null;
+  @observable network = null;
 
   constructor(props) {
     Object.assign(this, props);
@@ -61,14 +61,26 @@ export default class Web3Service {
       await Bb.fromCallback(callback => web3.version.getNetwork(callback));
     runInAction(() => {
       this.netId = netId;
+      let network;
+      if(netId == 1)
+        this.network = 'Mainnet';
+      else if(netId == 3)
+        this.network = 'Ropsten'
+      else if(netId == 4)
+        this.network = 'Rinkeby';
+      else
+        this.network = 'Private'
     });
-    console.log('netId', this.netId);
+    console.log('netId', this.netId,this.network);
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
     this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
     ,callback) );
+    TOKEN_CONTRACT_ADDRESS = web3Config[this.network].TOKEN_CONTRACT_ADDRESS;
+    DEPLOYER_ADDRESS = web3Config[this.network].DEPLOYER_ADDRESS;
+    MIN_FEE = web3Config[this.network].MIN_FEE;
   }
 
-  @action
+
   async checkBalance() {
     const result = await Bb.fromCallback((callback) => {
       this.tokenInstance.balanceOf.call(this.accounts[0], callback);
