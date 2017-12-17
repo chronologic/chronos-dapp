@@ -5,11 +5,12 @@ import { action, observable, runInAction } from 'mobx';
 import dayTokenABI from './abi/dayTokenABI';
 import deployerABI from './abi/deployerABI';
 
-const TOKEN_CONTRACT_ADDRESS = '0x7941bc77E1d6BD4628467b6cD3650F20F745dB06';
-const DEPLOYER_ADDRESS = '0x0B482E31ff16143719414Afa1EF102C6B39178F4';
-const MIN_FEE = '100000000000000000000';
+import web3Config from './lib/web3Utils.js'
 
 let instance = null;
+let TOKEN_CONTRACT_ADDRESS,
+DEPLOYER_ADDRESS,
+MIN_FEE;
 
 export default class Web3Service {
   initialized = false;
@@ -19,6 +20,7 @@ export default class Web3Service {
   @observable connectedToMetaMask = null;
   @observable accounts = null;
   @observable netId = null;
+  @observable network = null;
 
   constructor(props) {
     Object.assign(this, props);
@@ -59,13 +61,36 @@ export default class Web3Service {
       await Bb.fromCallback(callback => web3.version.getNetwork(callback));
     runInAction(() => {
       this.netId = netId;
+      let network;
+      if(netId == 1)
+        this.network = 'Mainnet';
+      else if(netId == 3)
+        this.network = 'Ropsten'
+      else if(netId == 4)
+        this.network = 'Rinkeby';
+      else
+        this.network = 'Private'
     });
-    console.log('netId', this.netId);
+    console.log('netId', this.netId,this.network);
+
+    TOKEN_CONTRACT_ADDRESS = web3Config[this.network].TOKEN_CONTRACT_ADDRESS;
+    DEPLOYER_ADDRESS = web3Config[this.network].DEPLOYER_ADDRESS;
+    MIN_FEE = web3Config[this.network].MIN_FEE;
+
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
-    this.deployerInstance = web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS);
+    this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
+    ,callback) );
   }
 
-  @action
+
+  async checkBalance() {
+    const result = await Bb.fromCallback((callback) => {
+      this.tokenInstance.balanceOf.call(this.accounts[0], callback);
+    });
+    return result.valueOf() >= MIN_FEE;
+  }
+
+
   async checkAllowance() {
     const result = await Bb.fromCallback((callback) => {
       this.tokenInstance.allowance.call(this.accounts[0], DEPLOYER_ADDRESS, callback);
@@ -73,7 +98,7 @@ export default class Web3Service {
     return result.valueOf() >= MIN_FEE;
   }
 
-  @action
+
   async approveFee() {
     const result =  await Bb.fromCallback((callback) => {
       this.tokenInstance.approve(DEPLOYER_ADDRESS, MIN_FEE, callback);
@@ -81,15 +106,93 @@ export default class Web3Service {
     return result;
   }
 
-  @action
-  async deploy() {
-    const result =  await this.sendTransaction();
-    console.log(result);
+
+  async fetchGasPrice(){
+    const result = await Bb.fromCallback( callback =>
+      web3.eth.getGasPrice(callback)
+    );
+    return result;
   }
 
-  @action
-  async sendTransaction() {
-      console.log(this)
+
+  async deploy(contractData) {
+      let {web3,deployerInstance} = this;
+
+      let transactionOptions = {
+        gasPrice : (await this.fetchGasPrice()).plus(web3.toWei(2,'gwei')),
+      }
+
+      const hash = await Bb.fromCallback((callback)=>{
+        deployerInstance.createCustomDayToken(
+        contractData.tokenName,
+        contractData.symbol,
+        contractData.maxAddresses,
+        contractData.startingId,
+        contractData.totalMintingId,
+        contractData.postDeploymentMaxIds,
+        contractData.minMintingPower,
+        contractData.maxMintingPower,
+        contractData.halvingCycle,
+        contractData.minimumBalance,
+        contractData.mintingPeriod,
+        contractData.teamLockPeriod,
+        transactionOptions,
+        callback
+      )
+    });
+    console.log(hash);
+    return hash;
+  }
+
+
+  async trackTransaction(hash){
+    //let {deployerInstance,trackTransaction} = this;
+    let receipt;
+    var that = this;
+
+    if(!(receipt = await this.fetchReceipt(hash)) ){
+      let Promises = new Promise((resolve, reject) => {
+          setTimeout( async function(){
+            resolve(await that.trackTransaction(hash) );
+          },2000);
+        })
+      return  Promises;
+    }
+    else{
+      return receipt;
+    }
+  }
+
+  async fetchReceipt(hash){
+    let {web3} = this;
+    let receipt =  await Bb.fromCallback( callback=>
+      web3.eth.getTransactionReceipt(hash, callback) );
+      return receipt;
+  }
+
+  async fetchConfirmations(transaction){
+    const mined = await this.trackTransaction(transaction);
+    const block = await this.fetchBlockNumber();
+    const that = this;
+    if(!mined.blockNumber ){
+      let Promises = new Promise((resolve, reject) => {
+          setTimeout( async function(){
+            resolve(await that.fetchConfirmations(transaction) );
+          },2000);
+        })
+      return  Promises;
+    }
+    else{
+      return (block - mined.blockNumber);
+    }
+  }
+
+  async fetchBlockNumber(){
+    let{web3} = this;
+    let block = await Bb.fromCallback( callback =>
+    web3.eth.getBlockNumber(callback));
+    return block;
+  }
     /*
     console.log("deploying new token");
     var _tokenName = $("#name").val();
@@ -140,7 +243,6 @@ getDeployerInstance().then(function(deployerInstance) {
         console.log('Could not fetch new balances', error);
         return Promise.reject(error);
     });*/
-  }
 }
 
 export function initWeb3Service(isServer, source) {

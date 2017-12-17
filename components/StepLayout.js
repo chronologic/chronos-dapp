@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import ReactTooltip from 'react-tooltip'
 
 import { NAVIGATION_STEPS } from '../lib/consts';
 import StepNavigation from './StepNavigation';
@@ -30,13 +31,15 @@ export default class StepLayout extends React.Component {
           {this.props.children}
         </div>
         <div className="button-container">
-          <button className="button button_fill" onClick={onNext} disabled={web3Disabled} >
+          {nextTitle !== null &&
+            <button className="button button_fill" onClick={onNext} disabled={web3Disabled} >
             {nextTitle || 'Continue'}
-          </button>
+          </button>}
           <span className="guide-span">
             * If you need any additional help deploying your own version of the DAY token, refer to <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">this guide</a>.
           </span>
         </div>
+        <ReactTooltip />
       </section>
     );
   }

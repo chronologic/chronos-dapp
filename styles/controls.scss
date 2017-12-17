@@ -33,6 +33,17 @@
   margin-bottom: 15px;
   text-transform: uppercase;
   font-weight: bold;
+  &_info{
+    cursor: pointer;
+    position:relative;
+    bottom: -3px;
+    display:inline-block;
+    width: 15px;
+    height: 15px;
+    background-size: 100%;
+    margin: 0 6px;
+    background: url(./static/info.svg)
+  }
 }
 
 .loading{
