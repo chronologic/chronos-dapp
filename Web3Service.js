@@ -72,12 +72,14 @@ export default class Web3Service {
         this.network = 'Private'
     });
     console.log('netId', this.netId,this.network);
-    this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
-    this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
-    ,callback) );
+
     TOKEN_CONTRACT_ADDRESS = web3Config[this.network].TOKEN_CONTRACT_ADDRESS;
     DEPLOYER_ADDRESS = web3Config[this.network].DEPLOYER_ADDRESS;
     MIN_FEE = web3Config[this.network].MIN_FEE;
+
+    this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
+    this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
+    ,callback) );
   }
 
 
