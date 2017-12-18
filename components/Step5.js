@@ -66,6 +66,7 @@ export default class Step4 extends AbstractStep {
   async runDeploy(){
     const {web3Service} = this.props;
     const transaction = await web3Service.deploy( this.fetchData() );
+    if(transaction)
     await this.contractDeployed(transaction);
   }
 
@@ -81,26 +82,43 @@ export default class Step4 extends AbstractStep {
     console.log(confirmations)
     if(confirmations < 1 )
       return await this.checkConfirmations(transaction);
-    else if(confirmations > 0){
-      this.setState( Object.assign(this._state,{notReady:false}) );
+    else{
+      this.setState( Object.assign(this._state,{loadingData:true}) );
       return confirmations;
     }
   }
 
   async fetchContractData (contractAddress){
     const {web3Service} = this.props;
-    this.setState( Object.assign(this._state,{loadingData:true}) );
-    console.log( contractAddress )
     const data = await web3Service.getContractData(contractAddress);
-    this.setState( Object.assign(this._state,{contractInstance:data}) );
+    console.log(data);
+    this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false,notReady:false}) );
   }
 
-  async contractDeployed(transaction){
+  async contractDeployed( transaction ){
+    const {web3Service,store} = this.props;
     this.setState( Object.assign(this._state,{transactionHash:transaction}) );
     const mined = await this.awaitMined(transaction);
     this.setState( Object.assign(this._state,{transactionReceipt:mined}) );
-    const confirmations = this.checkConfirmations(transaction);
-    await this.fetchContractData(mined.contractAddress);
+    const confirmations = await this.checkConfirmations(transaction);
+    const contract = await web3Service.fetchNewChild(transaction);
+    console.log(contract, confirmations)
+    if(contract)
+      await this.fetchContractData(contract);
+    else{
+      const error = await showError('There was problem deploying the contract. Try again?')
+      const query = ALL_PROPERTIES.reduce((result, { name }) => {
+        result[name] = store[name];
+        return result;
+      }, {});
+
+      if(error)
+      Router.push({
+        pathname: this.activeStep.prevUrl,
+        query,
+      });
+    }
+
   }
 
   getValidations() {
