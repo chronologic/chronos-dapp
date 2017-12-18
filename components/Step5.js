@@ -142,7 +142,7 @@ export default class Step4 extends AbstractStep {
         }
         {!this._state.notReady && this._state.loadingData &&
           <div className="input-block-container center text-center">
-            <p className='loading_msg' >Successfully deployed.<br/> Loading data ...</p>
+            <p className='loading_msg' >Successfully deployed.<br/> Loading Contract data ...</p>
           </div>
         }
         {(this._state.notReady || this._state.loadingData) && this._state.transactionHash &&
