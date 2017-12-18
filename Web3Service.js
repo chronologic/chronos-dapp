@@ -21,7 +21,7 @@ export default class Web3Service {
   @observable connectedToMetaMask = null;
   @observable accounts = null;
   @observable netId = null;
-  @observable network = null;
+  @observable network = 'Rinkeby';
 
   constructor(props) {
     Object.assign(this, props);
@@ -115,8 +115,10 @@ export default class Web3Service {
     return result;
   }
 
-  convertMinningPower = percent => {
-    return (percent/100)*1e+18;
+  convertMinningPower = (value,reverse) => {
+    if(reverse)
+      return (value/1e+18)*100;
+    return (value/100)*1e+18;
   }
 
   async deploy(contractData) {
@@ -144,7 +146,6 @@ export default class Web3Service {
         callback
       )
     });
-    console.log(hash);
     return hash;
   }
 
@@ -192,10 +193,60 @@ export default class Web3Service {
   }
 
   async fetchBlockNumber(){
-    let{web3} = this;
-    let block = await Bb.fromCallback( callback =>
-    web3.eth.getBlockNumber(callback));
+    const{web3} = this;
+    const block = await Bb.fromCallback( callback =>
+      web3.eth.getBlockNumber(callback));
     return block;
+  }
+
+  async fetchNewChild(hash){
+    const{web3} = this;
+    const receipt = await this.fetchReceipt(hash);
+      let foundLog;
+      if(!receipt.logs)
+        return false;
+      receipt.logs.forEach(function(l){
+        if(l.address == DEPLOYER_ADDRESS)
+          if(l.topics[0] == web3.sha3("LogChildCreated(address,address)") )
+          foundLog = l.data;
+      })
+      if(!foundLog)
+        return false;
+       let result = ethers.Interface.decodeParams(['address','address'],foundLog);
+       console.log('New Contract', result[1] )
+       return result[1];
+  }
+
+  async getContractData(contract){
+    console.log('Contract: ',contract)
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const data = {
+      address: contract,
+      tokenName: await Bb.fromCallback( callback => childContract.tokenName.call(callback) ),
+      symbol: await Bb.fromCallback( callback => childContract.symbol.call(callback) ),
+      totalSupply: await Bb.fromCallback( callback => childContract.totalSupply.call(callback) ),
+      decimal: await Bb.fromCallback( callback => childContract.decimals.call(callback) ),
+      mintingPeriod: await Bb.fromCallback( callback => childContract.mintingPeriod.call(callback) ),
+      totalDays: await Bb.fromCallback( callback => childContract.getDayCount.call(callback) ),
+      halvingCycle: await Bb.fromCallback( callback => childContract.halvingCycle.call(callback) ),
+      dayTokenActivated: await Bb.fromCallback( callback => childContract.isDayTokenActivated.call(callback) ),
+      maxAddresses: await Bb.fromCallback( callback => childContract.maxAddresses.call(callback) ),
+      firstContributorId : await Bb.fromCallback( callback => childContract.firstContributorId.call(callback) ),
+      firstPostIcoContributorId: await Bb.fromCallback( callback => childContract.firstPostIcoContributorId.call(callback) ),
+      firstTeamContributorId: await Bb.fromCallback( callback => childContract.firstTeamContributorId.call(callback) ),
+      minMintingPower: this.convertMinningPower(await Bb.fromCallback( callback => childContract.minMintingPower.call(callback) ), true ),
+      maxMintingPower: this.convertMinningPower(await Bb.fromCallback( callback => childContract.maxMintingPower.call(callback) ), true),
+      initialBlockTimestamp: this.convertMinningPower(await Bb.fromCallback( callback => childContract.initialBlockTimestamp.call(callback) ), true),
+      teamLockPeriodInSec: await Bb.fromCallback( callback => childContract.teamLockPeriodInSec.call(callback) ),
+      totalNormalContributorIds: await Bb.fromCallback( callback => childContract.totalNormalContributorIds.call(callback) ),
+      totalNormalContributorIdsAllocated: await Bb.fromCallback( callback => childContract.totalNormalContributorIds.call(callback) ),
+      totalTeamContributorIds: await Bb.fromCallback( callback => childContract.totalTeamContributorIds.call(callback) ),
+      totalTeamContributorIdsAllocated: await Bb.fromCallback( callback => childContract.totalTeamContributorIdsAllocated.call(callback) ),
+      totalPostIcoContributorIds: await Bb.fromCallback( callback => childContract.totalPostIcoContributorIds.call(callback) ),
+      totalPostIcoContributorIdsAllocated : await Bb.fromCallback( callback => childContract.totalPostIcoContributorIdsAllocated .call(callback) ),
+    }
+    console.log(data)
+    return data;
   }
     /*
     console.log("deploying new token");

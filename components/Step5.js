@@ -101,6 +101,7 @@ export default class Step4 extends AbstractStep {
     const mined = await this.awaitMined(transaction);
     this.setState( Object.assign(this._state,{transactionReceipt:mined}) );
     const confirmations = await this.checkConfirmations(transaction);
+    this.setState( Object.assign(this._state,{notReady:false}) );
     const contract = await web3Service.fetchNewChild(transaction);
     console.log(contract, confirmations)
     if(contract)
