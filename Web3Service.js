@@ -114,6 +114,9 @@ export default class Web3Service {
     return result;
   }
 
+  convertMinningPower = percent => {
+    return (percent/100)*1e+18;
+  }
 
   async deploy(contractData) {
       let {web3,deployerInstance} = this;
@@ -130,8 +133,8 @@ export default class Web3Service {
         contractData.startingId,
         contractData.totalMintingId,
         contractData.postDeploymentMaxIds,
-        contractData.minMintingPower,
-        contractData.maxMintingPower,
+        this.convertMinningPower(contractData.minMintingPower),
+        this.convertMinningPower(contractData.maxMintingPower),
         contractData.halvingCycle,
         contractData.minimumBalance,
         contractData.mintingPeriod,
