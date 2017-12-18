@@ -1,4 +1,5 @@
 import Web3 from 'web3/index';
+import ethers from 'ethers';
 import Bb from 'bluebird';
 import { action, observable, runInAction } from 'mobx';
 
