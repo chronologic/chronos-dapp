@@ -115,7 +115,7 @@ export default class Web3Service {
     return result;
   }
 
-  convertMinningPower = (value,reverse) => {
+  convertMiningPower = (value,reverse) => {
     if(reverse)
       return (value/1e+18)*100;
     return (value/100)*1e+18;
@@ -136,8 +136,8 @@ export default class Web3Service {
         contractData.startingId,
         contractData.totalMintingId,
         contractData.postDeploymentMaxIds,
-        this.convertMinningPower(contractData.minMintingPower),
-        this.convertMinningPower(contractData.maxMintingPower),
+        this.convertMiningPower(contractData.minMintingPower),
+        this.convertMiningPower(contractData.maxMintingPower),
         contractData.halvingCycle,
         contractData.minimumBalance,
         contractData.mintingPeriod,
@@ -234,9 +234,9 @@ export default class Web3Service {
       firstContributorId : await Bb.fromCallback( callback => childContract.firstContributorId.call(callback) ),
       firstPostIcoContributorId: await Bb.fromCallback( callback => childContract.firstPostIcoContributorId.call(callback) ),
       firstTeamContributorId: await Bb.fromCallback( callback => childContract.firstTeamContributorId.call(callback) ),
-      minMintingPower: this.convertMinningPower(await Bb.fromCallback( callback => childContract.minMintingPower.call(callback) ), true ),
-      maxMintingPower: this.convertMinningPower(await Bb.fromCallback( callback => childContract.maxMintingPower.call(callback) ), true),
-      initialBlockTimestamp: this.convertMinningPower(await Bb.fromCallback( callback => childContract.initialBlockTimestamp.call(callback) ), true),
+      minMintingPower: this.convertMiningPower(await Bb.fromCallback( callback => childContract.minMintingPower.call(callback) ), true ),
+      maxMintingPower: this.convertMiningPower(await Bb.fromCallback( callback => childContract.maxMintingPower.call(callback) ), true),
+      initialBlockTimestamp: this.convertMiningPower(await Bb.fromCallback( callback => childContract.initialBlockTimestamp.call(callback) ), true),
       teamLockPeriodInSec: await Bb.fromCallback( callback => childContract.teamLockPeriodInSec.call(callback) ),
       totalNormalContributorIds: await Bb.fromCallback( callback => childContract.totalNormalContributorIds.call(callback) ),
       totalNormalContributorIdsAllocated: await Bb.fromCallback( callback => childContract.totalNormalContributorIds.call(callback) ),
