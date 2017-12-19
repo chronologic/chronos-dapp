@@ -84,43 +84,12 @@ export default class Web3Service {
   }
 
 
-  async checkBalance() {
-    const result = await Bb.fromCallback((callback) => {
-      this.tokenInstance.balanceOf.call(this.accounts[0], callback);
-    });
-    return result.valueOf() >= MIN_FEE;
-  }
-
-
-  async checkAllowance() {
-    const result = await Bb.fromCallback((callback) => {
-      this.tokenInstance.allowance.call(this.accounts[0], DEPLOYER_ADDRESS, callback);
-    });
-    return result.valueOf() >= MIN_FEE;
-  }
-
-
   async approveFee() {
     const result =  await Bb.fromCallback((callback) => {
       this.tokenInstance.approve(DEPLOYER_ADDRESS, MIN_FEE, callback);
     });
     return result;
   }
-
-
-  async fetchGasPrice(){
-    const result = await Bb.fromCallback( callback =>
-      web3.eth.getGasPrice(callback)
-    );
-    return result;
-  }
-
-  convertMiningPower = (value,reverse) => {
-    if(reverse)
-      return (value/1e+18)*100;
-    return (value/100)*1e+18;
-  }
-
   async deploy(contractData) {
       let {web3,deployerInstance} = this;
 
@@ -149,6 +118,32 @@ export default class Web3Service {
     return hash;
   }
 
+  convertMiningPower = (value,reverse) => {
+    if(reverse)
+      return (value/1e+18)*100;
+    return (value/100)*1e+18;
+  }
+
+  async fetchGasPrice(){
+    const result = await Bb.fromCallback( callback =>
+      web3.eth.getGasPrice(callback)
+    );
+    return result;
+  }
+
+  async checkBalance() {
+    const result = await Bb.fromCallback((callback) => {
+      this.tokenInstance.balanceOf.call(this.accounts[0], callback);
+    });
+    return result.valueOf() >= MIN_FEE;
+  }
+
+  async checkAllowance() {
+    const result = await Bb.fromCallback((callback) => {
+      this.tokenInstance.allowance.call(this.accounts[0], DEPLOYER_ADDRESS, callback);
+    });
+    return result.valueOf() >= MIN_FEE;
+  }
 
   async trackTransaction(hash){
     //let {deployerInstance,trackTransaction} = this;
