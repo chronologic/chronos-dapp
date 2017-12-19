@@ -21,6 +21,11 @@
     background-color: $accent-color;
     color: #fff;
   }
+
+  &_mullayer {
+    margin-top: 25px !important;
+    margin-bottom:32px !important;
+  }
 }
 
 .button:disabled{

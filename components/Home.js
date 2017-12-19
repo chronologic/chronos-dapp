@@ -9,7 +9,15 @@ import web3Config from '../lib/web3Utils.js';
 @inject('web3Service')
 @observer
 export default class Home extends Component {
-  state = {MIN_FEE:null}
+  constructor(props){
+    super(props);
+
+    this.state = {
+      MIN_FEE:null,
+      needsFaucet: false
+    }
+    this.getTestnetTokens = this.getTestnetTokens.bind(this);
+  }
 
   onStart = async (eventInst) => {
     if(this.web3Disabled() )
@@ -22,6 +30,7 @@ export default class Home extends Component {
       if(preview == 'preview')
         return this.start();
       else
+        this.setState({needsFaucet:true});
         return target.disabled = false;
     }
     else{
@@ -62,6 +71,23 @@ export default class Home extends Component {
     },200)
   }
 
+  async getTestnetTokens (){
+    const {web3Service} = this.props;
+    try{
+      const faucetTx = await web3Service.requestFromFaucet();
+      if(faucetTx.status == -1)
+        return showError(`Sorry the Faucet is not funded at the moment`);
+      else if(faucetTx.status == 0)
+        return showError(`You have to wait for another ${ (faucetTx.data/60).toFixed(2)} min(s) to request Tokens.`);
+      showInfo('Token Faucet request Tx Status', `TxHash ${faucetTx.data}`);
+      this.setState({needsFaucet: false});
+    }
+    catch(e){
+      console.error(e);
+      showError('Error Requesting Faucet Tokens');
+    }
+  }
+
   web3Disabled (){
     const {web3Service} = this.props;
     return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0) || !this.state.MIN_FEE
@@ -86,7 +112,11 @@ export default class Home extends Component {
                 DAY token.
               </p>
               <div className="buttons">
-                <button className="button button_fill" onClick={this.onStart} disabled={this.web3Disabled()} >Start</button>
+                <button className="button button_fill button_mullayer" onClick={this.onStart} disabled={this.web3Disabled()} >Start</button>
+                <br/>
+                {this.state.needsFaucet &&
+                  <button className="button button_fill button_mullayer" onClick={this.getTestnetTokens} >Get Testnet DAY Tokens</button>
+                }
               </div>
               <p className="description">
                 *This tool requires <b><a href="https://metamask.io/" target="_blank">MetaMask</a> </b> extension. Besides, the ETH address which will create

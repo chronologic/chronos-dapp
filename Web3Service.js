@@ -5,12 +5,14 @@ import { action, observable, runInAction } from 'mobx';
 
 import dayTokenABI from './abi/dayTokenABI';
 import deployerABI from './abi/deployerABI';
+import dayFaucetABI from './abi/dayFaucetABI';
 
 import web3Config from './lib/web3Utils.js'
 
 let instance = null;
 let TOKEN_CONTRACT_ADDRESS,
 DEPLOYER_ADDRESS,
+FAUCET_ADDRESS,
 MIN_FEE;
 
 export default class Web3Service {
@@ -76,11 +78,14 @@ export default class Web3Service {
 
     TOKEN_CONTRACT_ADDRESS = web3Config[this.network].TOKEN_CONTRACT_ADDRESS;
     DEPLOYER_ADDRESS = web3Config[this.network].DEPLOYER_ADDRESS;
+    FAUCET_ADDRESS = web3Config[this.network].FAUCET_ADDRESS;
     MIN_FEE = web3Config[this.network].MIN_FEE;
 
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
-    this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
-    ,callback) );
+    this.deployerInstance = web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS);
+    //this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
+    //,callback) );
+    this.faucetInstance = web3.eth.contract(dayFaucetABI).at(FAUCET_ADDRESS);
   }
 
 
@@ -116,6 +121,22 @@ export default class Web3Service {
       )
     });
     return hash;
+  }
+
+  async requestFromFaucet(){
+    const tokenBalance = (await Bb.fromCallback( callback => this.faucetInstance.getTokensBalance.call(callback) )).valueOf();
+    const waitTime = (await Bb.fromCallback( callback => this.faucetInstance.waitTime.call(callback) )).valueOf();
+    const lastRequest = (await Bb.fromCallback( callback => this.faucetInstance.lastRequest.call(this.accounts[0],callback) )).valueOf();
+    const now = Math.floor(new Date().getTime()/1000);
+
+    if(tokenBalance < MIN_FEE)
+      return {status:-1}
+
+    if( (now - lastRequest) < waitTime)
+      return {status:0,data: waitTime - (now - lastRequest) }
+
+    const faucetTxn = await Bb.fromCallback( callback => this.faucetInstance.useFaucet(callback) );
+    return {status:1 ,data: faucetTxn };
   }
 
   convertMiningPower = (value,reverse) => {
