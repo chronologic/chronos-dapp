@@ -388,11 +388,32 @@ body {
   float: right; }
 
 .col {
-  display: 'inline-block'; }
+  display: inline-block;
+  min-height: 43px;
+  margin-bottom: 10px; }
 
 .col-3 {
     width: 33%;
-    margin-right: 0.33%; }
+    margin-right: 0.33%;
+    float: left; }
+
+.col p {
+    font-size: 0.8rem; }
+
+.col.left {
+    width: 49.5%; }
+
+.col.right {
+    width: 49.5%; }
+
+.contract_info {
+  padding: 20px 20px 0;
+  overflow-y: visible;
+  margin-bottom: 52px;
+  font-size: 0.8rem; }
+
+.contract_clear {
+  clear: both; }
 
 .center {
   margin-left: auto;
@@ -676,7 +697,7 @@ body {
     height: 120px;
     background-position: 0 -480px; }
 </style><div><div id="__next"><div data-reactroot=""><div><header class="header"><div class="container"><a class="logo" href="/chronos-dapp/"><div></div></a></div></header><section class="steps"><div class="steps-navigation"><div class="container"><div class="step-navigation">Token Setup</div><div class="step-navigation">Timemint Setup</div><div class="step-navigation step-navigation_active">Contract Setup</div><div class="step-navigation">Publish</div><div class="step-navigation">Watch Page</div></div></div><div class="steps-content container step_contract-setup"><div class="about-step"><p class="title">Contract Setup</p><p class="description">Choose the specifics of your smart contract</p></div><div class="input-block-container"><div class="left"><label class="label">Max addresses<a class="label_info" data-tip="The maximum possible number of TimeMints ( Team TimeMints + Investor TimeMints)"></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div><div class="right"><label class="label">Starting Id for Team&#x27;s minting address<a class="label_info" data-tip="The ID of the first Team TimeMint (Only Team TimeMints)"></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div><div class="input-block-container"><div class="left"><label class="label">Total team&#x27;s minting Id<a class="label_info" data-tip="The total number of all Team TimeMints ( Only Team TimeMints )"></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div><div class="right"><label class="label">Team lock period in seconds<a class="label_info" data-tip="Number of Seconds required by Team TimeMints to wait before Minted Tokens can be withdrawn or Transfered "></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div><div class="input-block-container"><div class="left"><label class="label">Post deployment max Ids<a class="label_info" data-tip="Total number of allowed Investor TimeMints"></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div><div class="right"><label class="label">Minimum balance to transfer a minter<a class="label_info" data-tip="Minimum number of minted tokens that can be transferred by TimeMints ( WEI )"></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div></div><div class="button-container"><button class="button button_fill" disabled="">Continue</button><span class="guide-span">* If you need any additional help deploying your own version of the DAY token, refer to <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">this guide</a>.</span></div><div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div></section><footer class="footer"><div class="container"><p class="rights"> ChronoLogic. All rights reserved.</p><a href="/chronos-dapp/"><div class="logo"></div></a><div class="socials"><a href="https://chronologic.network" class="social social_web" target="_blank" title="Website"><div></div></a><a href="https://blog.chronologic.network " class="social social_blog" target="_blank" title="Blog"><div></div></a><a href="https://chronologic.network/paper" class="social social_whitepaper" target="_blank" title="Whitepaper"><div></div></a><a href="https://github.com/chronologic/" class="social social_github" target="_blank" title="Github"><div></div></a><a href="https://blog.chronologic.network/chronos-platform/home" class="social social_help" target="_blank" title="Training and Support"><div></div></a></div></div></footer></div></div></div><div id="__next-error"></div></div><div><script>
-          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/step-3","query":{},"buildId":"2f200663-0c4d-40bb-829b-c86e81b847eb","buildStats":{"app.js":{"hash":"b9a9f37cd44a24a2529df2ca2d90ad6e"}},"assetPrefix":"/chronos-dapp","nextExport":true,"err":null,"chunks":[]}
+          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/step-3","query":{},"buildId":"f2fdf403-a895-4e2d-ae8d-ad8ede923b17","buildStats":{"app.js":{"hash":"fd9e2d103c3f4eb41d6bd619522d5d78"}},"assetPrefix":"/chronos-dapp","nextExport":true,"err":null,"chunks":[]}
           module={}
           __NEXT_LOADED_PAGES__ = []
           __NEXT_LOADED_CHUNKS__ = []
@@ -688,4 +709,4 @@ body {
           __NEXT_REGISTER_CHUNK = function (chunkName, fn) {
             __NEXT_LOADED_CHUNKS__.push({ chunkName: chunkName, fn: fn })
           }
-        </script><script async="" id="__NEXT_PAGE__/step-3" type="text/javascript" src="/chronos-dapp/_next/2f200663-0c4d-40bb-829b-c86e81b847eb/page/step-3.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/chronos-dapp/_next/2f200663-0c4d-40bb-829b-c86e81b847eb/page/_error.js"></script><div></div><script type="text/javascript" src="/chronos-dapp/_next/b9a9f37cd44a24a2529df2ca2d90ad6e/app.js" async=""></script></div></body></html>
+        </script><script async="" id="__NEXT_PAGE__/step-3" type="text/javascript" src="/chronos-dapp/_next/f2fdf403-a895-4e2d-ae8d-ad8ede923b17/page/step-3.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/chronos-dapp/_next/f2fdf403-a895-4e2d-ae8d-ad8ede923b17/page/_error.js"></script><div></div><script type="text/javascript" src="/chronos-dapp/_next/fd9e2d103c3f4eb41d6bd619522d5d78/app.js" async=""></script></div></body></html>
