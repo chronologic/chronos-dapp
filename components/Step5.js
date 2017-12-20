@@ -12,16 +12,16 @@ import StepLayout from './StepLayout';
 import Ringloader,{Boxloader} from '../lib/loader';
 
 const ContractData = data => {
-  console.log(data)
-  return(<div></div>)
-  let Data = [];
+  let Data = [],
+  index = 0;
   for(var d in data){
-    Data.push(<div className="input-block-container col-3">
-      <label className="label">{d+' : '}</label>
-      <p className='loading_msg' >{ this._state.contractInstance[d] }</p>
-    </div>)
-   }
-   return {Data};
+    Data.push(<div className={'col col-3'} key={d}>
+      <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
+      <p className='' >{ data[d] }</p>
+    </div>);
+    index++;
+  }
+   return (Data);
 }
 
 @inject('web3Service')
