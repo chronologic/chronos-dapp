@@ -41,12 +41,37 @@ body {
 }
 
 .col{
-  display:'inline-block';
+  display:inline-block;
+  min-height:43px;
+  margin-bottom: 10px;
   &-3{
     width:33%;
     margin-right:0.33%;
+    float: left;
   }
+  & .label{
+  }
+  & p{
+    font-size: 0.8rem;
+  }
+  &.left{
+    width:49.5%
+  }
+  &.right{
+    width:49.5%
+  }
+}
 
+.contract{
+  &_info{
+    padding: 20px 20px 0;
+    overflow-y: visible;
+    margin-bottom: 52px;
+    font-size: 0.8rem;
+  }
+  &_clear{
+    clear:both;
+  }
 }
 
 .center{
