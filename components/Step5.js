@@ -3,7 +3,7 @@ import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
 
-import { PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
+import { PROPERTIES as ALL_PROPERTIES ,CONTRACT_LABELS} from '../lib/consts';
 import {showError,showInfo} from '../lib/alerts';
 import web3Config from '../lib/web3Utils';
 import AbstractStep from './AbstractStep';
@@ -91,7 +91,6 @@ export default class Step4 extends AbstractStep {
   async fetchContractData (contractAddress){
     const {web3Service} = this.props;
     const data = await web3Service.getContractData(contractAddress);
-    console.log(data);
     this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false,notReady:false}) );
   }
 
@@ -171,7 +170,10 @@ export default class Step4 extends AbstractStep {
           </div>
         }
         {!this._state.notReady && !this._state.loadingData &&
-          <ContractData {...this._state.contractInstance} />
+          <div className="steps-content contract_info">
+            <ContractData {...this._state.contractInstance} />
+            <div className='contract_clear'></div>
+          </div>
         }
         <div className="input-block-container">
         </div>
