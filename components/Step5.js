@@ -173,6 +173,7 @@ export default class Step4 extends AbstractStep {
           <div className="steps-content contract_info">
             <ContractData {...this._state.contractInstance} />
             <div className='contract_clear'></div>
+            <button className="button button_secondary_fill button_right button_mullayer" disabled={true} >Release Tokens</button>
           </div>
         }
         <div className="input-block-container">

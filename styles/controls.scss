@@ -21,6 +21,14 @@
     background-color: $accent-color;
     color: #fff;
   }
+  &_secondary_fill{
+    background-color: $secondary-accent-color;
+    color: #fff;
+  }
+
+  &_right{
+    margin-left:75%;
+  }
 
   &_mullayer {
     margin-top: 25px !important;
@@ -30,6 +38,10 @@
 
 .button:disabled{
      @include background-opacity($accent-color, 0.7);
+     cursor: auto;
+}
+.button_secondary_fill:disabled{
+     @include background-opacity($secondary-accent-color, 0.7);
      cursor: auto;
 }
 
