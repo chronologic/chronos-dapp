@@ -3,7 +3,7 @@ import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
 
-import { PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
+import { PROPERTIES as ALL_PROPERTIES ,CONTRACT_LABELS} from '../lib/consts';
 import {showError,showInfo} from '../lib/alerts';
 import web3Config from '../lib/web3Utils';
 import AbstractStep from './AbstractStep';
@@ -12,16 +12,16 @@ import StepLayout from './StepLayout';
 import Ringloader,{Boxloader} from '../lib/loader';
 
 const ContractData = data => {
-  console.log(data)
-  return(<div></div>)
-  let Data = [];
+  let Data = [],
+  index = 0;
   for(var d in data){
-    Data.push(<div className="input-block-container col-3">
-      <label className="label">{d+' : '}</label>
-      <p className='loading_msg' >{ this._state.contractInstance[d] }</p>
-    </div>)
-   }
-   return {Data};
+    Data.push(<div className={'col col-3'} key={d}>
+      <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
+      <p className='' >{ data[d] }</p>
+    </div>);
+    index++;
+  }
+   return (Data);
 }
 
 @inject('web3Service')
@@ -66,6 +66,7 @@ export default class Step4 extends AbstractStep {
   async runDeploy(){
     const {web3Service} = this.props;
     const transaction = await web3Service.deploy( this.fetchData() );
+    if(transaction)
     await this.contractDeployed(transaction);
   }
 
@@ -81,26 +82,43 @@ export default class Step4 extends AbstractStep {
     console.log(confirmations)
     if(confirmations < 1 )
       return await this.checkConfirmations(transaction);
-    else if(confirmations > 0){
-      this.setState( Object.assign(this._state,{notReady:false}) );
+    else{
+      this.setState( Object.assign(this._state,{loadingData:true}) );
       return confirmations;
     }
   }
 
   async fetchContractData (contractAddress){
     const {web3Service} = this.props;
-    this.setState( Object.assign(this._state,{loadingData:true}) );
-    console.log( contractAddress )
     const data = await web3Service.getContractData(contractAddress);
-    this.setState( Object.assign(this._state,{contractInstance:data}) );
+    this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false,notReady:false}) );
   }
 
-  async contractDeployed(transaction){
+  async contractDeployed( transaction ){
+    const {web3Service,store} = this.props;
     this.setState( Object.assign(this._state,{transactionHash:transaction}) );
     const mined = await this.awaitMined(transaction);
     this.setState( Object.assign(this._state,{transactionReceipt:mined}) );
-    const confirmations = this.checkConfirmations(transaction);
-    await this.fetchContractData(mined.contractAddress);
+    const confirmations = await this.checkConfirmations(transaction);
+    this.setState( Object.assign(this._state,{notReady:false}) );
+    const contract = await web3Service.fetchNewChild(transaction);
+    console.log(contract, confirmations)
+    if(contract)
+      await this.fetchContractData(contract);
+    else{
+      const error = await showError('There was problem deploying the contract. Try again?')
+      const query = ALL_PROPERTIES.reduce((result, { name }) => {
+        result[name] = store[name];
+        return result;
+      }, {});
+
+      if(error)
+      Router.push({
+        pathname: this.activeStep.prevUrl,
+        query,
+      });
+    }
+
   }
 
   getValidations() {
@@ -137,12 +155,12 @@ export default class Step4 extends AbstractStep {
       >
         {this._state.notReady &&
          <div className="input-block-container">
-          <Boxloader {...{color:'#123abc',loading: true, size:13,msg:!this._state.transactionHash?'Deploying...':'Awaiting Minning ...'}} />
+          <Boxloader {...{color:'#123abc',loading: true, size:13,msg:!this._state.transactionHash?'Deploying...':'Awaiting Mining ...'}} />
          </div>
         }
         {!this._state.notReady && this._state.loadingData &&
           <div className="input-block-container center text-center">
-            <p className='loading_msg' >Successfully deployed.<br/> Please wait...</p>
+            <p className='loading_msg' >Successfully deployed.<br/> Loading Contract data ...</p>
           </div>
         }
         {(this._state.notReady || this._state.loadingData) && this._state.transactionHash &&
@@ -152,7 +170,11 @@ export default class Step4 extends AbstractStep {
           </div>
         }
         {!this._state.notReady && !this._state.loadingData &&
-          <ContractData {...this._state.contractInstance} />
+          <div className="steps-content contract_info">
+            <ContractData {...this._state.contractInstance} />
+            <div className='contract_clear'></div>
+            <button className="button button_secondary_fill button_right button_mullayer" disabled={true} >Release Tokens</button>
+          </div>
         }
         <div className="input-block-container">
         </div>

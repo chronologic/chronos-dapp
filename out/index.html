@@ -388,11 +388,32 @@ body {
   float: right; }
 
 .col {
-  display: 'inline-block'; }
+  display: inline-block;
+  min-height: 43px;
+  margin-bottom: 10px; }
 
 .col-3 {
     width: 33%;
-    margin-right: 0.33%; }
+    margin-right: 0.33%;
+    float: left; }
+
+.col p {
+    font-size: 0.8rem; }
+
+.col.left {
+    width: 49.5%; }
+
+.col.right {
+    width: 49.5%; }
+
+.contract_info {
+  padding: 20px 20px 0;
+  overflow-y: visible;
+  margin-bottom: 52px;
+  font-size: 0.8rem; }
+
+.contract_clear {
+  clear: both; }
 
 .center {
   margin-left: auto;
@@ -428,10 +449,27 @@ body {
     background-color: #2f4ffd;
     color: #fff; }
 
+.button_secondary_fill {
+    background-color: #fd2f4f;
+    color: #fff; }
+
+.button_right {
+    margin-left: 75%; }
+
+.button_mullayer {
+    margin-top: 25px !important;
+    margin-bottom: 32px !important; }
+
 .button:disabled {
   background: #2f4ffd;
   /* The Fallback */
   background: rgba(47, 79, 253, 0.7);
+  cursor: auto; }
+
+.button_secondary_fill:disabled {
+  background: #fd2f4f;
+  /* The Fallback */
+  background: rgba(253, 47, 79, 0.7);
   cursor: auto; }
 
 .label {
@@ -671,8 +709,8 @@ body {
     width: 120px;
     height: 120px;
     background-position: 0 -480px; }
-</style><div><div id="__next"><div data-reactroot=""><div><header class="header"><div class="container"><a class="logo" href="/"><div></div></a></div></header><div><section class="home"><div class="crowdsale"><div class="container"><h1 class="title">Welcome to the Chronologic&#x27;s DAPP </h1><p class="description">This DAPP (Decentralized App) allows anyone to create his/hers own version of minting token easily.<br/>The steps ahead will help you set up the features of your very own version of the DAY token.</p><div class="buttons"><button class="button button_fill" disabled="">Start</button></div><p class="description">*This tool requires <b><a href="https://metamask.io/" target="_blank">MetaMask</a> </b> extension. Besides, the ETH address which will create the smart contract has to have an amount of ETH for the contract deployment and also <!-- -->0<!-- --> DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.</p></div></div><div class="process"><div class="container"><div class="process-item"><div class="step-icons step-icons_token-setup"></div><p class="title">Token Setup</p><p class="description">Select the futures for your own version of the DAY token</p></div><div class="process-item"><div class="step-icons step-icons_timemint-setup"></div><p class="title">Timemint Setup</p><p class="description">Setup minting and halving rate your contract will apply</p></div><div class="process-item"><div class="step-icons step-icons_contract-setup"></div><p class="title">Contract Setup</p><p class="description">Choose the specifics of your smart contract</p></div><div class="process-item"><div class="step-icons step-icons_publish"></div><p class="title">Publish</p><p class="description">Check your contract&#x27;s data and proceed with the deployment</p></div><div class="process-item"><div class="step-icons step-icons_watch"></div><p class="title">Watch Page</p><p class="description">Watch your deployed contract details and also assign late TimeMints</p></div></div></div></section></div><footer class="footer"><div class="container"><p class="rights"> ChronoLogic. All rights reserved.</p><a href="/"><div class="logo"></div></a><div class="socials"><a href="https://chronologic.network" class="social social_web" target="_blank" title="Website"><div></div></a><a href="https://blog.chronologic.network " class="social social_blog" target="_blank" title="Blog"><div></div></a><a href="https://chronologic.network/paper" class="social social_whitepaper" target="_blank" title="Whitepaper"><div></div></a><a href="https://github.com/chronologic/" class="social social_github" target="_blank" title="Github"><div></div></a><a href="https://blog.chronologic.network/chronos-platform/home" class="social social_help" target="_blank" title="Training and Support"><div></div></a></div></div></footer></div></div></div><div id="__next-error"></div></div><div><script>
-          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/","query":{},"buildId":"0e4b64a7-a515-4324-8ac2-28867bbf2871","buildStats":{"app.js":{"hash":"fc4d19612dff9c2d31ff6159ca7c4cf1"}},"assetPrefix":"","nextExport":true,"err":null,"chunks":[]}
+</style><div><div id="__next"><div data-reactroot=""><div><header class="header"><div class="container"><a class="logo" href="/"><div></div></a></div></header><div><section class="home"><div class="crowdsale"><div class="container"><h1 class="title">Welcome to the Chronologic&#x27;s DAPP </h1><p class="description">This DAPP (Decentralized App) allows anyone to create his/hers own version of minting token easily.<br/>The steps ahead will help you set up the features of your very own version of the DAY token.</p><div class="buttons"><button class="button button_fill button_mullayer" disabled="">Start</button><br/></div><p class="description">*This tool requires <b><a href="https://metamask.io/" target="_blank">MetaMask</a> </b> extension. Besides, the ETH address which will create the smart contract has to have an amount of ETH for the contract deployment and also <!-- -->0<!-- --> DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.</p></div></div><div class="process"><div class="container"><div class="process-item"><div class="step-icons step-icons_token-setup"></div><p class="title">Token Setup</p><p class="description">Select the futures for your own version of the DAY token</p></div><div class="process-item"><div class="step-icons step-icons_timemint-setup"></div><p class="title">Timemint Setup</p><p class="description">Setup minting and halving rate your contract will apply</p></div><div class="process-item"><div class="step-icons step-icons_contract-setup"></div><p class="title">Contract Setup</p><p class="description">Choose the specifics of your smart contract</p></div><div class="process-item"><div class="step-icons step-icons_publish"></div><p class="title">Publish</p><p class="description">Check your contract&#x27;s data and proceed with the deployment</p></div><div class="process-item"><div class="step-icons step-icons_watch"></div><p class="title">Watch Page</p><p class="description">Watch your deployed contract details and also assign late TimeMints</p></div></div></div></section></div><footer class="footer"><div class="container"><p class="rights"> ChronoLogic. All rights reserved.</p><a href="/"><div class="logo"></div></a><div class="socials"><a href="https://chronologic.network" class="social social_web" target="_blank" title="Website"><div></div></a><a href="https://blog.chronologic.network " class="social social_blog" target="_blank" title="Blog"><div></div></a><a href="https://chronologic.network/paper" class="social social_whitepaper" target="_blank" title="Whitepaper"><div></div></a><a href="https://github.com/chronologic/" class="social social_github" target="_blank" title="Github"><div></div></a><a href="https://blog.chronologic.network/chronos-platform/home" class="social social_help" target="_blank" title="Training and Support"><div></div></a></div></div></footer></div></div></div><div id="__next-error"></div></div><div><script>
+          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/","query":{},"buildId":"28efb0ad-e609-414a-8228-981be9001927","buildStats":{"app.js":{"hash":"73a73ac88301edfb55286552a40bd881"}},"assetPrefix":"","nextExport":true,"err":null,"chunks":[]}
           module={}
           __NEXT_LOADED_PAGES__ = []
           __NEXT_LOADED_CHUNKS__ = []
@@ -684,4 +722,4 @@ body {
           __NEXT_REGISTER_CHUNK = function (chunkName, fn) {
             __NEXT_LOADED_CHUNKS__.push({ chunkName: chunkName, fn: fn })
           }
-        </script><script async="" id="__NEXT_PAGE__/" type="text/javascript" src="/_next/0e4b64a7-a515-4324-8ac2-28867bbf2871/page/index.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/_next/0e4b64a7-a515-4324-8ac2-28867bbf2871/page/_error.js"></script><div></div><script type="text/javascript" src="/_next/fc4d19612dff9c2d31ff6159ca7c4cf1/app.js" async=""></script></div></body></html>
+        </script><script async="" id="__NEXT_PAGE__/" type="text/javascript" src="/_next/28efb0ad-e609-414a-8228-981be9001927/page/index.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/_next/28efb0ad-e609-414a-8228-981be9001927/page/_error.js"></script><div></div><script type="text/javascript" src="/_next/73a73ac88301edfb55286552a40bd881/app.js" async=""></script></div></body></html>
