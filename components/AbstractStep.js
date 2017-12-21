@@ -65,11 +65,12 @@ export default class AbstractStep extends React.Component {
 
   @action
   validate(property) {
-    const { props: { store } } = this;
+    const { props: { store,web3Service } } = this;
+    const {web3} = web3Service;
     const validations = this.getValidations();
     const { validator } = this.properties[property];
     const value = store[property];
-    validations[property] = validator(value);
+    validations[property] = validator(value,web3);
     return validations[property];
   }
 

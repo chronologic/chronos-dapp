@@ -27,9 +27,13 @@ const ContractData = data => {
 @inject('web3Service')
 @inject('store')
 @observer
-export default class Step4 extends AbstractStep {
+export default class Step5 extends AbstractStep {
   constructor(props) {
     super('WATCH', props);
+  }
+
+  getValidations (){
+    return this._validations;
   }
 
   @observable
@@ -39,10 +43,18 @@ export default class Step4 extends AbstractStep {
     contractInstance:{}
   }
 
+  @observable
+  _validations = {
+    receiverAddress: true,
+    tokens: true,
+    weiAmount: true,
+    timemintId: true,
+  };
+
   _contractFields = ['tokenName', 'symbol',
     'minMintingPower', 'maxMintingPower', 'halvingCycle', 'mintingPeriod',
     'maxAddresses', 'startingId', 'totalMintingId',
-    'teamLockPeriod', 'postDeploymentMaxIds', 'minimumBalance']
+    'teamLockPeriod', 'postDeploymentMaxIds', 'minimumBalance'];
 
   componentDidMount() {
     try{
@@ -121,10 +133,6 @@ export default class Step4 extends AbstractStep {
 
   }
 
-  getValidations() {
-    return {};
-  }
-
   goNext = () => {
       throw new Error('Implement next stage');
   };
@@ -170,10 +178,37 @@ export default class Step4 extends AbstractStep {
           </div>
         }
         {!this._state.notReady && !this._state.loadingData &&
-          <div className="steps-content contract_info">
-            <ContractData {...this._state.contractInstance} />
-            <div className='contract_clear'></div>
-            <button className="button button_secondary_fill button_right button_mullayer" disabled={true} >Release Tokens</button>
+          <div>
+            <div className="steps-content contract_info">
+              <ContractData {...this._state.contractInstance} />
+              <div className='contract_clear'></div>
+              <button className="button button_secondary_fill button_right button_mullayer" disabled={true} >Release Tokens</button>
+            </div>
+            <div className="steps-content contract_info">
+              <h2 className="title left">
+                Allocate Time Mints
+              </h2>
+              <div className="input-block-container bottom-margin">
+                {super.renderProperty(this.properties.receiverAddress, { })}
+              </div>
+              <div className="input-block-container bottom-margin">
+                {super.renderProperty(this.properties.tokens, {  })}
+              </div>
+              <div className="input-block-container bottom-margin">
+                {super.renderProperty(this.properties.weiAmount, {  })}
+              </div>
+              <div className="input-block-container bottom-margin">
+                {super.renderProperty(this.properties.timemintId, {  })}
+              </div>
+              <div className="input-block-container bottom-margin">
+                {super.renderProperty(this.properties.timemintId, {  })}
+              </div>
+              <div className="input-block-container bottom-margin">
+                <button className="button button_fill " disabled={true} >Allocate</button>
+              </div>
+              <div></div>
+
+            </div>
           </div>
         }
         <div className="input-block-container">
