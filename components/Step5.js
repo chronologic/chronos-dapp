@@ -2,6 +2,7 @@ import React from 'react';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
+import ReactTooltip from 'react-tooltip'
 
 import { PROPERTIES as ALL_PROPERTIES ,CONTRACT_LABELS} from '../lib/consts';
 import {showError,showInfo} from '../lib/alerts';
@@ -206,7 +207,7 @@ export default class Step5 extends AbstractStep {
               <div className="input-block-container bottom-margin">
                 <button className="button button_fill " disabled={true} >Allocate</button>
               </div>
-              <div></div>
+              {ReactTooltip.rebuild()}
 
             </div>
           </div>
