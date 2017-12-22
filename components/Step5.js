@@ -13,13 +13,21 @@ import StepLayout from './StepLayout';
 import Ringloader,{Boxloader} from '../lib/loader';
 
 const ContractData = data => {
+  const explorer = data.explorer;
+  data = data.data;
   let Data = [],
   index = 0;
   for(var d in data){
-    Data.push(<div className={'col col-3'} key={d}>
-      <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
-      <p className='' >{ data[d] }</p>
-    </div>);
+    if(d=='address')
+      Data.push(<div className={'col col-3'} key={d}>
+        <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
+        <p className='' ><a target="_blank" href={explorer+'address/'+data[d]}>{ data[d] }</a></p>
+      </div>);
+    else
+      Data.push(<div className={'col col-3'} key={d}>
+        <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
+        <p className='' >{ data[d] }</p>
+      </div>);
     index++;
   }
    return (Data);
@@ -190,7 +198,7 @@ export default class Step5 extends AbstractStep {
         {!this._state.notReady && !this._state.loadingData &&
           <div>
             <div className="steps-content contract_info">
-              <ContractData {...this._state.contractInstance} />
+              <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
               <div className='contract_clear'></div>
               <button className="button button_secondary_fill button_right button_mullayer" disabled={true} >Release Tokens</button>
             </div>
