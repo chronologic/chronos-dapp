@@ -79,7 +79,7 @@ export default class Web3Service {
     TOKEN_CONTRACT_ADDRESS = web3Config[this.network].TOKEN_CONTRACT_ADDRESS;
     DEPLOYER_ADDRESS = web3Config[this.network].DEPLOYER_ADDRESS;
     FAUCET_ADDRESS = web3Config[this.network].FAUCET_ADDRESS;
-    MIN_FEE = web3Config[this.network].MIN_FEE;
+    MIN_FEE = Number(web3Config[this.network].MIN_FEE);
 
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
     this.deployerInstance = web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS);
