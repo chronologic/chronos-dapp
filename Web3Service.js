@@ -6,6 +6,7 @@ import { action, observable, runInAction } from 'mobx';
 import dayTokenABI from './abi/dayTokenABI';
 import deployerABI from './abi/deployerABI';
 import dayFaucetABI from './abi/dayFaucetABI';
+import debtTokenDeployerABI from './abi/debtTokenDeployerABI';
 
 import web3Config from './lib/web3Utils.js'
 
