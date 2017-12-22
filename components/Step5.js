@@ -41,7 +41,8 @@ export default class Step5 extends AbstractStep {
   _state = {
     notReady: true,
     loadingData: false,
-    contractInstance:{}
+    contractInstance:{},
+    deploymentData:{}
   }
 
   @observable
@@ -107,6 +108,12 @@ export default class Step5 extends AbstractStep {
     this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false,notReady:false}) );
   }
 
+  async fetchDeploymentData (transaction){
+    const {web3Service} = this.props;
+    const data = await web3Service.getDeploymentData(transaction);
+    this.setState( Object.assign(this._state,{deploymentData:data}) );
+  }
+
   async contractDeployed( transaction ){
     const {web3Service,store} = this.props;
     this.setState( Object.assign(this._state,{transactionHash:transaction}) );
@@ -116,8 +123,10 @@ export default class Step5 extends AbstractStep {
     this.setState( Object.assign(this._state,{notReady:false}) );
     const contract = await web3Service.fetchNewChild(transaction);
     console.log(contract, confirmations)
-    if(contract)
+    if(contract){
+      await this.fetchDeploymentData(transaction);
       await this.fetchContractData(contract);
+    }
     else{
       const error = await showError('There was problem deploying the contract. Try again?')
       const query = ALL_PROPERTIES.reduce((result, { name }) => {
@@ -208,7 +217,47 @@ export default class Step5 extends AbstractStep {
                 <button className="button button_fill " disabled={true} >Allocate</button>
               </div>
               {ReactTooltip.rebuild()}
+            </div>
+            <div>
+              <div className="input-block-container">
+                <h2 className="title left">
+                  Transaction <span className='small'>history</span>
+                </h2>
+              </div>
+              <div className="steps-content contract_info scrollable scrollable_200">
+              </div>
+            </div>
+            <div>
+              <div className="input-block-container">
+                <h2 className="title left">
+                  Contract <span className='small'>details</span>
+                </h2>
+              </div>
+              <div className="steps-content contract_info  scrollable scrollable_600">
+                <div className="code">
+                  <div className="input-block-container">
+                    <h4 className="title left">
+                      Contact Deployment code
+                    </h4>
+                  </div>
+                  <pre className="scrollable scrollable_200">
+                    {this._state.deploymentData.creationCode}
+                  </pre>
+                </div>
 
+                <div className="code">
+                  <div className="input-block-container">
+                    <h4 className="title left">
+                      Contact ABI
+                    </h4>
+                  </div>
+                  <pre className="scrollable scrollable_200">
+                    {this._state.deploymentData.abi}
+                  </pre>
+                </div>
+
+
+              </div>
             </div>
           </div>
         }

@@ -262,56 +262,17 @@ export default class Web3Service {
     }
     return data;
   }
-    /*
-    console.log("deploying new token");
-    var _tokenName = $("#name").val();
-    var _tokenSymbol = $("#symbol").val();
-    var _maxAddresses = $("#maxAddresses").val();
-    var _firstTeamContributorId = $("#firstTeamContributionId").val();
-    var _totalTeamContributorIds = $("#totalTeamContributionId").val();
-    var _totalPostIcoContributorIds = $("#totalPostIcoContributorIds").val();
-    var _minMintingPower = $("#minMintingPower").val();
-    var _maxMintingPower = $("#maxMintingPower").val();
-    var _halvingCycle = $("#halvingCycle").val();
-    var _DayInSecs = $('#dayLengthinSec').val();
-    var _minBalanceToSell = $("#teamLockPeriodInSec").val();
-    var _teamLockPeriodInSec = $("#minBalanceToSell").val();
-getDeployerInstance().then(function(deployerInstance) {
-    var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec,{
-            from: accounts[0],
-            gas: 4100000,
-            value: 0
-        },function(error,result){
-            if(result){
-                txUrl = baseNetworkURL+"tx/"+result;
 
-                swal({
-                title: 'Please wait while the transaction is mined',
-                html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>',
-                allowOutsideClick:false,
-                type: "info",
-                showCancelButton: false,
-                showConfirmButton: false,
-                allowEscapeKey:false
-                })
-                return awaitBlockConsensus(window.web3, result,2, 200).then(function(result){
-                    var obj = result.logs;
-                    window.location.replace("watchToken.html?tad="+obj[2].address);
+  async getDeploymentData(transaction){
+    let { web3 } = this;
+    const data ={
+      creationCode: (await Bb.fromCallback( callback => web3.eth.getTransaction(transaction, callback))).input ,
+      abi: JSON.stringify( dayTokenABI ),
+    }
+    return data;
+  }
 
-            }, function(error) {
-                console.log('Could not fetch new balances', error);
-                return Promise.reject(error);
-            });
-            }
-            else
-                return;
-        });
-    }).then(function(result){
-        console.log("result",result);
-    }, function(error) {
-        console.log('Could not fetch new balances', error);
-        return Promise.reject(error);
-    });*/
+
 }
 
 export function initWeb3Service(isServer, source) {

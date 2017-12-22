@@ -40,6 +40,25 @@ body {
   float: right;
 }
 
+.small{
+  font-size:smaller;
+}
+
+.code{
+  & .title{
+    margin-bottom:10px;
+    text-decoration: underline;
+  }
+
+  & pre{
+    background-color:$code-background-color;
+    font-size:1.2em;
+    color:#000;
+    padding: 10px;
+    margin-bottom:20px;
+  }
+}
+
 .col{
   display:inline-block;
   min-height:43px;
@@ -62,10 +81,23 @@ body {
   }
 }
 
+.scrollable{
+  height:auto !important;
+  overflow-y:scroll;
+  &_200{
+    max-height:200px !important;
+  }
+  &_400{
+    max-height:400px !important;
+  }
+  &_600{
+    max-height:600px !important;
+  }
+}
+
 .contract{
   &_info{
     padding: 20px 20px 0;
-    overflow-y: visible;
     margin-bottom: 52px;
     font-size: 0.8rem;
   }
