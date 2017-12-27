@@ -233,6 +233,11 @@ export default class Web3Service {
        return result[1];
   }
 
+  async isTokensReleased(contract){
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    return await Bb.fromCallback( callback => childContract.released.call(callback) );
+  }
+
   async getContractData(contract){
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
     const data = {

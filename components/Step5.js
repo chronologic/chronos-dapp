@@ -110,6 +110,12 @@ export default class Step5 extends AbstractStep {
     }
   }
 
+  async isReleased(){
+    const {web3Service} = this.props;
+    const released = await web3Service.isTokensReleased(this._state.contractInstance.address);
+    return released
+  }
+
   async fetchContractData (contractAddress){
     const {web3Service} = this.props;
     const data = await web3Service.getContractData(contractAddress);
@@ -200,7 +206,7 @@ export default class Step5 extends AbstractStep {
             <div className="steps-content contract_info">
               <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
               <div className='contract_clear'></div>
-              <button className="button button_secondary_fill button_right button_mullayer" disabled={true} >Release Tokens</button>
+              <button className="button button_secondary_fill button_right button_mullayer" disabled={!this.isReleased()} >Release Tokens</button>
             </div>
             <div className="steps-content contract_info">
               <h2 className="title left">
