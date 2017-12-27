@@ -35,7 +35,7 @@ export default class InputField extends React.Component {
         <input
           disabled={disabled}
           type={type}
-          className="input"
+          className={type=='checkbox'?"input left_checkbox":"input"}
           onBlur={onBlur}
           value={value}
           defaultValue={defaultValue}
