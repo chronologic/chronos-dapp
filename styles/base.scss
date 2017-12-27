@@ -33,6 +33,9 @@ body {
 .left {
   width: 46%;
   float: left;
+  &_checkbox{
+    width: 5% !important;
+  }
 }
 
 .right {

@@ -59,6 +59,7 @@ export default class Step5 extends AbstractStep {
     tokens: true,
     weiAmount: true,
     timemintId: true,
+    teamMember: true
   };
 
   _contractFields = ['tokenName', 'symbol',
@@ -225,7 +226,7 @@ export default class Step5 extends AbstractStep {
                 {super.renderProperty(this.properties.timemintId, {  })}
               </div>
               <div className="input-block-container bottom-margin">
-                {super.renderProperty(this.properties.timemintId, {  })}
+                {super.renderProperty(this.properties.teamMember, { side:'left', type:'checkbox' })}
               </div>
               <div className="input-block-container bottom-margin">
                 <button className="button button_fill " disabled={true} >Allocate</button>
@@ -235,7 +236,7 @@ export default class Step5 extends AbstractStep {
             <div>
               <div className="input-block-container">
                 <h2 className="title left">
-                  Transaction <span className='small'>history</span>
+                  Transaction <kbd className='small'>history</kbd>
                 </h2>
               </div>
               <div className="steps-content contract_info scrollable scrollable_200">
