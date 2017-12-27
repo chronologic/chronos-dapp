@@ -141,7 +141,7 @@ export default class Web3Service {
 
   convertMiningPower = (value,reverse) => {
     if(reverse)
-      return (value/1e+18)*100;
+      return (value*100)/1e+18;
     return (value/100)*1e+18;
   }
 
