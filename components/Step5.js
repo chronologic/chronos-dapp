@@ -65,7 +65,7 @@ export default class Step4 extends AbstractStep {
 
   async runDeploy(){
     const {web3Service} = this.props;
-    const transaction = await web3Service.deploy( this.fetchData() );
+    const transaction = await web3Service.deploy( this.fetchData(),true );
     if(transaction)
     await this.contractDeployed(transaction);
   }

@@ -6,6 +6,7 @@ import { action, observable, runInAction } from 'mobx';
 import dayTokenABI from './abi/dayTokenABI';
 import deployerABI from './abi/deployerABI';
 import dayFaucetABI from './abi/dayFaucetABI';
+import dayFaucetABI from './abi/dayFaucetABI';
 import debtTokenDeployerABI from './abi/debtTokenDeployerABI';
 
 import web3Config from './lib/web3Utils.js'
@@ -13,6 +14,7 @@ import web3Config from './lib/web3Utils.js'
 let instance = null;
 let TOKEN_CONTRACT_ADDRESS,
 DEPLOYER_ADDRESS,
+    DEBT_TOKEN_DEPLOYER_ADDRESS,
 FAUCET_ADDRESS,
 MIN_FEE;
 
@@ -21,6 +23,7 @@ export default class Web3Service {
   web3 = null;
   tokenInstance = null;
   deployerInstance = null;
+  debtTokenDeployerInstance = null;
   @observable connectedToMetaMask = null;
   @observable accounts = null;
   @observable netId = null;
@@ -81,12 +84,15 @@ export default class Web3Service {
     DEPLOYER_ADDRESS = web3Config[this.network].DEPLOYER_ADDRESS;
     FAUCET_ADDRESS = web3Config[this.network].FAUCET_ADDRESS;
     MIN_FEE = web3Config[this.network].MIN_FEE;
+    DEBT_TOKEN_DEPLOYER_ADDRESS = web3Config[this.network].DEBT_TOKEN_DEPLOYER_ADDRESS;
 
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
     this.deployerInstance = web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS);
     //this.deployerInstance = await Bb.fromCallback(callback => web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS
     //,callback) );
     this.faucetInstance = web3.eth.contract(dayFaucetABI).at(FAUCET_ADDRESS);
+    this.debtTokenDeployerInstance = web3.eth.contract(debtTokenDeployerABI).at(DEBT_TOKEN_DEPLOYER_ADDRESS);
+
   }
 
 
@@ -96,33 +102,54 @@ export default class Web3Service {
     });
     return result;
   }
-  async deploy(contractData) {
-      let {web3,deployerInstance} = this;
+  async deploy(contractData, whichContract) {
+      let {web3,deployerInstance, debtTokenDeployerInstance} = this;
 
       let transactionOptions = {
         gasPrice : (await this.fetchGasPrice()).plus(web3.toWei(2,'gwei')),
       }
-
-      const hash = await Bb.fromCallback((callback)=>{
+if(whichContract){
+    const hash = await Bb.fromCallback((callback)=>{
         deployerInstance.createCustomDayToken(
-        contractData.tokenName,
-        contractData.symbol,
-        contractData.maxAddresses,
-        contractData.startingId,
-        contractData.totalMintingId,
-        contractData.postDeploymentMaxIds,
-        this.convertMiningPower(contractData.minMintingPower),
-        this.convertMiningPower(contractData.maxMintingPower),
-        contractData.halvingCycle,
-        contractData.minimumBalance,
-        contractData.mintingPeriod,
-        contractData.teamLockPeriod,
-        transactionOptions,
-        callback
-      )
+            contractData.tokenName,
+            contractData.symbol,
+            contractData.maxAddresses,
+            contractData.startingId,
+            contractData.totalMintingId,
+            contractData.postDeploymentMaxIds,
+            this.convertMiningPower(contractData.minMintingPower),
+            this.convertMiningPower(contractData.maxMintingPower),
+            contractData.halvingCycle,
+            contractData.minimumBalance,
+            contractData.mintingPeriod,
+            contractData.teamLockPeriod,
+            transactionOptions,
+            callback
+        )
     });
     return hash;
+}
+
+const hash = await Bb.fromCallback((callback)=>{
+  debtTokenDeployerInstance.createDebtToken(
+      contractData.tokenSymbol,
+      contractData.initialAmount,
+      contractData.exchangeRate,
+      contractData.decimalUnits,
+      contractData.dayLength,
+      contractData.loanTerm,
+      contractData.loanCycle,
+      contractData.interestRate,
+      contractData.debtOwner,
+      transactionOptions,
+      callback
+
+  )
+});
+
+return hash;
   }
+
 
   async requestFromFaucet(){
     const tokenBalance = (await Bb.fromCallback( callback => this.faucetInstance.getTokensBalance.call(callback) )).valueOf();
