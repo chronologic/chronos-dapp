@@ -1,7 +1,6 @@
 import React from 'react';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import Router from 'next/router';
 
 import { PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
 import AbstractStep from './AbstractStep';

@@ -1,10 +1,9 @@
 import React from 'react';
-import { observable } from 'mobx';
+import { observable,whyRun } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import Router from 'next/router';
 import ReactTooltip from 'react-tooltip'
 
-import { PROPERTIES as ALL_PROPERTIES ,CONTRACT_LABELS} from '../lib/consts';
+import { CONTRACT_LABELS} from '../lib/consts';
 import {showError,showInfo} from '../lib/alerts';
 import web3Config from '../lib/web3Utils';
 import AbstractStep from './AbstractStep';
