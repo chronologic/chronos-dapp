@@ -2,6 +2,7 @@ import React from 'react';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import ReactTooltip from 'react-tooltip'
+import Router from 'next/router';
 
 import { PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
 import {showError} from '../lib/alerts';
@@ -52,10 +53,11 @@ export default class Step4 extends AbstractStep {
     const { props: { store } } = this;
     let that = this;
     const CONTRACT_PROPERTIES = ['transactionHash','newContract']
-    const query = CONTRACT_PROPERTIES.reduce((result, { name }) => {
+    const query = CONTRACT_PROPERTIES.reduce((result, name) => {
       result[name] = that._state[name];
       return result;
     }, {});
+
     Router.push({
       pathname: this.activeStep.nextUrl,
       query,
@@ -83,22 +85,22 @@ export default class Step4 extends AbstractStep {
       return;
     target.disabled = true;
     this.setState( Object.assign(this._state,{deploying:true}) );
-
+    let newContract;
     try{
       //const transaction = '0x9c7ee592dee97d515458ff4ca6e441db6f2a016bb821c40bde4136f7a264b22a';
       const transaction = await web3Service.deploy( this.fetchData() );
-      const newContract = await this.contractDeployed(transaction);
+      newContract = await this.contractDeployed(transaction);
       this.setState( Object.assign(this._state,{deploying:false}) );
     }
     catch(e){
       target.disabled = false;
       console.error(e);
-      showError('There was problem deploying the contract.');
+      showError('Transaction Failed.');
     }
 
     this.setState( Object.assign(this._state,{deploying:false,notReady:false}) );
 
-    if(typeof newContract != 'undefined' && web3.isAddress(newContract) ){
+    if(newContract && web3.isAddress(newContract) ){
       this.setState( Object.assign(this._state,{newContract:newContract}) );
       this.goNext();
     }
