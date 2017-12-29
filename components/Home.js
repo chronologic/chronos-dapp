@@ -47,11 +47,9 @@ export default class Home extends Component {
 
   onWatch = async() =>{
     const val = await showContractAddressRequest();
-    console.log(val);
     if(!val)
       return;
-    this.goWatch(val);
-    return console.log('Contract ',val)
+    return this.goWatch(val);
   }
 
   async goWatch(hash) {
