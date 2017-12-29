@@ -148,6 +148,45 @@ export default class Web3Service {
     return released;
   }
 
+  async allocateTeamTimemints (data){
+    console.log('Team',data)
+    const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
+    const allocateTeam = await Bb.fromCallback( callback => childContract.addTeamTimeMints(
+      data.receiverAddress,
+      data.timemintId,
+      data.tokens,
+      data.isTest,
+      callback
+    ) );
+    return allocateTeam;
+  }
+
+  async allocateNormalTimeMints (data){
+    console.log('Normal',data)
+    const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
+    const allocateNormal = await Bb.fromCallback( callback => childContract.allocateNormalTimeMints(
+      data.receiverAddress,
+      0,
+      data.timemintId,
+      data.tokens,
+      data.weiAmount,
+      callback
+    ) );
+    return allocateNormal;
+  }
+
+  async postAllocateAuctionTimeMints (data){
+    console.log('PostAllocate',data)
+    const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
+    const postAllocate = await Bb.fromCallback( callback => childContract.postAllocateAuctionTimeMints(
+      data.receiverAddress,
+      0,
+      data.timemintId,
+      callback
+    ) );
+    return postAllocate;
+  }
+
   convertMiningPower = (value,reverse) => {
     if(reverse)
       return (value*100)/1e+18;

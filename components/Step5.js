@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
 
 import { CONTRACT_LABELS} from '../lib/consts';
-import {showError,showInfo,confirmTokenRelease} from '../lib/alerts';
+import {showError,showInfo,confirmProcess} from '../lib/alerts';
 import web3Config from '../lib/web3Utils';
 import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
@@ -39,6 +39,7 @@ const ContractData = data => {
 export default class Step5 extends AbstractStep {
   constructor(props) {
     super('WATCH', props);
+    this.allocateMints = this.allocateMints.bind(this);
   }
 
   getValidations (){
@@ -73,18 +74,67 @@ export default class Step5 extends AbstractStep {
     this.loadInfo();
   }
 
-  doRelease = async(eventInst) => {
+  async doRelease (eventInst) {
     const { target } = eventInst;
     const { props: {web3Service} } = this;
     const EXPLORER = web3Config[web3Service.network].EXPLORER;
-    const prompt = await confirmTokenRelease();
-    console.log(prompt);
+    const prompt = await confirmProcess('Release Tokens','You won\'t be able to allocate timemints after this!');
     if(!prompt)
       return;
     target.disabled = true;
     try{
       const releaseTxn = await web3Service.releaseTokens();
       showInfo(`Tokens released: \n <a href="${EXPLORER}/tx/${releaseTxn}" >${releaseTxn}</a>`);
+    }
+    catch(e){
+      console.error(e);
+      showError("Transaction Failed !!!");
+      target.disabled = false;
+    }
+  }
+
+  async allocateMints (eventInst) {
+    const { target } = eventInst;
+    const { props: {web3Service,store} } = this;
+    const EXPLORER = web3Config[web3Service.network].EXPLORER;
+
+    let fxn,skipValidations = [],allocateData={};
+    Object.keys(this.properties).map(property => allocateData[property] = store[property]);
+
+    switch(true){
+      case (await this.isReleased()):
+        fxn = 'postAllocateAuctionTimeMints';
+        skipValidations = ['isTest','weiAmount','tokens'];
+        break;
+      case (allocateData['teamMember']):
+        fxn = 'allocateTeamTimemints';
+        skipValidations = ['weiAmount'];
+        break;
+      default:
+        fxn = 'allocateNormalTimeMints';
+        skipValidations = ['isTest'];
+        break;
+    }
+
+    const validated = await this.validateAllocation(skipValidations);
+    if(!validated)
+      return;
+
+    const prompt = await confirmProcess('Allocate Tokens',`Kindly confirm allocation of timemint ID: ${allocateData['timemintId']} `);
+    if(!prompt)
+      return;
+
+    target.disabled = true;
+    allocateData.contract = this._state.contractInstance.address;
+
+    try{
+      const allocateTxn = await web3Service[fxn](allocateData);
+      allocateData.forEach( d => {//Clean up fields to avoid doiuble allocation
+        console.log(d)
+        store[d] = '';
+      })
+      showInfo(`Tokens allocated: \n <a href="${EXPLORER}/tx/${allocateTxn}" >${allocateTxn}</a>`);
+      target.disabled = false;
     }
     catch(e){
       console.error(e);
@@ -127,6 +177,15 @@ export default class Step5 extends AbstractStep {
     const data = await web3Service.getDeploymentData(transaction);
     this.setState( Object.assign(this._state,{deploymentData:data}) );
   }
+
+  validateAllocation = (skipValidation) => {
+    const {web3Service} = this.props;
+    if(this.web3Disabled(web3Service) )
+      return;
+    const { props: { store } } = this;
+    const validations = Object.keys(this.properties).map(property => skipValidation[property] || this.validate(property));
+    return (!validations.some(validation => !validation));
+  };
 
   goNext = () => {
       throw new Error('No passage here!!!');
@@ -172,9 +231,11 @@ export default class Step5 extends AbstractStep {
                   <div className="input-block-container bottom-margin">
                     {this.renderProperty(this.properties.receiverAddress, {  })}
                   </div>
-                  <div className="input-block-container bottom-margin">
-                    {this.renderProperty(this.properties.tokens, {  })}
-                  </div>
+                  {!this._state.contractInstance.isReleased &&
+                    <div className="input-block-container bottom-margin">
+                      {this.renderProperty(this.properties.tokens, {  })}
+                    </div>
+                  }
                   {!store['teamMember'] &&
                      <div className="input-block-container bottom-margin">
                         {this.renderProperty(this.properties.weiAmount, {  })}
@@ -192,7 +253,7 @@ export default class Step5 extends AbstractStep {
                     </div>
                   }
                   <div className="input-block-container bottom-margin">
-                    <button className="button button_fill " disabled={true} >Allocate</button>
+                    <button className="button button_fill " onClick={this.allocateMints} >Allocate</button>
                   </div>
                 </div>
 
