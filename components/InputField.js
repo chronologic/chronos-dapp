@@ -33,7 +33,6 @@ export default class InputField extends React.Component {
     attrs["defaultValue"] = defaultValue;
     attrs["onChange"] = onChange;
     attrs["className"] = type=='checkbox'?"input left_checkbox":"input";
-    (type=='checkbox')?attrs["checked"] = value:
     attrs["value"] = value;
     return (
       <div className={side}>

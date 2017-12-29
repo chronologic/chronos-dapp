@@ -18,6 +18,12 @@ class Store {
   @observable postDeploymentMaxIds = '';
   @observable minimumBalance = '';
 
+  @observable receiverAddress = '';
+  @observable tokens = '';
+  @observable weiAmount = '';
+  @observable timemintId = '';
+  @observable teamMember = false;
+
   constructor(source) {
     Object.assign(this, source);
   }
