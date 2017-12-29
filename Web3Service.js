@@ -227,7 +227,6 @@ export default class Web3Service {
         if(contract)
           transaction = hash;
       }
-
     return{
       newContract:contract,
       transactionHash:transaction
@@ -254,7 +253,7 @@ export default class Web3Service {
 
   async fetchCreationHash(contract){
     const{web3} = this;
-    let foundLog,
+    let foundLog = null,
     DEPLOYER_FIRST_BLOCK = web3Config[this.network].DEPLOYER_FIRST_BLOCK;
     const filterConfig = {
         //topics: [web3.sha3("LogChildCreated(address,address)")],
@@ -265,14 +264,15 @@ export default class Web3Service {
     const created = await Bb.fromCallback( callback =>this.deployerInstance.LogChildCreated({},filterConfig).get(callback) );
     created.forEach(log =>{
       if(log.args.child == contract)
-        return log.transactionHash;
+        foundLog = log.transactionHash;
     })
-    return null;
+    return foundLog;
   }
 
   async isTokensReleased(contract){
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
-    return await Bb.fromCallback( callback => childContract.released.call(callback) );
+    const releaseState = await Bb.fromCallback( callback => childContract.released.call(callback) );
+    return releaseState;
   }
 
   async getContractData(contract){
