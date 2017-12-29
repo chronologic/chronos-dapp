@@ -215,6 +215,25 @@ export default class Web3Service {
     return block;
   }
 
+  async prepareWatch(hash){
+    const{web3} = this;
+    let contract,transaction;
+      if(web3.isAddress(hash)){
+          contract = hash;
+        transaction = await this.fetchCreationHash(hash);
+      }
+      else{
+        contract = await this.fetchNewChild(hash);
+        if(contract)
+          transaction = hash;
+      }
+
+    return{
+      newContract:contract,
+      transactionHash:transaction
+    };
+  }
+
   async fetchNewChild(hash){
     const{web3} = this;
     const receipt = await this.fetchReceipt(hash);
@@ -231,6 +250,24 @@ export default class Web3Service {
        let result = ethers.Interface.decodeParams(['address','address'],foundLog);
        console.log('New Contract', result[1] )
        return result[1];
+  }
+
+  async fetchCreationHash(contract){
+    const{web3} = this;
+    let foundLog,
+    DEPLOYER_FIRST_BLOCK = web3Config[this.network].DEPLOYER_FIRST_BLOCK;
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock:DEPLOYER_FIRST_BLOCK,
+        toBlock:'latest',
+    }
+
+    const created = await Bb.fromCallback( callback =>this.deployerInstance.LogChildCreated({},filterConfig).get(callback) );
+    created.forEach(log =>{
+      if(log.args.child == contract)
+        return log.transactionHash;
+    })
+    return null;
   }
 
   async isTokensReleased(contract){

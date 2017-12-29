@@ -73,7 +73,7 @@ export default class Step5 extends AbstractStep {
     if(newContract)
     await this.fetchContractData(newContract);
     if(transactionHash)
-    await this.fetchDeploymentData(transactionHash);
+      await this.fetchDeploymentData(transactionHash);
     ReactTooltip.rebuild()
   }
 
@@ -99,7 +99,7 @@ export default class Step5 extends AbstractStep {
   }
 
   goNext = () => {
-      throw new Error('Implement next stage');
+      throw new Error('No passage here!!!');
   };
 
   render() {
