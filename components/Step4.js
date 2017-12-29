@@ -87,7 +87,6 @@ export default class Step4 extends AbstractStep {
     this.setState( Object.assign(this._state,{deploying:true}) );
     let newContract;
     try{
-      //const transaction = '0x9c7ee592dee97d515458ff4ca6e441db6f2a016bb821c40bde4136f7a264b22a';
       const transaction = await web3Service.deploy( this.fetchData() );
       newContract = await this.contractDeployed(transaction);
       this.setState( Object.assign(this._state,{deploying:false}) );
