@@ -51,7 +51,8 @@ export default class Step5 extends AbstractStep {
     tokens: true,
     weiAmount: true,
     timemintId: true,
-    teamMember: true
+    teamMember: true,
+    isTest: true,
   };
 
   @observable
@@ -59,6 +60,13 @@ export default class Step5 extends AbstractStep {
     loadingData: true,
     contractInstance:{},
     deploymentData:{}
+  }
+
+
+  async change(property, event) {
+    await super.change(property, event);
+    if(property == 'teamMember')
+      ReactTooltip.rebuild();
   }
 
   componentDidMount() {
@@ -125,7 +133,7 @@ export default class Step5 extends AbstractStep {
   };
 
   render() {
-    const {web3Service} = this.props;
+    const {web3Service,store} = this.props;
     const EXPLORER = web3Config[web3Service.network].EXPLORER;
 
     return (
@@ -176,6 +184,11 @@ export default class Step5 extends AbstractStep {
                   <div className="input-block-container bottom-margin">
                     {this.renderProperty(this.properties.teamMember, { side:'left',type:'checkbox' })}
                   </div>
+                  {store['teamMember'] &&
+                    <div className="input-block-container bottom-margin">
+                      {this.renderProperty(this.properties.isTest, { side:'left',type:'checkbox' })}
+                    </div>
+                  }
                   <div className="input-block-container bottom-margin">
                     <button className="button button_fill " disabled={true} >Allocate</button>
                   </div>

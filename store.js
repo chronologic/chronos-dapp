@@ -23,6 +23,7 @@ class Store {
   @observable weiAmount = '';
   @observable timemintId = '';
   @observable teamMember = false;
+  @observable isTest = false;
 
   constructor(source) {
     Object.assign(this, source);
