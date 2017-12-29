@@ -17,6 +17,7 @@ const ContractData = data => {
   let Data = [],
   index = 0;
   for(var d in data){
+    if(d=='isReleased')continue;
     if(d=='address')
       Data.push(<div className={'col col-3'} key={d}>
         <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
@@ -79,6 +80,7 @@ export default class Step5 extends AbstractStep {
     }
     catch(e){
       console.error(e);
+      showError("Transaction Failed !!!");
       target.disabled = false;
     }
   }
@@ -99,15 +101,16 @@ export default class Step5 extends AbstractStep {
   async isReleased(){
     const {web3Service} = this.props;
     const released = await web3Service.isTokensReleased(this._state.contractInstance.address);
+    this.setState( Object.assign(this._state.contractInstance,{isReleased:released}) );
     return released
   }
 
   async fetchContractData (contractAddress){
     const {web3Service} = this.props;
-    //console.log(contract, confirmations)
     this.setState( Object.assign(this._state.contractInstance,{address:contractAddress}) );
     const data = await web3Service.getContractData(contractAddress);
     this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
+    await this.isReleased();
   }
 
   async fetchDeploymentData (transaction){
@@ -149,8 +152,10 @@ export default class Step5 extends AbstractStep {
               <div>
                 <div className="steps-content contract_info">
                   <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
-                  <div className='contract_clear'></div>
-                      <button className="button button_secondary_fill button_right button_mullayer" onClick={this.doRelease} disabled={!this.isReleased()} >Release Tokens</button>
+                  <div className='contract_clear bottom-margin'></div>
+                  { !this._state.contractInstance.isReleased &&
+                    <button className="button button_secondary_fill button_right button_mullayer" onClick={this.doRelease} >Release Tokens</button>
+                  }
                 </div>
                 <div className="steps-content contract_info">
                   <h2 className="title left">

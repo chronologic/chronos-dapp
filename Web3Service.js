@@ -139,6 +139,15 @@ export default class Web3Service {
     return {status:1 ,data: faucetTxn };
   }
 
+  async releaseTokens(contract){
+    const releasetime = Math.round((new Date()).getTime() / 1000);
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const released = await Bb.fromCallback( callback => childContract.releaseToken(releasetime, callback) );
+
+    console.log(released)
+    return released;
+  }
+
   convertMiningPower = (value,reverse) => {
     if(reverse)
       return (value*100)/1e+18;
