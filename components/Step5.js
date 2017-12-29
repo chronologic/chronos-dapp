@@ -175,9 +175,11 @@ export default class Step5 extends AbstractStep {
                   <div className="input-block-container bottom-margin">
                     {this.renderProperty(this.properties.tokens, {  })}
                   </div>
-                   <div className="input-block-container bottom-margin">
-                      {this.renderProperty(this.properties.weiAmount, {  })}
-                    </div>
+                  {!store['teamMember'] &&
+                     <div className="input-block-container bottom-margin">
+                        {this.renderProperty(this.properties.weiAmount, {  })}
+                      </div>
+                    }
                   <div className="input-block-container bottom-margin">
                     {this.renderProperty(this.properties.timemintId, { side:"" })}
                   </div>

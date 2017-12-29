@@ -86,7 +86,7 @@ body {
 
 .scrollable{
   height:auto !important;
-  overflow-y:scroll;
+  overflow-y:auto;
   &_200{
     max-height:200px !important;
   }
