@@ -1,10 +1,10 @@
 import React from 'react';
-import { observable,whyRun } from 'mobx';
+import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
 
 import { CONTRACT_LABELS} from '../lib/consts';
-import {showError,showInfo} from '../lib/alerts';
+import {showError,showInfo,confirmTokenRelease} from '../lib/alerts';
 import web3Config from '../lib/web3Utils';
 import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
@@ -62,6 +62,25 @@ export default class Step5 extends AbstractStep {
 
   componentDidMount() {
     this.loadInfo();
+  }
+
+  doRelease = async(eventInst) => {
+    const { target } = eventInst;
+    const { props: {web3Service} } = this;
+    const EXPLORER = web3Config[web3Service.network].EXPLORER;
+    const prompt = await confirmTokenRelease();
+    console.log(prompt);
+    if(!prompt)
+      return;
+    target.disabled = true;
+    try{
+      const releaseTxn = await web3Service.releaseTokens();
+      showInfo(`Tokens released: \n <a href="${EXPLORER}/tx/${releaseTxn}" >${releaseTxn}</a>`);
+    }
+    catch(e){
+      console.error(e);
+      target.disabled = false;
+    }
   }
 
   async loadInfo(){
@@ -131,7 +150,7 @@ export default class Step5 extends AbstractStep {
                 <div className="steps-content contract_info">
                   <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                   <div className='contract_clear'></div>
-                      <button className="button button_secondary_fill button_right button_mullayer" disabled={!this.isReleased()} >Release Tokens</button>
+                      <button className="button button_secondary_fill button_right button_mullayer" onClick={this.doRelease} disabled={!this.isReleased()} >Release Tokens</button>
                 </div>
                 <div className="steps-content contract_info">
                   <h2 className="title left">
