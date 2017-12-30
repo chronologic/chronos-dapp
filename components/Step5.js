@@ -61,6 +61,7 @@ export default class Step4 extends AbstractStep {
       data[field] = store[field]
     })
     return data;
+
   }
 
   async runDeploy(){
