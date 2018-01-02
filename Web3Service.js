@@ -6,7 +6,6 @@ import { action, observable, runInAction } from 'mobx';
 import dayTokenABI from './abi/dayTokenABI';
 import deployerABI from './abi/deployerABI';
 import dayFaucetABI from './abi/dayFaucetABI';
-import dayFaucetABI from './abi/dayFaucetABI';
 import debtTokenDeployerABI from './abi/debtTokenDeployerABI';
 
 import web3Config from './lib/web3Utils.js'
@@ -252,6 +251,10 @@ return hash;
       receipt.logs.forEach(function(l){
         if(l.address == DEPLOYER_ADDRESS)
           if(l.topics[0] == web3.sha3("LogChildCreated(address,address)") )
+          foundLog = l.data;
+        
+        if(l.address == DEBT_TOKEN_DEPLOYER_ADDRESS)
+          if(l.topics[0] ==  web3.sha3("DebtTokenCreated(address, address, uint256)"))
           foundLog = l.data;
       })
       if(!foundLog)

@@ -57,19 +57,20 @@ export default class Step4 extends AbstractStep {
     }
   }
 
-  fetchData(){
+  fetchData(contractFields){
     const { props: { store } } = this;
     var data = {};
-    this._contractFields.map(function(field){
+    contractFields.map(function(field){
       data[field] = store[field]
     })
     return data;
 
   }
 
-  async runDeploy(){
+  async runDeploy(which){
     const {web3Service} = this.props;
-    const transaction = await web3Service.deploy( this.fetchData(),true );
+    const contractFields = this._contractFields;
+    const transaction = await web3Service.deploy( this.fetchData(contractFields),which);
     if(transaction)
     await this.contractDeployed(transaction);
   }
