@@ -44,6 +44,9 @@ export default class Step4 extends AbstractStep {
     'maxAddresses', 'startingId', 'totalMintingId',
     'teamLockPeriod', 'postDeploymentMaxIds', 'minimumBalance']
 
+    _debtContractFields = ['tokenName','tokenSymbol','initialAmount','exchangeRate',
+        'decimalUnits','dayLength','loanTerm','loanCycle','interestRate','debtOwner']
+
   componentDidMount() {
     try{
       this.runDeploy();
