@@ -139,6 +139,13 @@ export default class Web3Service {
     return {status:1 ,data: faucetTxn };
   }
 
+  async acceptTokenOwnership ( contract ){
+    const { web3 } = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const txn = await Bb.fromCallback( callback => childContract.acceptOwnership(callback) );
+    return txn;
+  }
+
   async releaseTokens(contract){
     const releasetime = Math.round((new Date()).getTime() / 1000);
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
@@ -198,6 +205,19 @@ export default class Web3Service {
       web3.eth.getGasPrice(callback)
     );
     return result;
+  }
+
+  async checkTokenOwnership( contract ){
+    const { web3 } = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const owner = await Bb.fromCallback( callback => childContract.owner.call(callback));
+    const newOwner = await Bb.fromCallback( callback => childContract.newOwner.call(callback));
+    if(owner == web3.eth.defaultAccount)
+      return owner
+    else if( owner != web3.eth.defaultAccount && newOwner == web3.eth.defaultAccount)
+      return true;
+    else
+      return false;
   }
 
   async checkBalance() {

@@ -110,6 +110,25 @@ export default class Step5 extends AbstractStep {
     this.loadInfo();
   }
 
+  async resolveOwnership ( contract ){
+    const { web3Service } = this.props;
+    const EXPLORER = web3Config[web3Service.network].EXPLORER;
+    const owner = await web3Service.checkTokenOwnership(contract);
+    if( owner === true ){
+      const ready = await confirmProcess('Take Ownership','Kindly accept ownership of your new tokens ');
+      if(ready){
+        try{
+          const txn = await web3Service.acceptTokenOwnership(contract);
+          showInfo(`Tokens Ownership accepted: \n <a href="${EXPLORER}/tx/${txn}" >${txn}</a>`);
+        }
+        catch(e){
+          console.error(e);
+          showError("Transaction Failed !!!");
+        }
+      }
+    }
+  }
+
   async doRelease (eventInst) {
     const { target } = eventInst;
     const { props: {web3Service} } = this;
@@ -183,12 +202,16 @@ export default class Step5 extends AbstractStep {
     const {props:{store}} = this;
     let {query:{newContract,transactionHash}} = Router;
 
-    console.log(newContract,transactionHash)
+    console.log(newContract,transactionHash);
+
+    if(!newContract && !transactionHash)
+      return false;
 
     if(newContract)
     await this.fetchContractData(newContract);
     if(transactionHash)
       await this.fetchDeploymentData(transactionHash);
+    await this.resolveOwnership( newContract );
     await this.fetchAllocationHistory(newContract);
     ReactTooltip.rebuild()
   }
