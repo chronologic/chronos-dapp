@@ -429,7 +429,7 @@ export default class Web3Service {
       mintingPeriod: (await Bb.fromCallback( callback => childContract.DayInSecs.call(callback) )).valueOf(),
       totalDays: (await Bb.fromCallback( callback => childContract.getDayCount.call(callback) )).valueOf(),
       halvingCycle: (await Bb.fromCallback( callback => childContract.halvingCycle.call(callback) )).valueOf(),
-      dayTokenActivated: (await Bb.fromCallback( callback => childContract.isDayTokenActivated.call(callback) )).valueOf(),
+      dayTokenActivated: (await Bb.fromCallback( callback => childContract.isDayTokenActivated.call(callback) )).valueOf().toString(),
       maxAddresses: (await Bb.fromCallback( callback => childContract.maxAddresses.call(callback) )).valueOf(),
       firstContributorId : (await Bb.fromCallback( callback => childContract.firstContributorId.call(callback) )).valueOf(),
       firstPostIcoContributorId: (await Bb.fromCallback( callback => childContract.firstPostIcoContributorId.call(callback) )).valueOf(),
