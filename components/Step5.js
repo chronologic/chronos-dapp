@@ -16,7 +16,7 @@ const ContractData = data => {
   data = data.data;
   let Data = [],
   index = 0;
-  for(var d in data){
+  for(let d in data){
     if(d=='isReleased')continue;
     if(d=='address')
       Data.push(<div className={'col col-3'} key={d}>
@@ -30,6 +30,41 @@ const ContractData = data => {
       </div>);
     index++;
   }
+   return (Data);
+}
+
+const AllocationData = data => {
+  const explorer = data.explorer;
+  const skip = ['explorer','type'];
+  const Titles = {
+    'team': 'Allocated Team Member TimeMints',
+    'normal': 'Allocated Investor TimeMints',
+    'postico': 'Allocated Post-ICO Investor TimeMints'
+  }
+  let Data = [],
+  index = 0;
+  for(let d in data){
+    if(skip.indexOf(d) > -1)continue;
+    Data.push(
+      <div  key={'allocationdata'+d}>
+        <div className={'title'}>
+          {Titles[d]}
+        </div>
+        <div className={'col col-3'}>
+          <label className="label">Transaction Hash</label>
+          <p><a target="_blank" href={explorer+'tx/'+data[d].transactionHash}>{ data[d].transactionHash }</a></p>
+        </div>
+        <div className={'col col-3'}>
+          <label className="label">Receiver Address</label>
+          <p>{data[d].receiver}</p>
+        </div>
+        <div className={'col col-3'}>
+          <label className="label">TimeMint ID</label>
+          <p>{data[d].contributorId}</p>
+        </div>
+        <div className='contract_clear'></div>
+      </div>);
+    }
    return (Data);
 }
 
@@ -60,7 +95,8 @@ export default class Step5 extends AbstractStep {
   _state = {
     loadingData: true,
     contractInstance:{},
-    deploymentData:{}
+    deploymentData:{},
+    allocationHistory:{}
   }
 
 
@@ -153,6 +189,7 @@ export default class Step5 extends AbstractStep {
     await this.fetchContractData(newContract);
     if(transactionHash)
       await this.fetchDeploymentData(transactionHash);
+    await this.fetchAllocationHistory(newContract);
     ReactTooltip.rebuild()
   }
 
@@ -176,6 +213,13 @@ export default class Step5 extends AbstractStep {
     this.setState( Object.assign(this._state.deploymentData,{transactionHash:transaction}) );
     const data = await web3Service.getDeploymentData(transaction);
     this.setState( Object.assign(this._state,{deploymentData:data}) );
+  }
+
+  async fetchAllocationHistory (contractAddress){
+    const {web3Service} = this.props;
+    const history = await web3Service.getAllocationHistory(contractAddress);
+    console.log(history,'history')
+    this.setState( Object.assign(this._state.allocationHistory,history) );
   }
 
   validateAllocation = (skipValidation) => {
@@ -264,6 +308,7 @@ export default class Step5 extends AbstractStep {
                     </h2>
                   </div>
                   <div className="steps-content contract_info scrollable scrollable_200">
+                    <AllocationData {...Object.assign(this._state.allocationHistory,{explorer:EXPLORER})}/>
                   </div>
                 </div>
                 <div>

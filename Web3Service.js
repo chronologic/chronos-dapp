@@ -88,13 +88,13 @@ export default class Web3Service {
     this.faucetInstance = web3.eth.contract(dayFaucetABI).at(FAUCET_ADDRESS);
   }
 
-
   async approveFee() {
     const result =  await Bb.fromCallback((callback) => {
       this.tokenInstance.approve(DEPLOYER_ADDRESS, MIN_FEE, callback);
     });
     return result;
   }
+
   async deploy(contractData) {
       let {web3,deployerInstance} = this;
 
@@ -263,24 +263,6 @@ export default class Web3Service {
     return block;
   }
 
-  async prepareWatch(hash){
-    const{web3} = this;
-    let contract,transaction;
-      if(web3.isAddress(hash)){
-          contract = hash;
-        transaction = await this.fetchCreationHash(hash);
-      }
-      else{
-        contract = await this.fetchNewChild(hash);
-        if(contract)
-          transaction = hash;
-      }
-    return{
-      newContract:contract,
-      transactionHash:transaction
-    };
-  }
-
   async fetchNewChild(hash){
     const{web3} = this;
     const receipt = await this.fetchReceipt(hash);
@@ -317,10 +299,123 @@ export default class Web3Service {
     return foundLog;
   }
 
+  parseAllocationLog = logs => {
+
+    logs.map( l => {
+      for( let m in l.args){
+        switch(true){
+          case (m == 'investor' || m == teamAddress):
+            l.args.receiver = l.args[m];
+            delete(l.args[m]);
+            break;
+          case m == 'id':
+            l.args.contributorId = l.args[m];
+            delete(l.args[m]);
+            break;
+        }
+      }
+
+      return  Object.assign(
+        {},
+        l.args,
+        {transactionHash:l.transactionHash,
+          blockNumber: l.blockNumber}
+      )
+    });
+    return logs;
+  }
+
+  async fetchTeamAllocationHistory( contract, deployedBlock ){
+    const{web3} = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock: deployedBlock,
+        toBlock:'latest',
+    }
+    let allocLogs = await Bb.fromCallback( callback => childContract.TeamAddressAdded({},filterConfig).get(callback) );
+    console.log(allocLogs);
+    allocLogs = this.parseAllocationLog(allocLogs);
+    return allocLogs;
+  }
+
+  async fetchNormalAllocationHistory( contract, deployedBlock ){
+    const{web3} = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock: deployedBlock,
+        toBlock:'latest',
+    }
+    let allocLogs = await Bb.fromCallback( callback => childContract.Invested({},filterConfig).get(callback) );
+    console.log(allocLogs);
+    allocLogs = this.parseAllocationLog(allocLogs);
+    return allocLogs;
+  }
+
+  async fetchPostICOAllocationHistory( contract, deployedBlock ){
+    const{web3} = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock: deployedBlock,
+        toBlock:'latest',
+    }
+    let allocLogs = await Bb.fromCallback( callback => childContract.PostInvested({},filterConfig).get(callback) );
+    console.log(allocLogs);
+    allocLogs = this.parseAllocationLog(allocLogs);
+    return allocLogs;
+  }
+
+  async prepareWatch(hash){
+    const{web3} = this;
+    let contract,transaction;
+      if(web3.isAddress(hash)){
+          contract = hash;
+        transaction = await this.fetchCreationHash(hash);
+      }
+      else{
+        contract = await this.fetchNewChild(hash);
+        if(contract)
+          transaction = hash;
+      }
+    return{
+      newContract:contract,
+      transactionHash:transaction
+    };
+  }
+
   async isTokensReleased(contract){
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
     const releaseState = await Bb.fromCallback( callback => childContract.released.call(callback) );
     return releaseState;
+  }
+
+  async getAllocationHistory( contract ){
+    const{ web3 } = this;
+    let fromBlock = (await this.fetchBlockNumber()) - 0x2710; //set default fromBlock to 10000 blocks ago
+    const DEPLOYER_FIRST_BLOCK = web3Config[this.network].DEPLOYER_FIRST_BLOCK;
+    fromBlock = fromBlock > DEPLOYER_FIRST_BLOCK?fromBlock:DEPLOYER_FIRST_BLOCK;
+    const watchPrep = await this.prepareWatch( contract );
+    if(watchPrep.transactionHash){
+      const receipt = await this.fetchReceipt( watchPrep.transactionHash);
+      if(receipt)
+        fromBlock = receipt.blockNumber;
+    }
+
+    const found = {
+      team: await this.fetchTeamAllocationHistory(contract,fromBlock),
+      normal: await this.fetchNormalAllocationHistory(contract,fromBlock),
+      postico: await this.fetchPostICOAllocationHistory(contract,fromBlock)
+    }
+
+    let allocations = [];
+    for (let f in found){
+      found[f].forEach( a => allocations.push( Object.assign(a,{type:f})) );
+    }
+    return allocations.sort(function(a, b){
+      return a.blockNumber-b.blockNumber
+    });
   }
 
   async getContractData(contract){
@@ -361,7 +456,6 @@ export default class Web3Service {
     }
     return data;
   }
-
 
 }
 
