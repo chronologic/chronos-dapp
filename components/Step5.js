@@ -10,6 +10,7 @@ import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
 
 import ReactTooltip from 'react-tooltip'
+import {Propagatesloader} from '../lib/loader';
 
 const ContractData = data => {
   const explorer = data.explorer;
@@ -294,7 +295,7 @@ export default class Step5 extends AbstractStep {
             { (this._state.loadingData || !this._state.contractInstance ) &&
               <div className="steps-content bottom-margin">
                 <div className="input-block-container center text-center">
-                  <p className='loading_msg' >Loading contract data ...</p>
+                  <Propagatesloader {...{color:'#123abc',loading: true, size:16,msg:'loading Contract data ...'}} />
                 </div>
                 <div className="input-block-container value center text-center">
                   <label className="label">Contract : </label>

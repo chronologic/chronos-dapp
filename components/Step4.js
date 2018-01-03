@@ -10,7 +10,7 @@ import web3Config from '../lib/web3Utils';
 import AbstractStep from './AbstractStep';
 import StepLayout from './StepLayout';
 
-import Ringloader,{Boxloader} from '../lib/loader';
+import {Boxloader} from '../lib/loader';
 
 @inject('web3Service')
 @inject('store')
