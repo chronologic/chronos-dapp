@@ -308,38 +308,10 @@ export default class Web3Service {
 
     const created = await Bb.fromCallback( callback =>this.deployerInstance.LogChildCreated({},filterConfig).get(callback) );
     created.forEach(log =>{
-      if(log.args.child == contract)
+      if(log.args.child.toLowerCase() == contract.toLowerCase())
         foundLog = log.transactionHash;
     })
     return foundLog;
-  }
-
-  parseAllocationLog = logs => {
-    let found = [];
-    logs.map( l => {
-      for( let m in l.args){
-        if(typeof l.args[m].valueOf !== 'undefined')
-          l.args[m] = l.args[m].valueOf();
-        switch(true){
-          case (m == 'investor' || m == 'teamAddress'):
-            l.args.receiver = l.args[m];
-            delete(l.args[m]);
-            break;
-          case m == 'id':
-            l.args.contributorId = l.args[m];
-            delete(l.args[m]);
-            break;
-        }
-      }
-
-      found.push(Object.assign(
-        {},
-        l.args,
-        {transactionHash:l.transactionHash,
-          blockNumber: l.blockNumber}
-      ) )
-    });
-    return found;
   }
 
   async fetchTeamAllocationHistory( contract, deployedBlock ){
@@ -381,6 +353,34 @@ export default class Web3Service {
     return allocLogs;
   }
 
+  parseAllocationLog = logs => {
+    let found = [];
+    logs.map( l => {
+      for( let m in l.args){
+        if(typeof l.args[m].valueOf !== 'undefined')
+          l.args[m] = l.args[m].valueOf();
+        switch(true){
+          case (m == 'investor' || m == 'teamAddress'):
+            l.args.receiver = l.args[m];
+            delete(l.args[m]);
+            break;
+          case m == 'id':
+            l.args.contributorId = l.args[m];
+            delete(l.args[m]);
+            break;
+        }
+      }
+
+      found.push(Object.assign(
+        {},
+        l.args,
+        {transactionHash:l.transactionHash,
+          blockNumber: l.blockNumber}
+      ) )
+    });
+    return found;
+  }
+
   async prepareWatch(hash){
     const{web3} = this;
     let contract,transaction;
@@ -400,9 +400,17 @@ export default class Web3Service {
   }
 
   async isTokensReleased(contract){
+    const{ web3 } = this;
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
     const releaseState = await Bb.fromCallback( callback => childContract.released.call(callback) );
     return releaseState;
+  }
+
+  async isTokensOwned(contract){
+    const{ web3 } = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const owner = await Bb.fromCallback( callback => childContract.owner.call(callback) );
+    return owner.toLowerCase() === web3.eth.defaultAccount.toLowerCase();
   }
 
   async getAllocationHistory( contract ){

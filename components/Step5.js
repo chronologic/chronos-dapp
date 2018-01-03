@@ -13,11 +13,12 @@ import ReactTooltip from 'react-tooltip'
 
 const ContractData = data => {
   const explorer = data.explorer;
+  const skip = ['isReleased','isOwned'];
   data = data.data;
   let Data = [],
   index = 0;
   for(let d in data){
-    if(d=='isReleased')continue;
+    if(skip.indexOf(d) > -1)continue;
     if(d=='address')
       Data.push(<div className={'col col-3'} key={d}>
         <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
@@ -214,7 +215,8 @@ export default class Step5 extends AbstractStep {
       await this.fetchDeploymentData(transactionHash);
     await this.resolveOwnership( newContract );
     await this.fetchAllocationHistory(newContract);
-    ReactTooltip.rebuild()
+    ReactTooltip.rebuild();
+    this.fetchUpdates();//begin interval retreival of data
   }
 
   async isReleased(){
@@ -224,12 +226,29 @@ export default class Step5 extends AbstractStep {
     return released
   }
 
+  async isOwned(){
+    const {web3Service} = this.props;
+    const owned = await web3Service.isTokensOwned(this._state.contractInstance.address);
+    this.setState( Object.assign(this._state.contractInstance,{isOwned:owned}) );
+  }
+
+  fetchUpdates = () =>{
+    const that = this;
+    const newContract = this._state.contractInstance.address;
+    setInterval( ()=>{
+      console.log('updating...')
+      that.fetchContractData(newContract);
+      that.fetchAllocationHistory(newContract);
+    }, 10000);
+  }
+
   async fetchContractData (contractAddress){
     const {web3Service} = this.props;
     this.setState( Object.assign(this._state.contractInstance,{address:contractAddress}) );
     const data = await web3Service.getContractData(contractAddress);
     this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
     await this.isReleased();
+    await this.isOwned();
   }
 
   async fetchDeploymentData (transaction){
@@ -289,7 +308,7 @@ export default class Step5 extends AbstractStep {
                   <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                   <div className='contract_clear bottom-margin'></div>
                   { !this._state.contractInstance.isReleased &&
-                    <button className="button button_secondary_fill button_right button_mullayer" onClick={this.doRelease} >Release Tokens</button>
+                    <button className="button button_secondary_fill button_right button_mullayer" onClick={this.doRelease} disabled={!this._state.contractInstance.isOwned} >Release Tokens</button>
                   }
                 </div>
                 <div className="steps-content contract_info">
@@ -321,7 +340,7 @@ export default class Step5 extends AbstractStep {
                     </div>
                   }
                   <div className="input-block-container bottom-margin">
-                    <button className="button button_fill " onClick={this.allocateMints} >Allocate</button>
+                    <button className="button button_fill " onClick={this.allocateMints} disabled={!this._state.contractInstance.isOwned} >Allocate</button>
                   </div>
                 </div>
 

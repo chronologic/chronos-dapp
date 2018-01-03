@@ -58,7 +58,6 @@ export default class Home extends Component {
     const CONTRACT_PROPERTIES = ['transactionHash','newContract']
     try{
       watchPageData = await web3Service.prepareWatch(hash);
-      console.log(watchPageData)
     }
     catch(e){
       console.error(e);
