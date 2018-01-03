@@ -71,6 +71,21 @@ body {
     margin-right:0.33%;
     float: left;
   }
+  &-4{
+    width:24.7%;
+    margin-right:0.3%;
+    float: left;
+  }
+  &-5{
+    width:19.7%;
+    margin-right:0.3%;
+    float: left;
+  }
+  &-8{
+    width:12.2%;
+    margin-right:0.3%;
+    float: left;
+  }
   & .label{
   }
   & p{
@@ -106,6 +121,9 @@ body {
   }
   &_clear{
     clear:both;
+  }
+  &_transaction{
+    margin-right: 0.5%;
   }
 }
 

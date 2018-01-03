@@ -320,11 +320,13 @@ export default class Web3Service {
   }
 
   parseAllocationLog = logs => {
-
+    let found = [];
     logs.map( l => {
       for( let m in l.args){
+        if(typeof l.args[m].valueOf !== 'undefined')
+          l.args[m] = l.args[m].valueOf();
         switch(true){
-          case (m == 'investor' || m == teamAddress):
+          case (m == 'investor' || m == 'teamAddress'):
             l.args.receiver = l.args[m];
             delete(l.args[m]);
             break;
@@ -335,14 +337,14 @@ export default class Web3Service {
         }
       }
 
-      return  Object.assign(
+      found.push(Object.assign(
         {},
         l.args,
         {transactionHash:l.transactionHash,
           blockNumber: l.blockNumber}
-      )
+      ) )
     });
-    return logs;
+    return found;
   }
 
   async fetchTeamAllocationHistory( contract, deployedBlock ){
@@ -354,7 +356,6 @@ export default class Web3Service {
         toBlock:'latest',
     }
     let allocLogs = await Bb.fromCallback( callback => childContract.TeamAddressAdded({},filterConfig).get(callback) );
-    console.log(allocLogs);
     allocLogs = this.parseAllocationLog(allocLogs);
     return allocLogs;
   }
@@ -368,7 +369,6 @@ export default class Web3Service {
         toBlock:'latest',
     }
     let allocLogs = await Bb.fromCallback( callback => childContract.Invested({},filterConfig).get(callback) );
-    console.log(allocLogs);
     allocLogs = this.parseAllocationLog(allocLogs);
     return allocLogs;
   }
@@ -382,7 +382,6 @@ export default class Web3Service {
         toBlock:'latest',
     }
     let allocLogs = await Bb.fromCallback( callback => childContract.PostInvested({},filterConfig).get(callback) );
-    console.log(allocLogs);
     allocLogs = this.parseAllocationLog(allocLogs);
     return allocLogs;
   }

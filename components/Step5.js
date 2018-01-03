@@ -35,7 +35,7 @@ const ContractData = data => {
 
 const AllocationData = data => {
   const explorer = data.explorer;
-  const skip = ['explorer','type'];
+  const skip = ['explorer'];
   const Titles = {
     'team': 'Allocated Team Member TimeMints',
     'normal': 'Allocated Investor TimeMints',
@@ -46,11 +46,12 @@ const AllocationData = data => {
   for(let d in data){
     if(skip.indexOf(d) > -1)continue;
     Data.push(
-      <div  key={'allocationdata'+d}>
-        <div className={'title'}>
-          {Titles[d]}
-        </div>
-        <div className={'col col-3'}>
+      <div key={'allocationdata'+d}>
+        <h3 className={'title left'}>
+          {Titles[data[d].type]}
+        </h3>
+        <div className='contract_clear'></div>
+        <div className={'col left contract_transaction'}>
           <label className="label">Transaction Hash</label>
           <p><a target="_blank" href={explorer+'tx/'+data[d].transactionHash}>{ data[d].transactionHash }</a></p>
         </div>
@@ -58,7 +59,7 @@ const AllocationData = data => {
           <label className="label">Receiver Address</label>
           <p>{data[d].receiver}</p>
         </div>
-        <div className={'col col-3'}>
+        <div className={'col col-8'}>
           <label className="label">TimeMint ID</label>
           <p>{data[d].contributorId}</p>
         </div>
@@ -94,6 +95,7 @@ export default class Step5 extends AbstractStep {
   @observable
   _state = {
     loadingData: true,
+    loadinghistoryData: true,
     contractInstance:{},
     deploymentData:{},
     allocationHistory:{}
@@ -112,14 +114,13 @@ export default class Step5 extends AbstractStep {
 
   async resolveOwnership ( contract ){
     const { web3Service } = this.props;
-    const EXPLORER = web3Config[web3Service.network].EXPLORER;
     const owner = await web3Service.checkTokenOwnership(contract);
     if( owner === true ){
       const ready = await confirmProcess('Take Ownership','Kindly accept ownership of your new tokens ');
       if(ready){
         try{
           const txn = await web3Service.acceptTokenOwnership(contract);
-          showInfo(`Tokens Ownership accepted: \n <a href="${EXPLORER}/tx/${txn}" >${txn}</a>`);
+          showInfo('Tokens Ownership accepted',`${txn}`);
         }
         catch(e){
           console.error(e);
@@ -132,14 +133,13 @@ export default class Step5 extends AbstractStep {
   async doRelease (eventInst) {
     const { target } = eventInst;
     const { props: {web3Service} } = this;
-    const EXPLORER = web3Config[web3Service.network].EXPLORER;
     const prompt = await confirmProcess('Release Tokens','You won\'t be able to allocate timemints after this!');
     if(!prompt)
       return;
     target.disabled = true;
     try{
       const releaseTxn = await web3Service.releaseTokens();
-      showInfo(`Tokens released: \n <a href="${EXPLORER}/tx/${releaseTxn}" >${releaseTxn}</a>`);
+      showInfo('Tokens released',`${releaseTxn}`);
     }
     catch(e){
       console.error(e);
@@ -151,7 +151,6 @@ export default class Step5 extends AbstractStep {
   async allocateMints (eventInst) {
     const { target } = eventInst;
     const { props: {web3Service,store} } = this;
-    const EXPLORER = web3Config[web3Service.network].EXPLORER;
 
     let fxn,skipValidations = [],allocateData={};
     Object.keys(this.properties).map(property => allocateData[property] = store[property]);
@@ -170,6 +169,7 @@ export default class Step5 extends AbstractStep {
         skipValidations = ['isTest'];
         break;
     }
+    skipValidations.forEach(a => skipValidations[a] = true );
 
     const validated = await this.validateAllocation(skipValidations);
     if(!validated)
@@ -184,11 +184,11 @@ export default class Step5 extends AbstractStep {
 
     try{
       const allocateTxn = await web3Service[fxn](allocateData);
-      allocateData.forEach( d => {//Clean up fields to avoid doiuble allocation
+      for(let d in allocateData){//Clean up fields to avoid doiuble allocation
         console.log(d)
         store[d] = '';
-      })
-      showInfo(`Tokens allocated: \n <a href="${EXPLORER}/tx/${allocateTxn}" >${allocateTxn}</a>`);
+      }
+      showInfo('Time Mints allocated',`${allocateTxn}`);
       target.disabled = false;
     }
     catch(e){
@@ -243,6 +243,7 @@ export default class Step5 extends AbstractStep {
     const history = await web3Service.getAllocationHistory(contractAddress);
     console.log(history,'history')
     this.setState( Object.assign(this._state.allocationHistory,history) );
+    this.setState( Object.assign(this._state,{loadinghistoryData:false}) );
   }
 
   validateAllocation = (skipValidation) => {
@@ -331,7 +332,9 @@ export default class Step5 extends AbstractStep {
                     </h2>
                   </div>
                   <div className="steps-content contract_info scrollable scrollable_200">
-                    <AllocationData {...Object.assign(this._state.allocationHistory,{explorer:EXPLORER})}/>
+                    {!this._state.loadinghistoryData && this._state.allocationHistory &&
+                      <AllocationData {...Object.assign(this._state.allocationHistory,{explorer:EXPLORER})}/>
+                    }
                   </div>
                 </div>
                 <div>
