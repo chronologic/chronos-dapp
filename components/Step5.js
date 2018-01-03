@@ -76,6 +76,7 @@ export default class Step5 extends AbstractStep {
   constructor(props) {
     super('WATCH', props);
     this.allocateMints = this.allocateMints.bind(this);
+    this.doRelease = this.doRelease.bind(this);
   }
 
   getValidations (){
@@ -241,7 +242,6 @@ export default class Step5 extends AbstractStep {
   async fetchAllocationHistory (contractAddress){
     const {web3Service} = this.props;
     const history = await web3Service.getAllocationHistory(contractAddress);
-    console.log(history,'history')
     this.setState( Object.assign(this._state.allocationHistory,history) );
     this.setState( Object.assign(this._state,{loadinghistoryData:false}) );
   }
