@@ -150,13 +150,10 @@ export default class Web3Service {
     const releasetime = Math.round((new Date()).getTime() / 1000);
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
     const released = await Bb.fromCallback( callback => childContract.releaseToken(releasetime, callback) );
-
-    console.log(released)
     return released;
   }
 
   async allocateTeamTimemints (data){
-    console.log('Team',data)
     const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
     const allocateTeam = await Bb.fromCallback( callback => childContract.addTeamTimeMints(
       data.receiverAddress,
@@ -169,7 +166,6 @@ export default class Web3Service {
   }
 
   async allocateNormalTimeMints (data){
-    console.log('Normal',data)
     const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
     const allocateNormal = await Bb.fromCallback( callback => childContract.allocateNormalTimeMints(
       data.receiverAddress,
@@ -183,7 +179,6 @@ export default class Web3Service {
   }
 
   async postAllocateAuctionTimeMints (data){
-    console.log('PostAllocate',data)
     const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
     const postAllocate = await Bb.fromCallback( callback => childContract.postAllocateAuctionTimeMints(
       data.receiverAddress,
@@ -287,10 +282,10 @@ export default class Web3Service {
     const{web3} = this;
     const receipt = await this.fetchReceipt(hash);
       let foundLog;
-      if(!receipt.logs)
+      if(!receipt.logs || typeof receipt.logs !== 'object' || receipt.logs.length < 1)
         return false;
       receipt.logs.forEach(function(l){
-        if(l.address == DEPLOYER_ADDRESS)
+        if(l.address.toLowerCase() === DEPLOYER_ADDRESS.toLowerCase() )
           if(l.topics[0] == web3.sha3("LogChildCreated(address,address)") )
           foundLog = l.data;
       })
