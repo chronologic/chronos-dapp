@@ -139,7 +139,7 @@ export default class Step5 extends AbstractStep {
       return;
     target.disabled = true;
     try{
-      const releaseTxn = await web3Service.releaseTokens();
+      const releaseTxn = await web3Service.releaseTokens(this._state.contractInstance.address);
       showInfo('Tokens released',`${releaseTxn}`);
     }
     catch(e){
