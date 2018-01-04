@@ -248,7 +248,7 @@ export default class Step5 extends AbstractStep {
     this.setState( Object.assign(this._state.contractInstance,{address:contractAddress}) );
     const data = await web3Service.getContractData(contractAddress);
     this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
-    await this.isReleased();
+    //await this.isReleased();//TODO find better way to load isReleased without UI blip
     await this.isOwned();
   }
 
@@ -308,7 +308,7 @@ export default class Step5 extends AbstractStep {
                 <div className="steps-content contract_info">
                   <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                   <div className='contract_clear bottom-margin'></div>
-                  { !this._state.contractInstance.isReleased &&
+                  { this._state.contractInstance && !this._state.contractInstance.isReleased &&
                     <button className="button button_secondary_fill button_right button_mullayer" onClick={this.doRelease} disabled={!this._state.contractInstance.isOwned} >Release Tokens</button>
                   }
                 </div>

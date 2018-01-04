@@ -466,6 +466,7 @@ export default class Web3Service {
       totalTeamContributorIdsAllocated: (await Bb.fromCallback( callback => childContract.totalTeamContributorIdsAllocated.call(callback) )).valueOf(),
       totalPostIcoContributorIds: (await Bb.fromCallback( callback => childContract.totalPostIcoContributorIds.call(callback) )).valueOf(),
       totalPostIcoContributorIdsAllocated : (await Bb.fromCallback( callback => childContract.totalPostIcoContributorIdsAllocated .call(callback) )).valueOf(),
+      isReleased : (await Bb.fromCallback( callback => childContract.released.call(callback) )).valueOf(),
     }
     return data;
   }
