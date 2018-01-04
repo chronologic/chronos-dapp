@@ -58,18 +58,19 @@ export default class AbstractStep extends React.Component {
   @action
   change(property, event) {
     const { props: { store } } = this;
-    const { value } = event.target;
-    store[property] = value;
+    const { value,type,checked } = event.target;
+    store[property] = (type=='checkbox')? checked: value
     this.validate(property);
   }
 
   @action
   validate(property) {
-    const { props: { store } } = this;
+    const { props: { store,web3Service } } = this;
+    const {web3} = web3Service;
     const validations = this.getValidations();
     const { validator } = this.properties[property];
     const value = store[property];
-    validations[property] = validator(value);
+    validations[property] = validator(value,web3);
     return validations[property];
   }
 

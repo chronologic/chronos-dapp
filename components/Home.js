@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Router from 'next/router';
 import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../lib/consts';
-import { confirmFeeWithdraw, showInsufficientBalalnce, showError, showInfo } from '../lib/alerts';
+import { confirmFeeWithdraw, showInsufficientBalalnce, showError, showInfo, showContractAddressRequest } from '../lib/alerts';
 
 import web3Config from '../lib/web3Utils.js';
 
@@ -43,6 +43,45 @@ export default class Home extends Component {
       else
         target.disabled = false;
     }
+  };
+
+  onWatch = async() =>{
+    const val = await showContractAddressRequest();
+    if(!val)
+      return;
+    return this.goWatch(val);
+  }
+
+  async goWatch(hash) {
+    const { props: { store,web3Service } } = this;
+    let watchPageData;
+    const CONTRACT_PROPERTIES = ['transactionHash','newContract']
+    try{
+      watchPageData = await web3Service.prepareWatch(hash);
+    }
+    catch(e){
+      console.error(e);
+      return showError('Failed!!!. Kindly check your Input and Network connection')
+    }
+
+    let found;
+    CONTRACT_PROPERTIES.forEach(p => {
+      if(watchPageData[p] == hash)
+        return found = true;
+    });
+
+    if(!found)
+      return showError('Unable to retreive contract');
+
+    const query = CONTRACT_PROPERTIES.reduce((result, name) => {
+      result[name] = watchPageData[name];
+      return result;
+    }, {});
+
+    Router.push({
+      pathname: '/step-5',
+      query,
+    });
   };
 
   async reserveTokens() {
@@ -110,6 +149,8 @@ export default class Home extends Component {
                 minting token easily.<br />
               The steps ahead will help you set up the features of your very own version of the
                 DAY token.
+                <br></br><br></br>
+                * Click <a href='#' onClick={this.onWatch}>here</a>, if you already have a deployed contract.
               </p>
               <div className="buttons">
                 <button className="button button_fill button_mullayer" onClick={this.onStart} disabled={this.web3Disabled()} >Start</button>

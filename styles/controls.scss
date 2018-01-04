@@ -75,6 +75,11 @@
   &_image{
     text-align:center;
     margin: 5px 40px;
+    min-height: 20px;
+    margin-bottom: 10px;
+    &.propagate{
+      margin-left:45%;
+    }
   }
 }
 

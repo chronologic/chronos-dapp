@@ -6,8 +6,6 @@ import { NAVIGATION_STEPS } from '../lib/consts';
 import StepNavigation from './StepNavigation';
 
 
-@inject('store')
-@inject('web3Service')
 @observer
 export default class StepLayout extends React.Component {
 

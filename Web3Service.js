@@ -79,7 +79,7 @@ export default class Web3Service {
     TOKEN_CONTRACT_ADDRESS = web3Config[this.network].TOKEN_CONTRACT_ADDRESS;
     DEPLOYER_ADDRESS = web3Config[this.network].DEPLOYER_ADDRESS;
     FAUCET_ADDRESS = web3Config[this.network].FAUCET_ADDRESS;
-    MIN_FEE = web3Config[this.network].MIN_FEE;
+    MIN_FEE = Number(web3Config[this.network].MIN_FEE);
 
     this.tokenInstance = web3.eth.contract(dayTokenABI).at(TOKEN_CONTRACT_ADDRESS);
     this.deployerInstance = web3.eth.contract(deployerABI).at(DEPLOYER_ADDRESS);
@@ -88,13 +88,13 @@ export default class Web3Service {
     this.faucetInstance = web3.eth.contract(dayFaucetABI).at(FAUCET_ADDRESS);
   }
 
-
   async approveFee() {
     const result =  await Bb.fromCallback((callback) => {
       this.tokenInstance.approve(DEPLOYER_ADDRESS, MIN_FEE, callback);
     });
     return result;
   }
+
   async deploy(contractData) {
       let {web3,deployerInstance} = this;
 
@@ -139,9 +139,59 @@ export default class Web3Service {
     return {status:1 ,data: faucetTxn };
   }
 
+  async acceptTokenOwnership ( contract ){
+    const { web3 } = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const txn = await Bb.fromCallback( callback => childContract.acceptOwnership(callback) );
+    return txn;
+  }
+
+  async releaseTokens(contract){
+    const releasetime = Math.round((new Date()).getTime() / 1000);
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const released = await Bb.fromCallback( callback => childContract.releaseToken(releasetime, callback) );
+    return released;
+  }
+
+  async allocateTeamTimemints (data){
+    const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
+    const allocateTeam = await Bb.fromCallback( callback => childContract.addTeamTimeMints(
+      data.receiverAddress,
+      data.timemintId,
+      data.tokens,
+      data.isTest,
+      callback
+    ) );
+    return allocateTeam;
+  }
+
+  async allocateNormalTimeMints (data){
+    const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
+    const allocateNormal = await Bb.fromCallback( callback => childContract.allocateNormalTimeMints(
+      data.receiverAddress,
+      0,
+      data.timemintId,
+      data.tokens,
+      data.weiAmount,
+      callback
+    ) );
+    return allocateNormal;
+  }
+
+  async postAllocateAuctionTimeMints (data){
+    const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
+    const postAllocate = await Bb.fromCallback( callback => childContract.postAllocateAuctionTimeMints(
+      data.receiverAddress,
+      0,
+      data.timemintId,
+      callback
+    ) );
+    return postAllocate;
+  }
+
   convertMiningPower = (value,reverse) => {
     if(reverse)
-      return (value/1e+18)*100;
+      return (value*100)/1e+18;
     return (value/100)*1e+18;
   }
 
@@ -150,6 +200,19 @@ export default class Web3Service {
       web3.eth.getGasPrice(callback)
     );
     return result;
+  }
+
+  async checkTokenOwnership( contract ){
+    const { web3 } = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const owner = await Bb.fromCallback( callback => childContract.owner.call(callback));
+    const newOwner = await Bb.fromCallback( callback => childContract.newOwner.call(callback));
+    if(owner == web3.eth.defaultAccount)
+      return owner
+    else if( owner != web3.eth.defaultAccount && newOwner == web3.eth.defaultAccount)
+      return true;
+    else
+      return false;
   }
 
   async checkBalance() {
@@ -219,10 +282,10 @@ export default class Web3Service {
     const{web3} = this;
     const receipt = await this.fetchReceipt(hash);
       let foundLog;
-      if(!receipt.logs)
+      if(!receipt.logs || typeof receipt.logs !== 'object' || receipt.logs.length < 1)
         return false;
       receipt.logs.forEach(function(l){
-        if(l.address == DEPLOYER_ADDRESS)
+        if(l.address.toLowerCase() === DEPLOYER_ADDRESS.toLowerCase() )
           if(l.topics[0] == web3.sha3("LogChildCreated(address,address)") )
           foundLog = l.data;
       })
@@ -231,6 +294,150 @@ export default class Web3Service {
        let result = ethers.Interface.decodeParams(['address','address'],foundLog);
        console.log('New Contract', result[1] )
        return result[1];
+  }
+
+  async fetchCreationHash(contract){
+    const{web3} = this;
+    let foundLog = null,
+    DEPLOYER_FIRST_BLOCK = web3Config[this.network].DEPLOYER_FIRST_BLOCK;
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock:DEPLOYER_FIRST_BLOCK,
+        toBlock:'latest',
+    }
+
+    const created = await Bb.fromCallback( callback =>this.deployerInstance.LogChildCreated({},filterConfig).get(callback) );
+    created.forEach(log =>{
+      if(log.args.child.toLowerCase() == contract.toLowerCase())
+        foundLog = log.transactionHash;
+    })
+    return foundLog;
+  }
+
+  async fetchTeamAllocationHistory( contract, deployedBlock ){
+    const{web3} = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock: deployedBlock,
+        toBlock:'latest',
+    }
+    let allocLogs = await Bb.fromCallback( callback => childContract.TeamAddressAdded({},filterConfig).get(callback) );
+    allocLogs = this.parseAllocationLog(allocLogs);
+    return allocLogs;
+  }
+
+  async fetchNormalAllocationHistory( contract, deployedBlock ){
+    const{web3} = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock: deployedBlock,
+        toBlock:'latest',
+    }
+    let allocLogs = await Bb.fromCallback( callback => childContract.Invested({},filterConfig).get(callback) );
+    allocLogs = this.parseAllocationLog(allocLogs);
+    return allocLogs;
+  }
+
+  async fetchPostICOAllocationHistory( contract, deployedBlock ){
+    const{web3} = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const filterConfig = {
+        //topics: [web3.sha3("LogChildCreated(address,address)")],
+        fromBlock: deployedBlock,
+        toBlock:'latest',
+    }
+    let allocLogs = await Bb.fromCallback( callback => childContract.PostInvested({},filterConfig).get(callback) );
+    allocLogs = this.parseAllocationLog(allocLogs);
+    return allocLogs;
+  }
+
+  parseAllocationLog = logs => {
+    let found = [];
+    logs.map( l => {
+      for( let m in l.args){
+        if(typeof l.args[m].valueOf !== 'undefined')
+          l.args[m] = l.args[m].valueOf();
+        switch(true){
+          case (m == 'investor' || m == 'teamAddress'):
+            l.args.receiver = l.args[m];
+            delete(l.args[m]);
+            break;
+          case m == 'id':
+            l.args.contributorId = l.args[m];
+            delete(l.args[m]);
+            break;
+        }
+      }
+
+      found.push(Object.assign(
+        {},
+        l.args,
+        {transactionHash:l.transactionHash,
+          blockNumber: l.blockNumber}
+      ) )
+    });
+    return found;
+  }
+
+  async prepareWatch(hash){
+    const{web3} = this;
+    let contract,transaction;
+      if(web3.isAddress(hash)){
+          contract = hash;
+        transaction = await this.fetchCreationHash(hash);
+      }
+      else{
+        contract = await this.fetchNewChild(hash);
+        if(contract)
+          transaction = hash;
+      }
+    return{
+      newContract:contract,
+      transactionHash:transaction
+    };
+  }
+
+  async isTokensReleased(contract){
+    const{ web3 } = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const releaseState = await Bb.fromCallback( callback => childContract.released.call(callback) );
+    return releaseState;
+  }
+
+  async isTokensOwned(contract){
+    const{ web3 } = this;
+    const childContract = web3.eth.contract(dayTokenABI).at(contract);
+    const owner = await Bb.fromCallback( callback => childContract.owner.call(callback) );
+    return owner.toLowerCase() === web3.eth.defaultAccount.toLowerCase();
+  }
+
+  async getAllocationHistory( contract ){
+    const{ web3 } = this;
+    let fromBlock = (await this.fetchBlockNumber()) - 0x2710; //set default fromBlock to 10000 blocks ago
+    const DEPLOYER_FIRST_BLOCK = web3Config[this.network].DEPLOYER_FIRST_BLOCK;
+    fromBlock = fromBlock > DEPLOYER_FIRST_BLOCK?fromBlock:DEPLOYER_FIRST_BLOCK;
+    const watchPrep = await this.prepareWatch( contract );
+    if(watchPrep.transactionHash){
+      const receipt = await this.fetchReceipt( watchPrep.transactionHash);
+      if(receipt)
+        fromBlock = receipt.blockNumber;
+    }
+
+    const found = {
+      team: await this.fetchTeamAllocationHistory(contract,fromBlock),
+      normal: await this.fetchNormalAllocationHistory(contract,fromBlock),
+      postico: await this.fetchPostICOAllocationHistory(contract,fromBlock)
+    }
+
+    let allocations = [];
+    for (let f in found){
+      found[f].forEach( a => allocations.push( Object.assign(a,{type:f})) );
+    }
+    return allocations.sort(function(a, b){
+      return a.blockNumber-b.blockNumber
+    });
   }
 
   async getContractData(contract){
@@ -244,7 +451,7 @@ export default class Web3Service {
       mintingPeriod: (await Bb.fromCallback( callback => childContract.DayInSecs.call(callback) )).valueOf(),
       totalDays: (await Bb.fromCallback( callback => childContract.getDayCount.call(callback) )).valueOf(),
       halvingCycle: (await Bb.fromCallback( callback => childContract.halvingCycle.call(callback) )).valueOf(),
-      dayTokenActivated: (await Bb.fromCallback( callback => childContract.isDayTokenActivated.call(callback) )).valueOf(),
+      dayTokenActivated: (await Bb.fromCallback( callback => childContract.isDayTokenActivated.call(callback) )).valueOf().toString(),
       maxAddresses: (await Bb.fromCallback( callback => childContract.maxAddresses.call(callback) )).valueOf(),
       firstContributorId : (await Bb.fromCallback( callback => childContract.firstContributorId.call(callback) )).valueOf(),
       firstPostIcoContributorId: (await Bb.fromCallback( callback => childContract.firstPostIcoContributorId.call(callback) )).valueOf(),
@@ -259,59 +466,20 @@ export default class Web3Service {
       totalTeamContributorIdsAllocated: (await Bb.fromCallback( callback => childContract.totalTeamContributorIdsAllocated.call(callback) )).valueOf(),
       totalPostIcoContributorIds: (await Bb.fromCallback( callback => childContract.totalPostIcoContributorIds.call(callback) )).valueOf(),
       totalPostIcoContributorIdsAllocated : (await Bb.fromCallback( callback => childContract.totalPostIcoContributorIdsAllocated .call(callback) )).valueOf(),
+      isReleased : (await Bb.fromCallback( callback => childContract.released.call(callback) )).valueOf(),
     }
     return data;
   }
-    /*
-    console.log("deploying new token");
-    var _tokenName = $("#name").val();
-    var _tokenSymbol = $("#symbol").val();
-    var _maxAddresses = $("#maxAddresses").val();
-    var _firstTeamContributorId = $("#firstTeamContributionId").val();
-    var _totalTeamContributorIds = $("#totalTeamContributionId").val();
-    var _totalPostIcoContributorIds = $("#totalPostIcoContributorIds").val();
-    var _minMintingPower = $("#minMintingPower").val();
-    var _maxMintingPower = $("#maxMintingPower").val();
-    var _halvingCycle = $("#halvingCycle").val();
-    var _DayInSecs = $('#dayLengthinSec').val();
-    var _minBalanceToSell = $("#teamLockPeriodInSec").val();
-    var _teamLockPeriodInSec = $("#minBalanceToSell").val();
-getDeployerInstance().then(function(deployerInstance) {
-    var txHash = deployerInstance.createCustomDayToken(_tokenName,_tokenSymbol,_maxAddresses,_firstTeamContributorId,_totalTeamContributorIds,_totalPostIcoContributorIds,_minMintingPower,_maxMintingPower,_halvingCycle,_minBalanceToSell,_DayInSecs, _teamLockPeriodInSec,{
-            from: accounts[0],
-            gas: 4100000,
-            value: 0
-        },function(error,result){
-            if(result){
-                txUrl = baseNetworkURL+"tx/"+result;
 
-                swal({
-                title: 'Please wait while the transaction is mined',
-                html: '<a target="_blank" href="'+txUrl+'">'+result+'</a>',
-                allowOutsideClick:false,
-                type: "info",
-                showCancelButton: false,
-                showConfirmButton: false,
-                allowEscapeKey:false
-                })
-                return awaitBlockConsensus(window.web3, result,2, 200).then(function(result){
-                    var obj = result.logs;
-                    window.location.replace("watchToken.html?tad="+obj[2].address);
+  async getDeploymentData(transaction){
+    let { web3 } = this;
+    const data ={
+      creationCode: (await Bb.fromCallback( callback => web3.eth.getTransaction(transaction, callback))).input ,
+      abi: JSON.stringify( dayTokenABI ),
+    }
+    return data;
+  }
 
-            }, function(error) {
-                console.log('Could not fetch new balances', error);
-                return Promise.reject(error);
-            });
-            }
-            else
-                return;
-        });
-    }).then(function(result){
-        console.log("result",result);
-    }, function(error) {
-        console.log('Could not fetch new balances', error);
-        return Promise.reject(error);
-    });*/
 }
 
 export function initWeb3Service(isServer, source) {
