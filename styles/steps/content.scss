@@ -23,27 +23,27 @@
 }
 
 .step_token-setup {
-  @include image-2x('./static/step-icons/token_setup_header@2x.png', 960px, 161px);
-  background-image: url('./static/step-icons/token_setup_header.png');
+  @include image-2x('./static/step-icons/token_setup_header2.png', 960px, 161px);
+  background-image: url('./static/step-icons/token_setup_header2.png');
   background-repeat: no-repeat;
   background-size: 960px, 161px;
 }
 
 .step_timemint-setup {
-  @include image-2x('./static/step-icons/timemint_setup_header@2x.png', 960px, 161px);
-  background-image: url('./static/step-icons/timemint_setup_header.png');
+  @include image-2x('./static/step-icons/timemint_setup_header2.png', 960px, 161px);
+  background-image: url('./static/step-icons/timemint_setup_header2.png');
   background-repeat: no-repeat;
 }
 
 .step_contract-setup {
-  @include image-2x('./static/step-icons/contract_setup_header@2x.png', 960px, 161px);
-  background-image: url('./static/step-icons/contract_setup_header.png');
+  @include image-2x('./static/step-icons/contract_setup_header2.png', 960px, 161px);
+  background-image: url('./static/step-icons/contract_setup_header2.png');
   background-repeat: no-repeat;
 }
 
 .step_publish {
-  @include image-2x('./static/step-icons/publish_header@2x.png', 960px, 161px);
-  background-image: url('./static/step-icons/publish_header.png');
+  @include image-2x('./static/step-icons/publish_header2.png', 960px, 161px);
+  background-image: url('./static/step-icons/publish_header2.png');
   background-repeat: no-repeat;
 }
 
