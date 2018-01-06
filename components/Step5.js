@@ -123,7 +123,7 @@ export default class Step5 extends AbstractStep {
       if(ready){
         try{
           const txn = await web3Service.acceptTokenOwnership(contract);
-          showInfo('Tokens Ownership accepted',`${txn}`);
+          showInfo('Token Ownership accepted',`${txn}`);
         }
         catch(e){
           console.error(e);
@@ -184,6 +184,7 @@ export default class Step5 extends AbstractStep {
 
     target.disabled = true;
     allocateData.contract = this._state.contractInstance.address;
+    allocateData.tokens = allocateData.tokens*1e+18;//quick little patch ETH => WEI
 
     try{
       const allocateTxn = await web3Service[fxn](allocateData);

@@ -88,7 +88,7 @@ export default class Home extends Component {
     const { web3Service } = this.props;
     try {
       const result = await web3Service.approveFee();
-      showInfo('Token Release Tx Status', `TxHash ${result}`);
+      showInfo('Token Release Tx Status', ` ${result}`);
       this.start();
     } catch (err) {
       showError('Could not complete transaction');
@@ -118,7 +118,7 @@ export default class Home extends Component {
         return showError(`Sorry the Faucet is not funded at the moment`);
       else if(faucetTx.status == 0)
         return showError(`You have to wait for another ${ (faucetTx.data/60).toFixed(2)} min(s) to request Tokens.`);
-      showInfo('Token Faucet request Tx Status', `TxHash ${faucetTx.data}`);
+      showInfo('Token Faucet request Tx Status', ` ${faucetTx.data}`);
       this.setState({needsFaucet: false});
     }
     catch(e){
@@ -143,7 +143,7 @@ export default class Home extends Component {
         <section className="home">
           <div className="crowdsale">
             <div className="container">
-              <h1 className="title">Welcome to the Chronologic's DAPP </h1>
+              <h1 className="title">Welcome to Chronos DAPP </h1>
               <p className="description">
                 This DAPP (Decentralized App) allows anyone to create his/hers own version of
                 minting token easily.<br />
