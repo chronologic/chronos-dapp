@@ -45,6 +45,7 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
+              data: "$backend-url: '" + env['process.env.BACKEND_URL'] + "';",
               includePaths: ['styles', 'node_modules']
                 .map(d => path.join(__dirname, d))
                 .map(g => glob.sync(g))

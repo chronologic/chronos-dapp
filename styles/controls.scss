@@ -59,7 +59,7 @@
     height: 15px;
     background-size: 100%;
     margin: 0 6px;
-    background: url(/static/info.svg)
+    background: url($backend-url+'/static/info.svg')
   }
 }
 
