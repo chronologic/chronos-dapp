@@ -20,6 +20,7 @@
   margin:0 20px 20px 80px;
   display: inline-block;
   background-size: contain;
+  cursor:pointer;
   &.chronos{
     background: url($backend-url+'/static/selector-screen/day_token.jpg'),rgba(47,79,253,0.5);
   }

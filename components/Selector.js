@@ -13,6 +13,7 @@ const SelectorBox = props =>{
 export default class Selector extends Component {
   constructor(props){
     super(props);
+    this.choosePath = this.choosePath.bind(this);
 
     this.state = {
       selected:'chronos',
@@ -39,6 +40,11 @@ export default class Selector extends Component {
         target.disabled = false;
   }
 
+  choosePath = path => event =>{
+    console.log(path,event)
+    this.setState({selected:path});
+  }
+
   componentDidMount(){
   }
 
@@ -57,7 +63,8 @@ export default class Selector extends Component {
             {Object.keys(appRoutes).map( e =>{
               return(<div key={appRoutes[e]}
                 className={'selector-box '+e+' '+
-                  (this.state.selected==e?'selected':'')} >
+                  (this.state.selected==e?'selected':'')}
+                  onClick={this.choosePath(e)}>
               </div>)
             })}
           </div>
