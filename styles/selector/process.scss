@@ -1,0 +1,29 @@
+.selector{
+  background-size:100%;
+
+  &.chronos-dapp{
+    background: url($backend-url+'/static/selector-screen/day_token_bg.jpg');
+  }
+
+  &.debt-contract{
+    background: url($backend-url+'/static/selector-screen/smart_contract_bg.jpg');
+  }
+
+}
+.selector-group{
+  margin:15% 7% 20%;
+  min-height: 300px;
+}
+.selector-box{
+  height:400px;
+  width:400px;
+  margin:0 20px 20px 80px;
+  display: inline-block;
+  background-size: contain;
+  &.chronos{
+    background: url($backend-url+'/static/selector-screen/day_token.jpg');
+  }
+  &.debt{
+    background: url($backend-url+'/static/selector-screen/smart_contract.jpg');
+  }
+}
