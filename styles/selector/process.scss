@@ -21,9 +21,14 @@
   display: inline-block;
   background-size: contain;
   &.chronos{
-    background: url($backend-url+'/static/selector-screen/day_token.jpg');
+    background: url($backend-url+'/static/selector-screen/day_token.jpg'),rgba(47,79,253,0.5);
   }
   &.debt{
-    background: url($backend-url+'/static/selector-screen/smart_contract.jpg');
+    background: url($backend-url+'/static/selector-screen/smart_contract.jpg'),rgba(47,79,253,0.5);
+  }
+  &.selected{
+    -moz-box-shadow:    0px 0px 5px 5px #df43fa;
+    -webkit-box-shadow: 0px 0px 5px 5px #df43fa;
+    box-shadow:         0px 0px 5px 5px #df43fa;
   }
 }
