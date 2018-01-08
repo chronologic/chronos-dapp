@@ -19,14 +19,21 @@ export default class Selector extends Component {
       selected:'chronos',
     }
 
+
+
+    this.routeLabels = {
+      debt:'Debt-Smart-Contract',
+      chronos:'Custom-Day-Tokens'
+    }
+
     this.cssGroup = {
       debt:'debt-contract',
       chronos:'chronos-dapp'
     }
 
     this.appRoutes = {//Order determines how they are displayed
-      chronos:'/chronos-home',
       debt:'/',
+      chronos:'/chronos-home',
     }
   }
 
@@ -40,12 +47,17 @@ export default class Selector extends Component {
         target.disabled = false;
   }
 
-  choosePath = path => event =>{
-    console.log(path,event)
-    this.setState({selected:path});
+  previewPath = path => event =>{
+    if(path != this.state.selected)
+      this.setState({selected:path});
   }
 
-  componentDidMount(){
+  choosePath = path => event =>{
+    const available = ['chronos'];
+    if(available.indexOf(path) < 0)
+      return showInfo('Coming Soon !!!');
+
+    this.start(path);
   }
 
   start(dapp) {
@@ -54,17 +66,21 @@ export default class Selector extends Component {
   }
 
   render() {
-    const {appRoutes,cssGroup} = this;
+    const {appRoutes,cssGroup,routeLabels} = this;
+    const {state:{selected}} = this;
 
     return (
       <div>
         <section className={'selector '+cssGroup[this.state.selected]}>
-          <div className='selector-group'>
-            {Object.keys(appRoutes).map( e =>{
-              return(<div key={appRoutes[e]}
+          <div className='container selector-group'>
+            {Object.keys(appRoutes).map( (e,i) =>{
+              return(<div key={cssGroup[e]}
                 className={'selector-box '+e+' '+
-                  (this.state.selected==e?'selected':'')}
+                  (selected==e?'selected':'')+' '+(i%2==0?'left':'right')}
+                  onMouseOver={this.previewPath(e)}
                   onClick={this.choosePath(e)}>
+                  <div className='icon'></div>
+                  <h2 className='label'>{routeLabels[e]}</h2>
               </div>)
             })}
           </div>
