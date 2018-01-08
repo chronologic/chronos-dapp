@@ -22,40 +22,40 @@
   }
 }
 
-.step_token-setup {
-  @include image-2x($backend-url+'/static/step-icons/token_setup_header2.jpg', 960px, 161px);
-  background-image: url($backend-url+'/static/step-icons/token_setup_header2.jpg');
-  background-repeat: no-repeat;
-  background-size: 960px, 161px;
-}
-
-.step_timemint-setup {
-  @include image-2x($backend-url+'/static/step-icons/timemint_setup_header2.jpg', 960px, 161px);
-  background-image: url($backend-url+'/static/step-icons/timemint_setup_header2.jpg');
-  background-repeat: no-repeat;
-}
-
-.step_contract-setup {
-  @include image-2x($backend-url+'/static/step-icons/contract_setup_header2.jpg', 960px, 161px);
-  background-image: url($backend-url+'/static/step-icons/contract_setup_header2.jpg');
-  background-repeat: no-repeat;
-}
-
-.step_publish {
-  @include image-2x($backend-url+'/static/step-icons/publish_header2.jpg', 960px, 161px);
-  background-image: url($backend-url+'/static/step-icons/publish_header2.jpg');
-  background-repeat: no-repeat;
-}
-
-.step_watch {
-  @include image-2x($backend-url+'/static/step-icons/watch_page_header2.jpg', 960px, 161px);
-  background-image: url($backend-url+'/static/step-icons/watch_page_header2.jpg');
-  background-repeat: no-repeat;
-}
-
 .steps-content {
   padding: 30px 30px 0;
   border-radius: 8px;
   border: 1px solid #eee;
   background-color: #fff;
+  &.container{
+    @include image-2x($backend-url+'/static/step-icons/overlay.svg', 960px, 161px);
+    background: url($backend-url+'/static/step-icons/overlay.svg');
+    background-repeat: no-repeat;
+  }
+
+  &.step_token-setup {
+    @include image-2x($backend-url+'/static/step-icons/token_setup_header2.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/step-icons/token_setup_header2.jpg');
+    background-size: 960px, 161px;
+  }
+
+  &.step_timemint-setup {
+    @include image-2x($backend-url+'/static/step-icons/timemint_setup_header2.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/step-icons/timemint_setup_header2.jpg');
+  }
+
+  &.step_contract-setup {
+    @include image-2x($backend-url+'/static/step-icons/contract_setup_header2.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/step-icons/contract_setup_header2.jpg');
+  }
+
+  &.step_publish {
+    @include image-2x($backend-url+'/static/step-icons/publish_header2.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/step-icons/publish_header2.jpg');
+  }
+
+  &.step_watch {
+    @include image-2x($backend-url+'/static/step-icons/watch_page_header2.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/step-icons/watch_page_header2.jpg');
+  }
 }
