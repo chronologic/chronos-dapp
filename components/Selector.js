@@ -23,7 +23,7 @@ export default class Selector extends Component {
 
     this.routeLabels = {
       debt:'Debt-Smart-Contract',
-      chronos:'Custom-Day-Tokens'
+      chronos:'Custom-Day-Token'
     }
 
     this.cssGroup = {
