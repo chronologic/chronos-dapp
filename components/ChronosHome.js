@@ -7,15 +7,19 @@ import { confirmFeeWithdraw, showInsufficientBalalnce, showError, showInfo, show
 import web3Config from '../lib/web3Utils.js';
 
 @inject('web3Service')
+@inject('store')
 @observer
 export default class Home extends Component {
   constructor(props){
     super(props);
+    let {props:{store}} = this;
 
     this.state = {
       MIN_FEE:null,
       needsFaucet: false
     }
+
+    store.activeApp = 'chronos-home';
     this.getTestnetTokens = this.getTestnetTokens.bind(this);
   }
 

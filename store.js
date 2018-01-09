@@ -3,6 +3,8 @@ import { observable } from 'mobx';
 let store = null;
 
 class Store {
+  @observable activeApp = '';
+
   @observable tokenName = '';
   @observable symbol = '';
 
