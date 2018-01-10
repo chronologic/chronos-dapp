@@ -39,7 +39,7 @@ class Layout extends React.Component {
     return (
       <Provider store={this.store} web3Service={this.web3Service}>
         <div>
-          <Header />
+          <Header {...{activeApp:this.store.activeApp}}/>
           {this.props.children}
           <Footer />
         </div>

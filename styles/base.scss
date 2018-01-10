@@ -33,6 +33,9 @@ body {
 .left {
   width: 46%;
   float: left;
+  &_checkbox{
+    width: 5% !important;
+  }
 }
 
 .right {
@@ -40,13 +43,88 @@ body {
   float: right;
 }
 
+.small{
+  font-size:smaller;
+}
+
+.code{
+  & .title{
+    margin-bottom:10px;
+    text-decoration: underline;
+  }
+
+  & pre{
+    background-color:$code-background-color;
+    font-size:1.2em;
+    color:#000;
+    padding: 10px;
+    margin-bottom:20px;
+  }
+}
+
 .col{
-  display:'inline-block';
+  display:inline-block;
+  min-height:43px;
+  margin-bottom: 10px;
   &-3{
     width:33%;
     margin-right:0.33%;
+    float: left;
   }
+  &-4{
+    width:24.7%;
+    margin-right:0.3%;
+    float: left;
+  }
+  &-5{
+    width:19.7%;
+    margin-right:0.3%;
+    float: left;
+  }
+  &-8{
+    width:12.2%;
+    margin-right:0.3%;
+    float: left;
+  }
+  & .label{
+  }
+  & p{
+    font-size: 0.8rem;
+  }
+  &.left{
+    width:49.5%
+  }
+  &.right{
+    width:49.5%
+  }
+}
 
+.scrollable{
+  height:auto !important;
+  overflow-y:auto;
+  &_200{
+    max-height:200px !important;
+  }
+  &_400{
+    max-height:400px !important;
+  }
+  &_600{
+    max-height:600px !important;
+  }
+}
+
+.contract{
+  &_info{
+    padding: 20px 20px 0;
+    margin-bottom: 52px;
+    font-size: 0.8rem;
+  }
+  &_clear{
+    clear:both;
+  }
+  &_transaction{
+    margin-right: 0.5%;
+  }
 }
 
 .center{
@@ -61,4 +139,8 @@ body {
 .input-block-container {
   display: table;
   width: 100%;
+}
+
+.bottom-margin{
+  margin-bottom: 25px;
 }

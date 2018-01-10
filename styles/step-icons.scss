@@ -1,6 +1,6 @@
 .step-icons {
-  @include image-2x('./static/step-icons@2x.png', 120px, 600px);
-  background-image: url(./static/step-icons.png);
+  @include image-2x($backend-url+'/static/step-icons@2x.png', 120px, 600px);
+  background-image: url($backend-url+'/static/step-icons.png');
 
   &_token-setup {
     width: 120px;

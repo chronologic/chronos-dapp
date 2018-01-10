@@ -3,6 +3,8 @@ import { observable } from 'mobx';
 let store = null;
 
 class Store {
+  @observable activeApp = '';
+
   @observable tokenName = '';
   @observable symbol = '';
 
@@ -17,6 +19,13 @@ class Store {
   @observable teamLockPeriod = '';
   @observable postDeploymentMaxIds = '';
   @observable minimumBalance = '';
+
+  @observable receiverAddress = '';
+  @observable tokens = '';
+  @observable weiAmount = '';
+  @observable timemintId = '';
+  @observable teamMember = false;
+  @observable isTest = false;
 
   constructor(source) {
     Object.assign(this, source);

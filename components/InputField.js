@@ -26,6 +26,14 @@ export default class InputField extends React.Component {
     } = this.props;
 
     const error = !valid ? errorMessage : '';
+    let attrs = [];
+    attrs["disabled"] = disabled;
+    attrs["type"] = type;
+    attrs["onBlur"] = onBlur;
+    attrs["defaultValue"] = defaultValue;
+    attrs["onChange"] = onChange;
+    attrs["className"] = type=='checkbox'?"input left_checkbox":"input";
+    attrs["value"] = value;
     return (
       <div className={side}>
         <label className="label">{title}
@@ -33,13 +41,7 @@ export default class InputField extends React.Component {
             <a className="label_info" data-tip={info}/> }
         </label>
         <input
-          disabled={disabled}
-          type={type}
-          className="input"
-          onBlur={onBlur}
-          value={value}
-          defaultValue={defaultValue}
-          onChange={onChange}
+          {...attrs}
         />
         { description ? <p className="description">{description}</p> : null }
         <p style={errorStyle}>{error}</p>

@@ -20,22 +20,22 @@
     }
 
     &:before {
-      /*@include image-2x('./static/socials@2x.png', 16px, 69px);*/
+      /*@include image-2x($backend-url+'/static/socials@2x.png', 16px, 69px);*/
       transform: translate(-50%, -50%);
       content: '';
       position: absolute;
       left: 50%;
       top: 50%;
       background-size:100% 100%;
-      /*background-image: url(./static/socials.png);*/
+      /*background-image: url($backend-url+'/static/socials.png');*/
     }
 
     &_github {
       &:before {
         width: 19px;
         height: 20px;
-        background-image: url(./static/github.svg)
-        /*background-image: url(./static/github@2x.png)
+        background-image: url($backend-url+'/static/github.svg')
+        /*background-image: url($backend-url+'/static/github@2x.png')
         background-position: 0 -31px;*/
       }
     }
@@ -44,8 +44,8 @@
       &:before {
         width: 16px;
         height: 14px;
-        background-image: url(./static/medium.svg)
-        /*background-image: url(./static/medium@2x.png)
+        background-image: url($backend-url+'/static/medium.svg')
+        /*background-image: url($backend-url+'/static/medium@2x.png')
         background-position: 0 0;*/
       }
     }
@@ -54,8 +54,8 @@
       &:before {
         width: 17px;
         height: 19px;
-        background-image: url(./static/whitepaper.svg)
-        /*background-image: url(./static/whitepaper@2x.png)
+        background-image: url($backend-url+'/static/whitepaper.svg')
+        /*background-image: url($backend-url+'/static/whitepaper@2x.png')
         background-position: 0 -15px;*/
       }
     }
@@ -64,8 +64,8 @@
       &:before {
         width: 20px;
         height: 20px;
-        background-image: url(./static/website.svg)
-        /*background-image: url(./static/website@2x.png)
+        background-image: url($backend-url+'/static/website.svg')
+        /*background-image: url($backend-url+'/static/website@2x.png')
         background-position: 0 -48px;*/
       }
     }
@@ -74,8 +74,8 @@
       &:before {
         width: 18px;
         height: 18px;
-        background-image: url(./static/support.svg)
-        /*background-image: url(./static/website@2x.png)
+        background-image: url($backend-url+'/static/support.svg')
+        /*background-image: url($backend-url+'/static/website@2x.png')
         background-position: 0 -48px;*/
       }
     }

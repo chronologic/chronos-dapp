@@ -21,6 +21,14 @@
     background-color: $accent-color;
     color: #fff;
   }
+  &_secondary_fill{
+    background-color: $secondary-accent-color;
+    color: #fff;
+  }
+
+  &_right{
+    margin-left:75%;
+  }
 
   &_mullayer {
     margin-top: 25px !important;
@@ -30,6 +38,10 @@
 
 .button:disabled{
      @include background-opacity($accent-color, 0.7);
+     cursor: auto;
+}
+.button_secondary_fill:disabled{
+     @include background-opacity($secondary-accent-color, 0.7);
      cursor: auto;
 }
 
@@ -47,7 +59,7 @@
     height: 15px;
     background-size: 100%;
     margin: 0 6px;
-    background: url(./static/info.svg)
+    background: url($backend-url+'/static/info.svg')
   }
 }
 
@@ -63,6 +75,11 @@
   &_image{
     text-align:center;
     margin: 5px 40px;
+    min-height: 20px;
+    margin-bottom: 10px;
+    &.propagate{
+      margin-left:45%;
+    }
   }
 }
 

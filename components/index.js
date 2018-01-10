@@ -1,6 +1,6 @@
 export { Footer } from './Footer';
 export { Header } from './Header';
-export { Home } from './Home';
+export { ChronosHome } from './ChronosHome';
 export { stepOne } from './Step1';
 export { stepTwo } from './Step2';
 export { stepThree } from './Step3';

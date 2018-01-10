@@ -8,6 +8,7 @@ module.exports = {
     return {
       './': { page: '/' },
       '/index': { page: '/index' },
+      '/chronos-home': { page: '/chronos-home' },
       '/step-1': { page: '/step-1' },
       '/step-2': { page: '/step-2' },
       '/step-3': { page: '/step-3'},
@@ -45,6 +46,7 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
+              data: "$backend-url: '" + env['process.env.BACKEND_URL'] + "';",
               includePaths: ['styles', 'node_modules']
                 .map(d => path.join(__dirname, d))
                 .map(g => glob.sync(g))

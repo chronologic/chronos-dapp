@@ -13,7 +13,7 @@ import web3Config from './lib/web3Utils.js'
 let instance = null;
 let TOKEN_CONTRACT_ADDRESS,
 DEPLOYER_ADDRESS,
-    DEBT_TOKEN_DEPLOYER_ADDRESS,
+  //  DEBT_TOKEN_DEPLOYER_ADDRESS,
 FAUCET_ADDRESS,
 MIN_FEE;
 
