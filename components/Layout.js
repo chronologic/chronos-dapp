@@ -21,8 +21,8 @@ class Layout extends React.Component {
   }
 
   async componentDidMount() {
-    const { web3Service } = this;
-    if (await web3Service.init()) {
+    const { web3Service,store } = this;
+    if (await web3Service.init(store.activeApp)) {
       if (!web3Service.connectedToMetaMask) {
         showNoMetaMaskAlert();
       }
