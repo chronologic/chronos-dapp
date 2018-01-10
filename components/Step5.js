@@ -285,7 +285,7 @@ export default class Step5 extends AbstractStep {
 
   render() {
     const {web3Service,store} = this.props;
-    const EXPLORER = web3Config[web3Service.network].EXPLORER;
+    const EXPLORER = web3Config[store.activeApp][web3Service.network].EXPLORER;
 
     return (
       <StepLayout

@@ -19,7 +19,7 @@ export default class Home extends Component {
       needsFaucet: false
     }
 
-    store.activeApp = 'chronos-home';
+    store.activeApp = 'chronos';
     this.getTestnetTokens = this.getTestnetTokens.bind(this);
   }
 
@@ -105,10 +105,10 @@ export default class Home extends Component {
   }
 
   async getWeb3Fee(){
-    const {web3Service} = this.props;
+    const {web3Service,store} = this.props;
     const that = this;
     if( typeof web3Service.network !== 'undefined' && web3Service.network !== null)
-      return this.setState({MIN_FEE: web3Config[web3Service.network].MIN_FEE });
+      return this.setState({MIN_FEE: web3Config[store.activeApp][web3Service.network].MIN_FEE });
     setTimeout(function(){
       return that.getWeb3Fee();
     },200)
