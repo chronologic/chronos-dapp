@@ -36,10 +36,12 @@ export default class Web3Service {
       debt:{
         topic:web3.sha3("DebtTokenCreated(address, address, uint256)"),
         params:['address','address','uint256'],
+        eventFxn:'DebtTokenCreated',
       },
       chronos:{
         topic:web3.sha3("LogChildCreated(address,address)"),
         params:['address','address'],
+        eventFxn:'LogChildCreated',
       }
     };
   }
@@ -50,7 +52,6 @@ export default class Web3Service {
 
   @action
   async init(which) {
-    console.log(which);
 
     if (!this.initialized) {
       await this.connect(which);
@@ -358,7 +359,9 @@ export default class Web3Service {
         toBlock:'latest',
     }
 
-    const created = await Bb.fromCallback( callback =>this.deployerInstance.LogChildCreated({},filterConfig).get(callback) );
+    const fn = this.childTopics()[this.activeApp].eventFxn;
+
+    const created = await Bb.fromCallback( callback =>this.deployerInstance[fn]({},filterConfig).get(callback) );
     created.forEach(log =>{
       if(log.args.child.toLowerCase() == contract.toLowerCase())
         foundLog = log.transactionHash;
