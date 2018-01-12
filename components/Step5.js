@@ -118,6 +118,10 @@ export default class Step5 extends AbstractStep {
     this.loadInfo();
   }
 
+  componentWillUnmount() {
+    this.clearUpdater();
+  }
+
   async resolveOwnership ( contract ){
     const { web3Service } = this.props;
     const owner = await web3Service.checkTokenOwnership(contract);
@@ -224,6 +228,10 @@ export default class Step5 extends AbstractStep {
     this.fetchUpdates();//begin interval retreival of data
   }
 
+  clearUpdater(){
+    clearInterval(this.state.updateFetcher);
+  }
+
   async isReleased(){
     const {web3Service} = this.props;
     const released = await web3Service.isTokensReleased(this._state.contractInstance.address);
@@ -240,11 +248,13 @@ export default class Step5 extends AbstractStep {
   fetchUpdates = () =>{
     const that = this;
     const newContract = this._state.contractInstance.address;
-    setInterval( ()=>{
-      console.log('updating...')
-      that.fetchContractData(newContract);
-      that.fetchAllocationHistory(newContract);
-    }, 10000);
+    this.setState({updateFetcher: setInterval( ()=>{
+        console.log('updating...')
+        that.fetchContractData(newContract);
+        that.fetchAllocationHistory(newContract);
+      }, 10000)
+    });
+    this.clearUpdater()
   }
 
   async fetchContractData (contractAddress){
