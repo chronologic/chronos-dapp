@@ -57,7 +57,6 @@ export default class AbstractHome extends Component {
   }
 
   async goWatch(hash,destination) {
-    console.log('dest',destination,hash)
     const { props: { store,web3Service } } = this;
     let watchPageData;
     const CONTRACT_PROPERTIES = ['transactionHash','newContract']
