@@ -58,4 +58,29 @@
     @include image-2x($backend-url+'/static/step-icons/watch_page_header2.jpg', 960px, 161px);
     background-image: url($backend-url+'/static/step-icons/watch_page_header2.jpg'), url($backend-url+'/static/step-icons/overlay.svg');
   }
+
+  &.step_debt-token-setup {
+    @include image-2x($backend-url+'/static/debt-step-icons/debt_token_setup_header.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/debt-step-icons/debt_token_setup_header.jpg'), url($backend-url+'/static/step-icons/overlay.svg');
+  }
+
+  &.step_debt-interest-rate-setup {
+    @include image-2x($backend-url+'/static/debt-step-icons/debt_interest_rate_header.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/debt-step-icons/debt_interest_rate_header.jpg'), url($backend-url+'/static/step-icons/overlay.svg');
+  }
+
+  &.step_lender-setup {
+    @include image-2x($backend-url+'/static/debt-step-icons/debt_lender_setup_header.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/debt-step-icons/debt_lender_setup_header.jpg'), url($backend-url+'/static/step-icons/overlay.svg');
+  }
+
+  &.step_debt-publish {
+    @include image-2x($backend-url+'/static/debt-step-icons/debt_publish_header.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/debt-step-icons/debt_publish_header.jpg'), url($backend-url+'/static/step-icons/overlay.svg');
+  }
+
+  &.step_debt-watch {
+    @include image-2x($backend-url+'/static/debt-step-icons/watch_page_header2.jpg', 960px, 161px);
+    background-image: url($backend-url+'/static/debt-step-icons/watch_page_header2.jpg'), url($backend-url+'/static/step-icons/overlay.svg');
+  }
 }
