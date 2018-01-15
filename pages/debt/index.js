@@ -10,7 +10,7 @@ export default class CHome extends React.Component {
 
   render() {
     return (
-      <Layout {...this.props}>
+      <Layout {...Object.assign({},this.props,{activeApp:'debt'})}>
         <DebtHome />
       </Layout>
     );

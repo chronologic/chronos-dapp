@@ -5,15 +5,15 @@ import { NAVIGATION_STEPS } from '../../lib/consts';
 
 import AbstractHome from '../AbstractHome';
 
+let STEPS = '';
+
 @inject('web3Service')
-@inject('store')
 @observer
 export default class Home extends AbstractHome {
   constructor(props){
-    super(props);
+    super('debt',props);
 
-    let {props:{store}} = this;
-    store.activeApp = 'debt';
+    STEPS = NAVIGATION_STEPS[this.activeApp];
   }
 
   onWatch = async() => {
@@ -60,7 +60,7 @@ export default class Home extends AbstractHome {
           </div>
           <div className="process">
             <div className="container">
-              {Object.entries(NAVIGATION_STEPS)
+              {Object.entries(STEPS)
                 .map(([key, { iconClassName, description, title }]) => (
                   <div className="process-item" key={key}>
                     <div className={`step-icons ${iconClassName}`} />
