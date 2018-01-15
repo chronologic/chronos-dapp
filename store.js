@@ -27,6 +27,11 @@ class Store {
   @observable teamMember = false;
   @observable isTest = false;
 
+  @observable interestRate =  '';
+  @observable interestCycle = '';
+  @observable loanTerm = '';
+  @observable dayLength = '';
+
   constructor(source) {
     Object.assign(this, source);
   }
