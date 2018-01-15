@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Layout from '../components/Layout';
-import Step4 from '../components/Step4';
+import Layout from '../../components/Layout';
+import Step1 from '../../components/chronos/Step1';
 
-export default class Step4Page extends React.Component {
+export default class Step1Page extends React.Component {
   static async getInitialProps(props) {
     return Layout.getInitialProps(props);
   }
@@ -11,7 +11,7 @@ export default class Step4Page extends React.Component {
   render() {
     return (
       <Layout {...this.props}>
-        <Step4 />
+        <Step1 />
       </Layout>
     );
   }

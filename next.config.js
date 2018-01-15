@@ -8,12 +8,12 @@ module.exports = {
     return {
       './': { page: '/' },
       '/index': { page: '/index' },
-      '/chronos-home': { page: '/chronos-home' },
-      '/step-1': { page: '/step-1' },
-      '/step-2': { page: '/step-2' },
-      '/step-3': { page: '/step-3'},
-      '/step-4': { page: '/step-4'},
-      '/step-5': { page: '/step-5'}
+      '/chronos': { page: '/chronos/index' },
+      '/chronos/step-1': { page: '/chronos/step-1' },
+      '/chronos/step-2': { page: '/chronos/step-2' },
+      '/chronos/step-3': { page: '/chronos/step-3'},
+      '/chronos/step-4': { page: '/chronos/step-4'},
+      '/chronos/step-5': { page: '/chronos/step-5'}
     }
   },
   webpack: (config, { dev }) => {

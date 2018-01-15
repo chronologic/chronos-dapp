@@ -2,8 +2,8 @@ import React from 'react';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
-import AbstractStep from './AbstractStep';
-import StepLayout from './StepLayout';
+import AbstractStep from '../AbstractStep';
+import StepLayout from '../StepLayout';
 
 @inject('web3Service')
 @inject('store')

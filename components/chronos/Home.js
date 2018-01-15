@@ -1,9 +1,9 @@
 import React from 'react';
 import Router from 'next/router';
 import { inject, observer } from 'mobx-react';
-import { NAVIGATION_STEPS } from '../lib/consts';
+import { NAVIGATION_STEPS } from '../../lib/consts';
 
-import AbstractHome from './AbstractHome';
+import AbstractHome from '../AbstractHome';
 
 @inject('web3Service')
 @inject('store')
@@ -17,14 +17,14 @@ export default class Home extends AbstractHome {
   }
 
   onWatch = async() => {
-    super.onWatch('/step-5');
+    super.onWatch('/chronos/step-5');
   }
 
   componentDidMount(){
     super.componentDidMount();
   }
   start() {
-    Router.push('/step-1');
+    Router.push('/chronos/step-1');
   }
 
   render() {

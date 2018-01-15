@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Layout from '../components/Layout';
-import Step4 from '../components/Step5';
+import Layout from '../../components/Layout';
+import Step4 from '../../components/chronos/Step5';
 
 export default class Step4Page extends React.Component {
   static async getInitialProps(props) {

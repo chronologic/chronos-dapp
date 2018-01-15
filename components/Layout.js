@@ -20,11 +20,6 @@ class Layout extends React.Component {
     this.web3Service = initWeb3Service(false, props.web3Service);
   }
 
-  appUrl = {
-    chronos: 'chronos-home',
-    debt:'/'
-  }
-
   async componentDidMount() {
     const { web3Service,store } = this;
     if (await web3Service.init(store.activeApp)) {
@@ -44,7 +39,7 @@ class Layout extends React.Component {
     return (
       <Provider store={this.store} web3Service={this.web3Service}>
         <div>
-          <Header {...{ activeApp:this.appUrl[this.store.activeApp] }}/>
+          <Header {...{ activeApp:this.store.activeApp }}/>
           {this.props.children}
           <Footer />
         </div>

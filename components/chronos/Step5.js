@@ -2,15 +2,15 @@ import React from 'react';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
-
-import { CONTRACT_LABELS} from '../lib/consts';
-import {showError,showInfo,confirmProcess} from '../lib/alerts';
-import web3Config from '../lib/web3Utils';
-import AbstractStep from './AbstractStep';
-import StepLayout from './StepLayout';
-
 import ReactTooltip from 'react-tooltip'
-import {Propagatesloader} from '../lib/loader';
+
+import { CONTRACT_LABELS} from '../../lib/consts';
+import {showError,showInfo,confirmProcess} from '../../lib/alerts';
+import web3Config from '../../lib/web3Utils';
+import AbstractStep from '../AbstractStep';
+import StepLayout from '../StepLayout';
+
+import {Propagatesloader} from '../../lib/loader';
 
 const ContractData = data => {
   const explorer = data.explorer;
