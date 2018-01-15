@@ -8,15 +8,11 @@ import AbstractHome from '../AbstractHome';
 let STEPS = '';
 
 @inject('web3Service')
-@inject('store')
 @observer
 export default class Home extends AbstractHome {
   constructor(props){
-    super(props);
-
-    let {props:{store}} = this;
-    store.activeApp = 'chronos';
-    STEPS = NAVIGATION_STEPS[store.activeApp];
+    super('chronos',props);
+    STEPS = NAVIGATION_STEPS[this.activeApp];
   }
 
   onWatch = async() => {

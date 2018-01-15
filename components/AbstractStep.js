@@ -7,10 +7,12 @@ import { NAVIGATION_STEPS, PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
 import InputField from './InputField';
 
 export default class AbstractStep extends React.Component {
-  constructor(activeStepKey, props) {
+  constructor(activeStepKey, activeApp, props) {
     super(props);
+
+
     this.activeStepKey = activeStepKey;
-    this.activeApp = props.store.activeApp;
+    this.activeApp = activeApp;
 
     this.activeStep = NAVIGATION_STEPS[this.activeApp][this.activeStepKey];
     if (!this.activeStep) {
@@ -54,7 +56,7 @@ export default class AbstractStep extends React.Component {
     }
     const { props: { store = {} } } = this;
     if (prevProps.some(({ name, validator }) => !store[name] || !validator(store[name]))) {
-      Router.push('/');
+      Router.push('/'+this.activeApp);
     }
   }
 

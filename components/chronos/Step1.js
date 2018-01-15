@@ -10,7 +10,7 @@ import StepLayout from '../StepLayout';
 @observer
 export default class Step1 extends AbstractStep {
   constructor(props) {
-    super('TOKEN_SETUP', props);
+    super('TOKEN_SETUP', 'chronos', props);
   }
 
   @observable
@@ -25,10 +25,10 @@ export default class Step1 extends AbstractStep {
 
   render() {
 
-    const {web3Service,store:{activeApp}} = this.props;
+    const {web3Service} = this.props;
     return (
       <StepLayout
-        activeApp = {activeApp}
+        activeApp = {this.activeApp}
         activeStepKey={this.activeStepKey}
         onNext={this.goNext}
         web3Disabled = {this.web3Disabled(web3Service) }

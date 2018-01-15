@@ -9,16 +9,16 @@ import web3Config from '../lib/web3Utils.js';
 
 
 export default class AbstractHome extends Component {
-  constructor(props){
+  constructor(activeApp,props){
     super(props);
-    let {props:{store}} = this;
 
     this.state = {
       MIN_FEE:null,
       needsFaucet: false
     }
 
-    store.activeApp = '';
+
+    this.activeApp = activeApp;
     this.getTestnetTokens = this.getTestnetTokens.bind(this);
     this.onWatch = this.onWatch.bind(this);
   }
@@ -57,7 +57,7 @@ export default class AbstractHome extends Component {
   }
 
   async goWatch(hash,destination) {
-    const { props: { store,web3Service } } = this;
+    const { props: { web3Service } } = this;
     let watchPageData;
     const CONTRACT_PROPERTIES = ['transactionHash','newContract']
     try{
@@ -105,10 +105,10 @@ export default class AbstractHome extends Component {
   }
 
   async getWeb3Fee(){
-    const {web3Service,store} = this.props;
+    const {web3Service} = this.props;
     const that = this;
     if( typeof web3Service.network !== 'undefined' && web3Service.network !== null)
-      return this.setState({MIN_FEE: web3Config[store.activeApp][web3Service.network].MIN_FEE });
+      return this.setState({MIN_FEE: web3Config[this.activeApp][web3Service.network].MIN_FEE });
     setTimeout(function(){
       return that.getWeb3Fee();
     },200)
@@ -140,4 +140,7 @@ export default class AbstractHome extends Component {
     throw new Error('Implement me');
   }
 
+  render() {
+    throw new Error('Override me');
+  }
 }

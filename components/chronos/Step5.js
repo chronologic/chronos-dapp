@@ -76,7 +76,7 @@ const AllocationData = data => {
 @observer
 export default class Step5 extends AbstractStep {
   constructor(props) {
-    super('WATCH', props);
+    super('WATCH', 'chronos', props);
     this.allocateMints = this.allocateMints.bind(this);
     this.doRelease = this.doRelease.bind(this);
   }
@@ -114,8 +114,12 @@ export default class Step5 extends AbstractStep {
     _debtContractFields = ['tokenName','tokenSymbol','initialAmount','exchangeRate',
         'decimalUnits','dayLength','loanTerm','loanCycle','interestRate','debtOwner']
 
-  componentDidMount() {
-    this.loadInfo();
+  async componentWillMount() {
+    await this.loadInfo();
+  }
+
+  async componentDidMount() {
+    //await this.loadInfo();
   }
 
   componentWillUnmount() {
@@ -218,8 +222,10 @@ export default class Step5 extends AbstractStep {
     if(!newContract && !transactionHash)
       return false;
 
-    if(newContract)
-    await this.fetchContractData(newContract);
+    if(newContract){
+      this.setState( Object.assign(this._state.contractInstance,{address:newContract}) );
+      await this.fetchContractData(newContract);
+    }
     if(transactionHash)
       await this.fetchDeploymentData(transactionHash);
     await this.resolveOwnership( newContract );
@@ -259,7 +265,6 @@ export default class Step5 extends AbstractStep {
 
   async fetchContractData (contractAddress){
     const {web3Service} = this.props;
-    this.setState( Object.assign(this._state.contractInstance,{address:contractAddress}) );
     const data = await web3Service.getContractData(contractAddress);
     this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
     //await this.isReleased();//TODO find better way to load isReleased without UI blip
@@ -295,12 +300,11 @@ export default class Step5 extends AbstractStep {
 
   render() {
     const {web3Service,store} = this.props;
-    const {store:{activeApp}} = this.props;
-    const EXPLORER = web3Config[store.activeApp][web3Service.network].EXPLORER;
+    const EXPLORER = web3Config[this.activeApp][web3Service.network].EXPLORER;
 
     return (
       <StepLayout
-        activeApp = {activeApp}
+        activeApp = {this.activeApp}
         activeStepKey={this.activeStepKey}
         onNext={this.goNext}
         nextTitle={null}
@@ -315,7 +319,9 @@ export default class Step5 extends AbstractStep {
                 </div>
                 <div className="input-block-container value center text-center">
                   <label className="label">Contract : </label>
-                  <a target="_blank" href={EXPLORER+'/address/'+this._state.contractInstance.address}>{this._state.contractInstance.address}</a>
+                  {this._state.contractInstance && this._state.contractInstance.address &&
+                    <a target="_blank" href={EXPLORER+'/address/'+this._state.contractInstance.address}>{this._state.contractInstance.address}</a>
+                  }
                 </div>
               </div>
             }

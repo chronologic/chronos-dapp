@@ -18,11 +18,12 @@ class Layout extends React.Component {
     super(props);
     this.store = initStore(false, props.store);
     this.web3Service = initWeb3Service(false, props.web3Service);
+    this.activeApp = props.activeApp;
   }
 
   async componentDidMount() {
-    const { web3Service,store } = this;
-    if (await web3Service.init(store.activeApp)) {
+    const { web3Service } = this;
+    if (await web3Service.init(this.activeApp)) {
       if (!web3Service.connectedToMetaMask) {
         showNoMetaMaskAlert();
       }
@@ -39,7 +40,7 @@ class Layout extends React.Component {
     return (
       <Provider store={this.store} web3Service={this.web3Service}>
         <div>
-          <Header {...{ activeApp:this.store.activeApp }}/>
+          <Header {...{ activeApp: this.props.activeApp}}/>
           {this.props.children}
           <Footer />
         </div>

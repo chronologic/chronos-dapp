@@ -10,7 +10,7 @@ export default class Step2Page extends React.Component {
 
   render() {
     return (
-      <Layout {...this.props}>
+      <Layout {...Object.assign({},this.props,{activeApp:'chronos'})}>
         <Step2 />
       </Layout>
     );

@@ -17,7 +17,7 @@ import {Boxloader} from '../../lib/loader';
 @observer
 export default class Step4 extends AbstractStep {
   constructor(props) {
-    super('PUBLISH', props);
+    super('PUBLISH', 'chronos', props);
     this.runDeploy = this.runDeploy.bind(this);
   }
 
@@ -151,13 +151,12 @@ export default class Step4 extends AbstractStep {
 
   render() {
 
-    const {web3Service,store} = this.props;
-    const {store:{activeApp}} = this.props;
-    const EXPLORER = web3Config[store.activeApp][web3Service.network].EXPLORER;
+    const {web3Service} = this.props;
+    const EXPLORER = web3Config[this.activeApp][web3Service.network].EXPLORER;
 
     return (
       <StepLayout
-        activeApp = {activeApp}
+        activeApp = {this.activeApp}
         activeStepKey={this.activeStepKey}
         onNext={this.runDeploy}
         nextTitle="Deploy"
