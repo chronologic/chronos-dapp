@@ -13,7 +13,9 @@ module.exports = {
       '/chronos/step-2': { page: '/chronos/step-2' },
       '/chronos/step-3': { page: '/chronos/step-3'},
       '/chronos/step-4': { page: '/chronos/step-4'},
-      '/chronos/step-5': { page: '/chronos/step-5'}
+      '/chronos/step-5': { page: '/chronos/step-5'},
+      '/debt': { page: '/debt/index' },
+      '/debt/step-1': { page: '/debt/step-1' }
     }
   },
   webpack: (config, { dev }) => {

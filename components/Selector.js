@@ -48,7 +48,7 @@ export default class Selector extends Component {
   }
 
   choosePath = path => event =>{
-    const available = ['chronos'];
+    const available = ['chronos','debt'];
     if(available.indexOf(path) < 0)
       return showInfo('Coming Soon !!!');
 
