@@ -10,7 +10,9 @@ export default class AbstractStep extends React.Component {
   constructor(activeStepKey, props) {
     super(props);
     this.activeStepKey = activeStepKey;
-    this.activeStep = NAVIGATION_STEPS[this.activeStepKey];
+    this.activeApp = props.store.activeApp;
+
+    this.activeStep = NAVIGATION_STEPS[this.activeApp][this.activeStepKey];
     if (!this.activeStep) {
       throw new Error('No steps with key', this.activeStepKey);
     }
@@ -38,8 +40,9 @@ export default class AbstractStep extends React.Component {
 
   validatePrevState() {
     const prevProps = [];
+    const STEPS = NAVIGATION_STEPS[this.activeApp];
     for (let idx = this.activeStep.idx - 1; idx > 0; idx -= 1) {
-      const prevStep = Object.values(NAVIGATION_STEPS).find(step => step.idx === idx);
+      const prevStep = Object.values(STEPS).find(step => step.idx === idx);
       if (prevStep) {
         prevProps.push(...ALL_PROPERTIES.reduce((result, value) => {
           if (prevStep.propertyKeys.includes(value.name)) {

@@ -27,9 +27,10 @@ export default class Step2 extends AbstractStep {
 
   render() {
 
-    const {web3Service} = this.props;
+    const {web3Service,store:{activeApp}} = this.props;
     return (
       <StepLayout
+        activeApp = {activeApp}
         activeStepKey={this.activeStepKey}
         onNext={this.goNext}
         web3Disabled = {this.web3Disabled(web3Service) }

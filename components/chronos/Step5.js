@@ -295,10 +295,12 @@ export default class Step5 extends AbstractStep {
 
   render() {
     const {web3Service,store} = this.props;
+    const {store:{activeApp}} = this.props;
     const EXPLORER = web3Config[store.activeApp][web3Service.network].EXPLORER;
 
     return (
       <StepLayout
+        activeApp = {activeApp}
         activeStepKey={this.activeStepKey}
         onNext={this.goNext}
         nextTitle={null}
