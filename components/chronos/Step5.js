@@ -111,8 +111,7 @@ export default class Step5 extends AbstractStep {
       ReactTooltip.rebuild();
   }
 
-    _debtContractFields = ['tokenName','tokenSymbol','initialAmount','exchangeRate',
-        'decimalUnits','dayLength','loanTerm','loanCycle','interestRate','debtOwner']
+
 
   async componentWillMount() {
     await this.loadInfo();
