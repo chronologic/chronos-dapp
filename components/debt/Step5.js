@@ -21,8 +21,16 @@ import {Propagatesloader} from "../../lib/loader";
 export default class Step5 extends AbstractStep {
     constructor(props) {
         super('DEBT_WATCH', 'debt', props);
-        this.runDeploy = this.runDeploy.bind(this);
     }
+
+    @observable
+      _state = {
+        loadingData: true,
+        loadinghistoryData: true,
+        contractInstance:{},
+        deploymentData:{},
+        allocationHistory:{}
+      }
 
     const ContractData = data => {
         const explorer = data.explorer;
