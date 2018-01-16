@@ -53,8 +53,33 @@ export default class Step5 extends AbstractStep {
         return (Data);
     }
 
+    async componentDidMount(){
 
+    }
 
+    async componentWillMount(){
+        await this.loadInfo();
+    }
+
+async loadInfo(){
+    const {props:{store}} =  this;
+    let {query:{newContract,transactionHash}} = Router;
+
+    if(!newContract && !transactionHash)
+        return false;
+
+    if(newContract){
+        this.setState( Object.assign(this._state.contractInstance,{address:newContract}) );
+        await this.fetchContractData(newContract);
+    }
+    if(transactionHash){
+        await this.fetchDeploymentData(transactionHash);
+        await this.resolveOwnership( newContract );
+        await this.fetchAllocationHistory(newContract);
+    }
+    ReactTooltip.rebuild();
+    this.fetchUpdate();
+}
 
 
 
