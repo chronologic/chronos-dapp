@@ -81,6 +81,18 @@ async loadInfo(){
     this.fetchUpdate();
 }
 
+async fetchUpdates(){
+    const that = this;
+    const newContract = this._state.contractInstance.address;
+    this.setState({updateFetcher: setInterval( ()=>{
+        console.log('updating...')
+        that.fetchContractData(newContract);
+        that.fetchAllocationHistory(newContract);
+    }, 10000)
+    });
+    this.clearUpdater()
+}
+
 
 
 
