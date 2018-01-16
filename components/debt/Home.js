@@ -35,12 +35,11 @@ export default class Home extends AbstractHome {
         <section className="home">
           <div className="crowdsale">
             <div className="container">
-              <h1 className="title">Welcome to Chronos DAPP </h1>
+              <h1 className="title">Welcome to Debt Contract  DAPP </h1>
               <p className="description">
-                This DAPP (Decentralized App) allows anyone to create his/hers own version of
-                minting token easily.<br />
-              The steps ahead will help you set up the features of your very own version of the
-                DAY token.
+                This DAPP (Decentralized App) allows anyone to deploy their own Debt Smart Contract easily,<br></br>
+                 to serve as mediator between the two parties of a loan agreement..<br />
+               The steps ahead will help you set up the features of your very own Debt Dmart Contract.
                 <br></br><br></br>
                 * Click <a href='#' onClick={this.onWatch}>here</a>, if you already have a deployed contract.
               </p>
