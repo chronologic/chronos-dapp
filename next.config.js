@@ -8,6 +8,7 @@ module.exports = {
     return {
       './': { page: '/' },
       '/index': { page: '/index' },
+      '/chronos-home': { page: '/chronos-home' },
       '/step-1': { page: '/step-1' },
       '/step-2': { page: '/step-2' },
       '/step-3': { page: '/step-3'},

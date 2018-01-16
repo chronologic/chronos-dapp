@@ -1,18 +1,22 @@
 import React from 'react';
 
-import Layout from '../components/Layout';
-import Home from '../components/Home';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
+import Selector from '../components/Selector';
 
 export default class Index extends React.Component {
-  static async getInitialProps(props) {
-    return Layout.getInitialProps(props);
-  }
+  /*static async getInitialProps(props) {
+    return super.getInitialProps(props);
+  }*/
 
   render() {
     return (
-      <Layout {...this.props}>
-        <Home />
-      </Layout>
+      <div>
+        <Header />
+          <Selector />
+        <Footer />
+      </div>
     );
   }
 }
