@@ -55,7 +55,8 @@ export default class AbstractStep extends React.Component {
       }
     }
     const { props: { store = {} } } = this;
-    if (prevProps.some(({ name, validator }) => !store[name] || !validator(store[name]))) {
+    const { props: { web3Service:{web3} } } = this;
+    if (prevProps.some(({ name, validator }) => !store[name] || !validator(store[name],web3))) {
       Router.push('/'+this.activeApp);
     }
   }
