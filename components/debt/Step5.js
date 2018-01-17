@@ -93,8 +93,17 @@ async fetchUpdates(){
     this.clearUpdater()
 }
 
+    async fetchContractData (contractAddress){
+        const {web3Service} = this.props;
+        const data = await web3Service.getContractData(contractAddress);
+        this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
+
+    }
 
 
+    clearUpdater(){
+        clearInterval(this.state.updateFetcher);
+    }
 
 
 
