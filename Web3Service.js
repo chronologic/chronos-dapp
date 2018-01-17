@@ -9,6 +9,7 @@ import dayFaucetABI from './abi/dayFaucetABI';
 import debtTokenDeployerABI from './abi/debtTokenDeployerABI';
 
 import web3Config from './lib/web3Utils.js'
+import debtTokenABI from "./abi/debtTokenABI";
 
 let instance = null;
 let TOKEN_CONTRACT_ADDRESS,
@@ -528,6 +529,21 @@ export default class Web3Service {
   	      isReleased : (await Bb.fromCallback( callback => childContract.released.call(callback) )).valueOf(),
   	    }
         break;
+        case 'debt':
+          const debtContract = web3.eth.contract(debtTokenABI).at(contract);
+          data = {
+            address: contract,
+            tokenName: (await Bb.fromCallback( callback => debtContract.name.call(callback) )).valueOf(),
+            symbol: (await Bb.fromCallback( callback => debtContract.symbol.call(callback) )).valueOf(),
+            dayLength: (await Bb.fromCallback( callback => debtContract.dayLength.call(callback) )).valueOf(),
+            loanTerm: (await Bb.fromCallback( callback => debtContract.loanTerm.call(callback) )).valueOf(),
+            exchangeRate: (await Bb.fromCallback( callback => debtContract.exchangeRate.call(callback) )).valueOf(),
+            loanCycle: (await Bb.fromCallback( callback => debtContract.interestCycleLength.call(callback) )).valueOf(),
+            interestRate: (await Bb.fromCallback( callback => debtContract.interestRate.call(callback) )).valueOf(),
+            initialLoanAmount: (await Bb.fromCallback( callback => debtContract.getLoanValue(true).call(callback) )).valueOf(),
+              LoanAmount: (await Bb.fromCallback( callback => debtContract.getLoanValue.call(callback) )).valueOf(),
+          }
+g
     }
     return data;
   }
