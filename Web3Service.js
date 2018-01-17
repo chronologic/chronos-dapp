@@ -199,6 +199,13 @@ export default class Web3Service {
     return txn;
   }
 
+ async updateInterest(contract){
+      const { web3 } = this;
+      const childContract = web3.eth.contract(debtTokenABI).at(contract);
+      const txn = await Bb.fromCallback( callback => childContract.updateInterest(callback));
+      return txn;
+ }
+
   async releaseTokens(contract){
     const releasetime = Math.round((new Date()).getTime() / 1000);
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
@@ -241,6 +248,13 @@ export default class Web3Service {
     ) );
     return postAllocate;
   }
+
+  async updateInterest(contract){
+        const { web3 } = this;
+        const childContract = web3.eth.contract(debtTokenABI).at(contract);
+        const txn = await Bb.fromCallback( callback => childContract.updateInterest(callback));
+        return txn;
+    }
 
   convertMiningPower = (value,reverse) => {
     if(reverse)
@@ -496,6 +510,9 @@ export default class Web3Service {
     });
   }
 
+  async updateInterest(){
+
+}
   async getContractData(contract){
     console.log('Contract: ',contract)
     let data;
