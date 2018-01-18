@@ -119,6 +119,23 @@ async fundLoan(){
 
     }
 
+    async awaitMined (transaction){
+        const {web3Service} = this.props;
+        const mined = await web3Service.trackTransaction(transaction);
+        return mined;
+    }
+
+    async checkConfirmations (transaction){
+        const {web3Service} = this.props;
+        const confirmations = await web3Service.fetchConfirmations(transaction);
+        console.log(confirmations)
+        if(confirmations < 1 )
+            return await this.checkConfirmations(transaction);
+        else{
+            this.setState( Object.assign(this._state,{loadingData:true}) );
+            return confirmations;
+        }
+    }
 
     clearUpdater(){
         clearInterval(this.state.updateFetcher);
