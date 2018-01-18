@@ -19,6 +19,7 @@ module.exports = {
       '/debt/step-2': { page: '/debt/step-2' },
       '/debt/step-3': { page: '/debt/step-3' },
       '/debt/step-4': { page: '/debt/step-4' },
+        '/debt/step-5': { page: '/debt/step-5'}
     }
   },
   webpack: (config, { dev }) => {

@@ -576,7 +576,7 @@ export default class Web3Service {
             isLoanFunded: (await Bb.fromCallback( callback => debtContract.isLoanFunded.call(callback) )).valueOf(),
             isTermOver: (await Bb.fromCallback( callback => debtContract.isTermOver.call(callback) )).valueOf()
           }
-g
+
     }
     return data;
   }
@@ -588,7 +588,19 @@ g
     }
     return data;
   }
-}
+
+  async isLoanRefunded(contract){
+      let { web3 } = this;
+      const block = await web3.eth.getBlock("latest");
+
+      if(this.getContractData(contract).loanActivation < block.timestamp && !this.getContractData(contract).isLoanRefunded()){
+      return true;
+      }
+      return false;
+  }
+
+
+
 
 export function initWeb3Service(isServer, source) {
   if (isServer) {

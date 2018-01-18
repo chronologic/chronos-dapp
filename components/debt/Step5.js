@@ -141,9 +141,51 @@ async fundLoan(){
         clearInterval(this.state.updateFetcher);
     }
 
+    goNext = () => {
+        throw new Error('No passage here!!!');
+    };
 
 
     render() {
+        const {web3Service,store} = this.props;
+        const EXPLORER = web3Config[this.activeApp][web3Service.network].EXPLORER;
 
+        return(
+            <StepLayout
+            activeApp={ this.activeApp}
+            activeStepKey={this.activeStepKey}
+            onNext={this.goNext}
+            nextTitle={null}
+            web3Disabled={this.web3Disabled(web3Service) || this._state.notReady}
+            >
+                <div>
+                    {(this._state.loadingData || !this._state.contractInstance ) &&
+                    <div className="steps-content bottom-margin">
+                        <div className="input-block-container center text-center">
+                        <Propagatesloader {...{color:'#123abc',loading: true, size:16,msg:'loading Contract data ...'}}/>
+                    </div>
+                    <div className="input-block-container value center text-center">
+                        <label className="label">Contract :</label>
+                        {this._state.contractInstance && this._state.contractInstance.address &&
+                        <a target="_blank" href={EXPLORER+'/address/'+this._state.contractInstance.address}>{this._state.contractInstance.address}</a>
+                        }
+                    </div>
+                    }
+                    { !this._state.loadingData && this._state.contractInstance &&
+                        <div>
+                            <div className="steps-content contract_info">
+                                <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
+                                <div className='contract_clear bottom-margin'></div>
+                                { this._state.contractInstance && ! this._state.contractInstance}
+
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </StepLayout>
+        )
     }
 }
