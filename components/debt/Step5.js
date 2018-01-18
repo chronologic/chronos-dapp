@@ -29,7 +29,10 @@ export default class Step5 extends AbstractStep {
         loadinghistoryData: true,
         contractInstance:{},
         deploymentData:{},
-        allocationHistory:{}
+        allocationHistory:{},
+        funded:'',
+        refunded:'',
+
       }
 
     const ContractData = data => {
@@ -96,8 +99,19 @@ async fetchUpdates(){
 async updateInterest(){
     const {web3Service} =  this.props;
     const updated = await web3Service.updateInterest(this._state.contractInstance.address);
-    this.setState( Object.assign(this._state.contractInstance))
+    this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
 }
+
+async fundLoan(){
+    const {web3Service} =  this.props;
+    const funded = await web3Service.fundLoan(this._state.contractInstance.address);
+    this.setState( {funded:funded});
+}
+    async refundLoan(){
+        const {web3Service} =  this.props;
+        const refunded = await web3Service.refundLoan(this._state.contractInstance.address);
+        this.setState( {refunded:refunded});
+    }
     async fetchContractData (contractAddress){
         const {web3Service} = this.props;
         const data = await web3Service.getContractData(contractAddress);
