@@ -5,13 +5,33 @@ import ReactTooltip from 'react-tooltip'
 import Router from 'next/router';
 
 import { PROPERTIES as ALL_PROPERTIES } from '../../lib/consts';
-import {showError} from '../../lib/alerts';
 import web3Config from '../../lib/web3Utils';
 import AbstractStep from '../AbstractStep';
 import StepLayout from '../StepLayout';
 import { DEBT_CONTRACT_LABELS } from "../../lib/consts";
 import {showError,showInfo,confirmProcess} from "../../lib/alerts";
 import {Boxloader} from '../../lib/loader';
+
+const ContractData = data => {
+    const explorer = data.explorer;
+    data = data.data;
+    let Data = [],
+        index = 0;
+    for(let d in data){
+        if(d=='address')
+            Data.push(<div className={'col col-3'} key={d}>
+                <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
+                <p className='' ><a target="_blank" href={explorer+'address/'+data[d]}>{ data[d] }</a></p>
+            </div>);
+        else
+            Data.push(<div className={'col col-3'} key={d}>
+                <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
+                <p className='' >{ data[d] }</p>
+            </div>);
+        index++;
+    }
+    return (Data);
+}
 
 import {Propagatesloader} from "../../lib/loader";
 
@@ -35,26 +55,7 @@ export default class Step5 extends AbstractStep {
 
       }
 
-    const ContractData = data => {
-        const explorer = data.explorer;
-        data = data.data;
-        let Data = [],
-            index = 0;
-        for(let d in data){
-            if(d=='address')
-                Data.push(<div className={'col col-3'} key={d}>
-                    <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
-                    <p className='' ><a target="_blank" href={explorer+'address/'+data[d]}>{ data[d] }</a></p>
-                </div>);
-            else
-                Data.push(<div className={'col col-3'} key={d}>
-                    <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
-                    <p className='' >{ data[d] }</p>
-                </div>);
-            index++;
-        }
-        return (Data);
-    }
+
 
     async componentDidMount(){
 
@@ -158,33 +159,7 @@ async fundLoan(){
             nextTitle={null}
             web3Disabled={this.web3Disabled(web3Service) || this._state.notReady}
             >
-                <div>
-                    {(this._state.loadingData || !this._state.contractInstance ) &&
-                    <div className="steps-content bottom-margin">
-                        <div className="input-block-container center text-center">
-                        <Propagatesloader {...{color:'#123abc',loading: true, size:16,msg:'loading Contract data ...'}}/>
-                    </div>
-                    <div className="input-block-container value center text-center">
-                        <label className="label">Contract :</label>
-                        {this._state.contractInstance && this._state.contractInstance.address &&
-                        <a target="_blank" href={EXPLORER+'/address/'+this._state.contractInstance.address}>{this._state.contractInstance.address}</a>
-                        }
-                    </div>
-                    }
-                    { !this._state.loadingData && this._state.contractInstance &&
-                        <div>
-                            <div className="steps-content contract_info">
-                                <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
-                                <div className='contract_clear bottom-margin'></div>
-                                { this._state.contractInstance && ! this._state.contractInstance}
 
-                            </div>
-                        </div>
-
-                    }
-
-
-                </div>
             </StepLayout>
         )
     }
