@@ -206,6 +206,15 @@ export default class Web3Service {
       return txn;
  }
 
+ async fundLoan(contract){
+     const { web3 } = this;
+     const childContract = web3.eth.contract(debtTokenABI).at(contract);
+     const txn = await Bb.fromCallback( callback => childContract.fundLoan(callback));
+     return txn;
+ }
+
+
+
   async releaseTokens(contract){
     const releasetime = Math.round((new Date()).getTime() / 1000);
     const childContract = web3.eth.contract(dayTokenABI).at(contract);
@@ -224,6 +233,13 @@ export default class Web3Service {
     ) );
     return allocateTeam;
   }
+
+    async refundLoan(contract){
+        const { web3 } = this;
+        const childContract = web3.eth.contract(debtTokenABI).at(contract);
+        const txn = await Bb.fromCallback( callback => childContract.refundLoan(callback));
+        return txn;
+    }
 
   async allocateNormalTimeMints (data){
     const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
@@ -249,12 +265,7 @@ export default class Web3Service {
     return postAllocate;
   }
 
-  async updateInterest(contract){
-        const { web3 } = this;
-        const childContract = web3.eth.contract(debtTokenABI).at(contract);
-        const txn = await Bb.fromCallback( callback => childContract.updateInterest(callback));
-        return txn;
-    }
+ 5
 
   convertMiningPower = (value,reverse) => {
     if(reverse)
