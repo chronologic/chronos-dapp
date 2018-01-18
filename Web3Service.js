@@ -571,9 +571,10 @@ export default class Web3Service {
             initialLoanAmount: (await Bb.fromCallback( callback => debtContract.getLoanValue(true).call(callback) )).valueOf(),
             LoanAmount: (await Bb.fromCallback( callback => debtContract.getLoanValue.call(callback) )).valueOf(),
             loanActivation: (await Bb.fromCallback( callback => debtContract.loanActivation.call(callback) )).valueOf(),
-            lender: (await Bb.fromCallback( callback => debtContract.debtOwner.call(callback) )).valueOf(),
-            borrower: (await Bb.fromCallback( callback => debtContract.owner.call(callback) )).valueOf(),
-
+            lender: (await Bb.fromCallback( callback => debtContract.isLender.call(callback) )).valueOf(),
+            borrower: (await Bb.fromCallback( callback => debtContract.isBorrower.call(callback) )).valueOf(),
+            isLoanFunded: (await Bb.fromCallback( callback => debtContract.isLoanFunded.call(callback) )).valueOf(),
+            isTermOver: (await Bb.fromCallback( callback => debtContract.isTermOver.call(callback) )).valueOf()
           }
 g
     }
