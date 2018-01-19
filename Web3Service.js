@@ -496,6 +496,12 @@ export default class Web3Service {
         return owner.toLowerCase() === web3.eth.defaultAccount.toLowerCase();
     }
 
+    async isLender(contract){
+        const {web3} = this;
+        const debtContract = web3.eth.contract(debtTokenABI).at(contract);
+        const lender = await BB.fromCallback(callback => debtContract.isLender.call(callback));
+        return lender;
+    }
     async getAllocationHistory(contract) {
         const {web3} = this;
         let fromBlock = (await this.fetchBlockNumber()) - 0x2710; //set default fromBlock to 10000 blocks ago
