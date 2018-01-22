@@ -45,7 +45,7 @@ export default class Step5 extends AbstractStep {
 
     @observable
       _state = {
-        loadingData: true,
+        loadingData: true
         loadinghistoryData: true,
         contractInstance:{},
         deploymentData:{},
@@ -183,9 +183,9 @@ async fundLoan(){
                     { !this._state.loadingData && this._state.contractInstance &&
                     <div>
                         <div className="input-block-container center text-center">
-                            <button className="button button_fill" onClick={this.updateInterest}>UPDATE INTEREST</button>
+                            <button className="button button_btn" onClick={this.updateInterest}>UPDATE INTEREST</button>
 
-                            <button className="button button_fill" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button className="button button_btn" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />

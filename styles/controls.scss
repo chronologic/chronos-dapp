@@ -21,6 +21,13 @@
     background-color: $accent-color;
     color: #fff;
   }
+  &_btn {
+    background: #ffffff;
+    border: solid $accent-color 2px;
+    text-decoration: none;
+  }
+
+
   &_secondary_fill{
     background-color: $secondary-accent-color;
     color: #fff;
@@ -39,6 +46,10 @@
 .button:disabled{
      @include background-opacity($accent-color, 0.7);
      cursor: auto;
+}
+.button_btn:disabled{
+  @include background-opacity(#ffffff, 0.7);
+  cursor: auto;
 }
 .button_secondary_fill:disabled{
      @include background-opacity($secondary-accent-color, 0.7);
