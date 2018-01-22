@@ -172,8 +172,9 @@ async fundLoan(){
                             <Propagatesloader {...{color:'#123abc',loading: true, size:16,msg:'loading Contract data ...'}}/>
                         </div>
                         <div className="input-block-container center text-center">
-                            <button className="button button_fill" onClick={} >SCHEDULE UPDATE</button>
-                            <button className="button button_fill" onClick={this.updateInterest} disabled={true} >UPDATE INTEREST</button>
+                            <button className="button button_fill" onClick={this.updateInterest}>UPDATE INTEREST</button>
+
+                            <button className="button button_fill" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div className="input-block-container value center text-center">
                             <label className="label">Contract :</label>
