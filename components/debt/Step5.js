@@ -45,7 +45,7 @@ export default class Step5 extends AbstractStep {
 
     @observable
       _state = {
-        loadingData: true
+        loadingData: true,
         loadinghistoryData: true,
         contractInstance:{},
         deploymentData:{},
