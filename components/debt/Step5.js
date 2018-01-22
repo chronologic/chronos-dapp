@@ -171,11 +171,7 @@ async fundLoan(){
                         <div className="input-block-container center text-center">
                             <Propagatesloader {...{color:'#123abc',loading: true, size:16,msg:'loading Contract data ...'}}/>
                         </div>
-                        <div className="input-block-container center text-center">
-                            <button className="button button_fill" onClick={this.updateInterest}>UPDATE INTEREST</button>
 
-                            <button className="button button_fill" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                        </div>
                         <div className="input-block-container value center text-center">
                             <label className="label">Contract :</label>
                             {this._state.contractInstance && this._state.contractInstance.address &&
@@ -186,6 +182,11 @@ async fundLoan(){
                         }
                     { !this._state.loadingData && this._state.contractInstance &&
                     <div>
+                        <div className="input-block-container center text-center">
+                            <button className="button button_fill" onClick={this.updateInterest}>UPDATE INTEREST</button>
+
+                            <button className="button button_fill" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
