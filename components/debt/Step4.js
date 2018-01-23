@@ -180,7 +180,6 @@ export default class Step4 extends AbstractStep {
             </div>
             <div className="input-block-container">
               {this.renderProperty(this.properties.exchangeRate, { side: 'left' })}
-              {this.renderProperty(this.properties.decimalUnits, { side: 'right' })}
             </div>
           </div>
         }
