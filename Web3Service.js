@@ -584,7 +584,8 @@ export default class Web3Service {
                     borrower: (await Bb.fromCallback(callback => debtContract.isBorrower.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
                     isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf()
-                }
+                  }
+                  break;
 
         }
         return data;
@@ -609,9 +610,6 @@ export default class Web3Service {
         return false;
     }
 }
-
-
-
 
 export function initWeb3Service(isServer, source) {
   if (isServer) {
