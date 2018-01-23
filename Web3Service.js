@@ -178,9 +178,9 @@ export default class Web3Service {
 
 
     async requestFromFaucet() {
-        const tokenBalance = (await Bb.fromCallback(callback => this.faucetInstance.getTokensBalance.call(callback))).valueOf();
-        const waitTime = (await Bb.fromCallback(callback => this.faucetInstance.waitTime.call(callback))).valueOf();
-        const lastRequest = (await Bb.fromCallback(callback => this.faucetInstance.lastRequest.call(this.accounts[0], callback))).valueOf();
+        const tokenBalance = Number( (await Bb.fromCallback(callback => this.faucetInstance.getTokensBalance.call(callback))).valueOf() );
+        const waitTime = Number( (await Bb.fromCallback(callback => this.faucetInstance.waitTime.call(callback))).valueOf() );
+        const lastRequest = Number( (await Bb.fromCallback(callback => this.faucetInstance.lastRequest.call(this.accounts[0], callback))).valueOf() );
         const now = Math.floor(new Date().getTime() / 1000);
 
         if (tokenBalance < MIN_FEE)
