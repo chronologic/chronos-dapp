@@ -28,7 +28,8 @@ export default class AbstractStep extends React.Component {
     ), {});
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const{web3Service:{web3} } = this;
     this.validatePrevState();
   }
 
