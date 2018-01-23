@@ -35,7 +35,7 @@ export default class Web3Service {
         const {web3} = this;
         return {
             debt: {
-                topic: web3.sha3("DebtTokenCreated(address, address, uint256)"),
+                topic: web3.sha3("DebtTokenCreated(address,address,uint256)"),
                 params: ['address', 'address', 'uint256'],
                 eventFxn: 'DebtTokenCreated',
             },
@@ -157,13 +157,13 @@ export default class Web3Service {
             case 'debt':
                 hash = await Bb.fromCallback((callback) => {
                     deployerInstance.createDebtToken(
-                        contractData.tokenSymbol,
+                        contractData.tokenName,
+                        contractData.symbol,
                         contractData.initialAmount,
                         contractData.exchangeRate,
-                        contractData.decimalUnits,
                         contractData.dayLength,
                         contractData.loanTerm,
-                        contractData.loanCycle,
+                        contractData.interestCycle,
                         contractData.interestRate,
                         contractData.debtOwner,
                         transactionOptions,
@@ -577,8 +577,8 @@ export default class Web3Service {
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
                     interestRate: (await Bb.fromCallback(callback => debtContract.interestRate.call(callback))).valueOf(),
-                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue(true).call(callback))).valueOf(),
-                    LoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(callback))).valueOf(),
+                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(),
+                    LoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(),
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     lender: (await Bb.fromCallback(callback => debtContract.isLender.call(callback))).valueOf(),
                     borrower: (await Bb.fromCallback(callback => debtContract.isBorrower.call(callback))).valueOf(),
@@ -593,9 +593,10 @@ export default class Web3Service {
 
     async getDeploymentData(transaction) {
         let {web3} = this;
+
         const data = {
             creationCode: (await Bb.fromCallback(callback => web3.eth.getTransaction(transaction, callback))).input,
-            abi: JSON.stringify(dayTokenABI),
+            abi: this.deployerAbis[this.activeApp],
         }
         return data;
     }
