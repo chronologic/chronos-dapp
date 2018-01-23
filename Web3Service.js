@@ -359,13 +359,14 @@ export default class Web3Service {
     async fetchNewChild(hash) {
         const {web3} = this;
         const receipt = await this.fetchReceipt(hash);
+        const that = this;
 
         let foundLog;
         if (!receipt.logs || typeof receipt.logs !== 'object' || receipt.logs.length < 1)
             return false;
         receipt.logs.forEach(function (l) {
             if (l.address.toLowerCase() === DEPLOYER_ADDRESS.toLowerCase())
-                if (l.topics[0] == this.childTopics()[this.activeApp].topic)
+                if (l.topics[0] == that.childTopics()[that.activeApp].topic)
                     foundLog = l.data;
         })
         if (!foundLog)
