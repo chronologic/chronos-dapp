@@ -13,12 +13,12 @@
 
 .selector {
   position: fixed;
-  min-height: 780px;
   height: 100%;
   width: 100%; }
 
 .selector {
-  background-size: 100%; }
+  background-size: 100%;
+  overflow-y: auto; }
 
 .selector.chronos-dapp {
     background: url("/chronos-dapp/static/selector-screen/day_token_bg.jpg"), rgba(0, 0, 0, 0.75); }
@@ -27,15 +27,15 @@
     background: url("/chronos-dapp/static/selector-screen/smart_contract_bg.jpg"), rgba(0, 0, 0, 0.75); }
 
 .selector-group {
-  margin-top: 13%;
-  min-height: 300px;
-  padding-top: 12%; }
+  min-height: 600px;
+  height: 100%;
+  padding-top: 10%; }
 
 .selector-group .selector-box {
     width: 37%; }
 
 .selector-box {
-  height: 400px;
+  height: 52%;
   margin: 0 20px 20px 20px;
   display: inline-block;
   background-size: contain;
@@ -606,6 +606,11 @@ body {
     background-color: #2f4ffd;
     color: #fff; }
 
+.button_btn {
+    background: #ffffff;
+    border: solid #2f4ffd 2px;
+    text-decoration: none; }
+
 .button_secondary_fill {
     background-color: #fd2f4f;
     color: #fff; }
@@ -621,6 +626,12 @@ body {
   background: #2f4ffd;
   /* The Fallback */
   background: rgba(47, 79, 253, 0.7);
+  cursor: auto; }
+
+.button_btn:disabled {
+  background: #ffffff;
+  /* The Fallback */
+  background: rgba(255, 255, 255, 0.7);
   cursor: auto; }
 
 .button_secondary_fill:disabled {
@@ -905,7 +916,7 @@ body {
     height: 120px;
     background-position: 0 -480px; }
 </style><div><div id="__next"><div data-reactroot=""><div><header class="header"><div class="container"><a class="logo" href="/chronos-dapp/chronos/"><div></div></a></div></header><section class="steps"><div class="steps-navigation"><div class="container"><div class="step-navigation step-navigation_active">Token Setup</div><div class="step-navigation">Timemint Setup</div><div class="step-navigation">Contract Setup</div><div class="step-navigation">Publish</div><div class="step-navigation">Watch Page</div></div></div><div class="steps-content container step_token-setup"><div class="about-step"><p class="title">Token Setup</p><p class="description">Select the features for your own version of the DAY token</p></div><div class="input-block-container"><div class="left"><label class="label">Token name<a class="label_info" data-tip="The NAME of your token, as shown on the block explorer"></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div><div class="input-block-container"><div class="left"><label class="label">Symbol<a class="label_info" data-tip="The token TICKER, as shown on the block explorer"></a></label><input type="text" class="input" value=""/><p style="color:red;font-weight:bold;font-size:12px;width:100%;height:10px"></p></div></div></div><div class="button-container"><button class="button button_fill" disabled="">Continue</button><span class="guide-span">* If you need any additional help deploying your own version of the DAY token, refer to <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">this guide</a>.</span></div><div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div></section><footer class="footer"><div class="container"><p class="rights"> ChronoLogic. All rights reserved.</p><a href="/chronos-dapp/"><div class="logo"></div></a><div class="socials"><a href="https://chronologic.network" class="social social_web" target="_blank" title="Website"><div></div></a><a href="https://blog.chronologic.network " class="social social_blog" target="_blank" title="Blog"><div></div></a><a href="https://chronologic.network/paper" class="social social_whitepaper" target="_blank" title="Whitepaper"><div></div></a><a href="https://github.com/chronologic/" class="social social_github" target="_blank" title="Github"><div></div></a><a href="https://blog.chronologic.network/chronos-platform/home" class="social social_help" target="_blank" title="Training and Support"><div></div></a></div></div></footer></div></div></div><div id="__next-error"></div></div><div><script>
-          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/chronos/step-1","query":{},"buildId":"f9332a41-4b36-4561-9027-9248164a6e95","buildStats":{"app.js":{"hash":"5f6313f8292de7ec4f6ab10091667e7b"}},"assetPrefix":"/chronos-dapp","nextExport":true,"err":null,"chunks":[]}
+          __NEXT_DATA__ = {"props":{"store":{}},"pathname":"/chronos/step-1","query":{},"buildId":"d68f55d1-c71e-4d20-9375-afc0d73ec683","buildStats":{"app.js":{"hash":"1a312cd6be98f37abc665ec5abcf821d"}},"assetPrefix":"/chronos-dapp","nextExport":true,"err":null,"chunks":[]}
           module={}
           __NEXT_LOADED_PAGES__ = []
           __NEXT_LOADED_CHUNKS__ = []
@@ -917,4 +928,4 @@ body {
           __NEXT_REGISTER_CHUNK = function (chunkName, fn) {
             __NEXT_LOADED_CHUNKS__.push({ chunkName: chunkName, fn: fn })
           }
-        </script><script async="" id="__NEXT_PAGE__/chronos/step-1" type="text/javascript" src="/chronos-dapp/_next/f9332a41-4b36-4561-9027-9248164a6e95/page/chronos/step-1.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/chronos-dapp/_next/f9332a41-4b36-4561-9027-9248164a6e95/page/_error.js"></script><div></div><script type="text/javascript" src="/chronos-dapp/_next/5f6313f8292de7ec4f6ab10091667e7b/app.js" async=""></script></div></body></html>
+        </script><script async="" id="__NEXT_PAGE__/chronos/step-1" type="text/javascript" src="/chronos-dapp/_next/d68f55d1-c71e-4d20-9375-afc0d73ec683/page/chronos/step-1.js"></script><script async="" id="__NEXT_PAGE__/_error" type="text/javascript" src="/chronos-dapp/_next/d68f55d1-c71e-4d20-9375-afc0d73ec683/page/_error.js"></script><div></div><script type="text/javascript" src="/chronos-dapp/_next/1a312cd6be98f37abc665ec5abcf821d/app.js" async=""></script></div></body></html>

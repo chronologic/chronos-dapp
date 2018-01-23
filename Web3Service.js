@@ -35,7 +35,7 @@ export default class Web3Service {
         const {web3} = this;
         return {
             debt: {
-                topic: web3.sha3("DebtTokenCreated(address, address, uint256)"),
+                topic: web3.sha3("DebtTokenCreated(address,address,uint256)"),
                 params: ['address', 'address', 'uint256'],
                 eventFxn: 'DebtTokenCreated',
             },
@@ -157,13 +157,13 @@ export default class Web3Service {
             case 'debt':
                 hash = await Bb.fromCallback((callback) => {
                     deployerInstance.createDebtToken(
-                        contractData.tokenSymbol,
-                        contractData.initialAmount,
+                        contractData.tokenName,
+                        contractData.symbol,
+                        this.convertEtherToWei(contractData.initialAmount),
                         contractData.exchangeRate,
-                        contractData.decimalUnits,
                         contractData.dayLength,
                         contractData.loanTerm,
-                        contractData.loanCycle,
+                        contractData.interestCycle,
                         contractData.interestRate,
                         contractData.debtOwner,
                         transactionOptions,
@@ -178,9 +178,9 @@ export default class Web3Service {
 
 
     async requestFromFaucet() {
-        const tokenBalance = (await Bb.fromCallback(callback => this.faucetInstance.getTokensBalance.call(callback))).valueOf();
-        const waitTime = (await Bb.fromCallback(callback => this.faucetInstance.waitTime.call(callback))).valueOf();
-        const lastRequest = (await Bb.fromCallback(callback => this.faucetInstance.lastRequest.call(this.accounts[0], callback))).valueOf();
+        const tokenBalance = Number( (await Bb.fromCallback(callback => this.faucetInstance.getTokensBalance.call(callback))).valueOf() );
+        const waitTime = Number( (await Bb.fromCallback(callback => this.faucetInstance.waitTime.call(callback))).valueOf() );
+        const lastRequest = Number( (await Bb.fromCallback(callback => this.faucetInstance.lastRequest.call(this.accounts[0], callback))).valueOf() );
         const now = Math.floor(new Date().getTime() / 1000);
 
         if (tokenBalance < MIN_FEE)
@@ -265,12 +265,16 @@ export default class Web3Service {
         return postAllocate;
     }
 
-    5
-
     convertMiningPower = (value, reverse) => {
         if (reverse)
-            return (value / 1e+18) * 100;
-        return (value / 100) * 1e+18;
+            return this.convertEtherToWei(value, true) * 100;
+        return this.convertEtherToWei(value)/ 100;
+    }
+
+    convertEtherToWei = (value, reverse) => {
+        if (reverse)
+            return value / 1e+18;
+        return value * 1e+18;
     }
 
     async fetchGasPrice() {
@@ -359,13 +363,14 @@ export default class Web3Service {
     async fetchNewChild(hash) {
         const {web3} = this;
         const receipt = await this.fetchReceipt(hash);
+        const that = this;
 
         let foundLog;
         if (!receipt.logs || typeof receipt.logs !== 'object' || receipt.logs.length < 1)
             return false;
         receipt.logs.forEach(function (l) {
             if (l.address.toLowerCase() === DEPLOYER_ADDRESS.toLowerCase())
-                if (l.topics[0] == this.childTopics()[this.activeApp].topic)
+                if (l.topics[0] == that.childTopics()[that.activeApp].topic)
                     foundLog = l.data;
         })
         if (!foundLog)
@@ -577,14 +582,15 @@ export default class Web3Service {
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
                     interestRate: (await Bb.fromCallback(callback => debtContract.interestRate.call(callback))).valueOf(),
-                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue(true).call(callback))).valueOf(),
-                    LoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(callback))).valueOf(),
+                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(),
+                    LoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(),
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     lender: (await Bb.fromCallback(callback => debtContract.isLender.call(callback))).valueOf(),
                     borrower: (await Bb.fromCallback(callback => debtContract.isBorrower.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
                     isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf()
-                }
+                  }
+                  break;
 
         }
         return data;
@@ -592,9 +598,10 @@ export default class Web3Service {
 
     async getDeploymentData(transaction) {
         let {web3} = this;
+
         const data = {
             creationCode: (await Bb.fromCallback(callback => web3.eth.getTransaction(transaction, callback))).input,
-            abi: JSON.stringify(dayTokenABI),
+            abi: this.deployerAbis[this.activeApp],
         }
         return data;
     }
@@ -609,9 +616,6 @@ export default class Web3Service {
         return false;
     }
 }
-
-
-
 
 export function initWeb3Service(isServer, source) {
   if (isServer) {

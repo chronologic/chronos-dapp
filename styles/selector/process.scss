@@ -1,5 +1,6 @@
 .selector{
   background-size:100%;
+  overflow-y:auto;
   &.chronos-dapp{
     background: url($backend-url+'/static/selector-screen/day_token_bg.jpg'),rgba(0,0,0,0.75);
   }
@@ -9,16 +10,16 @@
 }
 
 .selector-group{
-  margin-top:13%;
-  min-height: 300px;
-  padding-top:12%;
+  min-height: 600px;
+  height: 100%;
+  padding-top:10%;
   & .selector-box{
     width: 37%;
   }
 }
 
 .selector-box{
-  height:400px;
+  height:52%;
   margin: 0 20px 20px 20px;
   display: inline-block;
   background-size: contain;
