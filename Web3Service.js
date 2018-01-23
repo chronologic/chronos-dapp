@@ -159,7 +159,7 @@ export default class Web3Service {
                     deployerInstance.createDebtToken(
                         contractData.tokenName,
                         contractData.symbol,
-                        contractData.initialAmount,
+                        this.convertEtherToWei(contractData.initialAmount),
                         contractData.exchangeRate,
                         contractData.dayLength,
                         contractData.loanTerm,
@@ -265,12 +265,16 @@ export default class Web3Service {
         return postAllocate;
     }
 
-    5
-
     convertMiningPower = (value, reverse) => {
         if (reverse)
-            return (value / 1e+18) * 100;
-        return (value / 100) * 1e+18;
+            return this.convertEtherToWei(value, true) * 100;
+        return this.convertEtherToWei(value)/ 100;
+    }
+
+    convertEtherToWei = (value, reverse) => {
+        if (reverse)
+            return value / 1e+18;
+        return value * 1e+18;
     }
 
     async fetchGasPrice() {
