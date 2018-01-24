@@ -81,7 +81,7 @@ export default class Step5 extends AbstractStep {
           return;
 
         const that = this;
-        
+
         if(!delay){
           console.log('updating...')
           const newContract = this._state.contractInstance.address;
@@ -120,7 +120,6 @@ export default class Step5 extends AbstractStep {
       this.setState( Object.assign(this._state,{deploymentData:data}) );
     }
 
-
     async updateInterest(){
       const {web3Service} =  this.props;
       const updated = await web3Service.updateInterest(this._state.contractInstance.address);
@@ -129,13 +128,13 @@ export default class Step5 extends AbstractStep {
 
     isBorrower(){
       const {web3Service:{web3}} =  this.props;
-      const isBorrower =  (web3.eth.defaultAccount == this._state.contractInstance.borrower);
+      const isBorrower =  (web3.eth.defaultAccount.toLowerCase() == this._state.contractInstance.borrower.toLowerCase());
       return isBorrower;
     }
 
     isLender(){
       const {web3Service:{web3}} =  this.props;
-      const isLender =  (web3.eth.defaultAccount == this._state.contractInstance.lender);
+      const isLender =  (web3.eth.defaultAccount.toLowerCase() == this._state.contractInstance.lender.toLowerCase());
       return isLender;
     }
 

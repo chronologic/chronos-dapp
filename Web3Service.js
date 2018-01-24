@@ -285,6 +285,14 @@ export default class Web3Service {
         return value * 1e+18;
     }
 
+    finePrint = value =>{
+      console.log(value,new RegExp('^\\d+\\.?\\d{8,}$').test(value))
+      if( new RegExp('^\\d+\\.?\\d{8,}$').test(value) )
+        return Number(value).toFixed(8)
+      else
+        return value;
+    }
+
     async fetchGasPrice() {
         const {web3} = this;
         const result = await Bb.fromCallback(callback =>
@@ -526,12 +534,6 @@ export default class Web3Service {
         return owner.toLowerCase() === web3.eth.defaultAccount.toLowerCase();
     }
 
-    async isLender(contract){
-        const {web3} = this;
-        const debtContract = web3.eth.contract(debtTokenABI).at(contract);
-        const lender = await Bb.fromCallback(callback => debtContract.isLender.call(callback));
-        return lender;
-    }
     async getAllocationHistory(contract) {
         const {web3} = this;
         let fromBlock = (await this.fetchBlockNumber()) - 0x2710; //set default fromBlock to 10000 blocks ago
@@ -581,8 +583,8 @@ export default class Web3Service {
                     firstContributorId: (await Bb.fromCallback(callback => childContract.firstContributorId.call(callback))).valueOf(),
                     firstPostIcoContributorId: (await Bb.fromCallback(callback => childContract.firstPostIcoContributorId.call(callback))).valueOf(),
                     firstTeamContributorId: (await Bb.fromCallback(callback => childContract.firstTeamContributorId.call(callback))).valueOf(),
-                    minMintingPower: this.convertMiningPower((await Bb.fromCallback(callback => childContract.minMintingPower.call(callback))).valueOf(), true).toFixed(8),
-                    maxMintingPower: this.convertMiningPower((await Bb.fromCallback(callback => childContract.maxMintingPower.call(callback))).valueOf(), true).toFixed(8),
+                    minMintingPower: this.finePrint(this.convertMiningPower((await Bb.fromCallback(callback => childContract.minMintingPower.call(callback))).valueOf(), true)),
+                    maxMintingPower: this.finePrint(this.convertMiningPower((await Bb.fromCallback(callback => childContract.maxMintingPower.call(callback))).valueOf(), true)),
                     initialBlockTimestamp: (await Bb.fromCallback(callback => childContract.initialBlockTimestamp.call(callback))).valueOf(),
                     teamLockPeriodInSec: (await Bb.fromCallback(callback => childContract.teamLockPeriodInSec.call(callback))).valueOf(),
                     totalNormalContributorIds: (await Bb.fromCallback(callback => childContract.totalNormalContributorIds.call(callback))).valueOf(),
@@ -605,7 +607,8 @@ export default class Web3Service {
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
                     interestRate: (await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf(),
-                    initialLoanAmount: this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), reverse).toFixed(8),
+                    initialLoanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), true)),
+                    loanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(), true)),
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
                     isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf(),
