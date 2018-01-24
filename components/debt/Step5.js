@@ -67,6 +67,18 @@ export default class Step5 extends AbstractStep {
         await this.loadInfo();
     }
 
+    fetchUpdates = () =>{
+        const that = this;
+        const newContract = this._state.contractInstance.address;
+        this.setState({updateFetcher: setInterval( ()=>{
+            console.log('updating...')
+            that.fetchContractData(newContract);
+            that.fetchAllocationHistory(newContract);
+        }, 10000)
+        });
+        this.clearUpdater()
+    }
+
 async loadInfo(){
     const {props:{store}} =  this;
     let {query:{newContract,transactionHash}} = Router;
@@ -80,29 +92,23 @@ async loadInfo(){
     }
     if(transactionHash){
         await this.fetchDeploymentData(transactionHash);
-        await this.resolveOwnership( newContract );
-        await this.fetchAllocationHistory(newContract);
     }
     ReactTooltip.rebuild();
-    this.fetchUpdate();
+    this.fetchUpdates();
 }
 
-async fetchUpdates(){
-    const that = this;
-    const newContract = this._state.contractInstance.address;
-    this.setState({updateFetcher: setInterval( ()=>{
-        console.log('updating...')
-        that.fetchContractData(newContract);
-        that.fetchAllocationHistory(newContract);
-    }, 10000)
-    });
-    this.clearUpdater()
-}
+    async fetchDeploymentData (transaction){
+        const {web3Service} = this.props;
+        this.setState( Object.assign(this._state.deploymentData,{transactionHash:transaction}) );
+        const data = await web3Service.getDeploymentData(transaction);
+        this.setState( Object.assign(this._state,{deploymentData:data}) );
+    }
+
 
 async updateInterest(){
     const {web3Service} =  this.props;
     const updated = await web3Service.updateInterest(this._state.contractInstance.address);
-    this.setState( {update: updated G} );
+    this.setState( {update: updated} );
 }
 
 async isLender(){
