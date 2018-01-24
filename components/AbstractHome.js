@@ -57,6 +57,9 @@ export default class AbstractHome extends Component {
   }
 
   async goWatch(hash,destination) {
+    if(this.web3Disabled() )
+      return;
+
     const { props: { web3Service } } = this;
     let watchPageData;
     const CONTRACT_PROPERTIES = ['transactionHash','newContract']
