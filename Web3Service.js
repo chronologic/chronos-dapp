@@ -587,14 +587,14 @@ export default class Web3Service {
                     loanTerm: (await Bb.fromCallback(callback => debtContract.loanTerm.call(callback))).valueOf(),
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
-                    interestRate: (await Bb.fromCallback(callback => debtContract.interestRate.call(callback))).valueOf(),
-                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(),
-                    LoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(),
-                    loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
-                    lender: (await Bb.fromCallback(callback => debtContract.isLender.call(callback))).valueOf(),
-                    borrower: (await Bb.fromCallback(callback => debtContract.isBorrower.call(callback))).valueOf(),
+                    interestRate: (await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf(),
+                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.initialSupply.call(callback))).valueOf(),
+
+                    LoanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
-                    isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf()
+                    isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf(),
+                    lender: (await Bb.fromCallback(callback => debtContract.lender.call(callback))).valueOf(),
+                    borrower: (await Bb.fromCallback(callback => debtContract.borrower.call(callback))).valueOf()
                   }
                   break;
 
