@@ -65,6 +65,7 @@ export default class Step5 extends AbstractStep {
 
     async componentWillMount(){
         await this.loadInfo();
+        await this.isLender();
     }
 
     fetchUpdates = () =>{
@@ -197,7 +198,7 @@ async fundLoan(){
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
-                            { this._state.contractInstance && ! this._state.lender &&
+                            { this._state.contractInstance && !this._state.lender &&
                             <button className="button button_fill" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >Fund</button>
                             }
 
