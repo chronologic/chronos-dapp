@@ -101,7 +101,8 @@ export default class Step5 extends AbstractStep {
     loadinghistoryData: true,
     contractInstance:{},
     deploymentData:{},
-    allocationHistory:{}
+    allocationHistory:{},
+    updateFetcher:''
   }
 
 
@@ -111,12 +112,16 @@ export default class Step5 extends AbstractStep {
       ReactTooltip.rebuild();
   }
 
-  async componentDidMount() {
-    await this.loadInfo();
+  componentWillMount() {
+    this._ismounted = true;
   }
 
   componentWillUnmount() {
-    this.clearUpdater();
+    this._ismounted = false;
+  }
+
+  async componentDidMount() {
+    await this.loadInfo();
   }
 
   async resolveOwnership ( contract ){
@@ -225,11 +230,7 @@ export default class Step5 extends AbstractStep {
     await this.resolveOwnership( newContract );
     await this.fetchAllocationHistory(newContract);
     ReactTooltip.rebuild();
-    this.fetchUpdates();//begin interval retreival of data
-  }
-
-  clearUpdater(){
-    clearInterval(this.state.updateFetcher);
+    this.fetchUpdates(true);//begin interval retreival of data
   }
 
   async isReleased(){
@@ -245,16 +246,22 @@ export default class Step5 extends AbstractStep {
     this.setState( Object.assign(this._state.contractInstance,{isOwned:owned}) );
   }
 
-  fetchUpdates = () =>{
-    const that = this;
-    const newContract = this._state.contractInstance.address;
-    this.setState({updateFetcher: setInterval( ()=>{
+  fetchUpdates = (delay) =>{
+      if(!this._ismounted)
+        return;
+
+      const that = this;
+      
+      if(!delay){
         console.log('updating...')
-        that.fetchContractData(newContract);
-        that.fetchAllocationHistory(newContract);
-      }, 10000)
-    });
-    this.clearUpdater()
+        const newContract = this._state.contractInstance.address;
+        this.fetchContractData(newContract);
+      }
+
+      this.setState(Object.assign(that._state,{updateFetcher: setTimeout( ()=>{
+            that.fetchUpdates();
+        }, 10000)
+      }));
   }
 
   async fetchContractData (contractAddress){
