@@ -111,14 +111,8 @@ export default class Step5 extends AbstractStep {
       ReactTooltip.rebuild();
   }
 
-
-
-  async componentWillMount() {
-    await this.loadInfo();
-  }
-
   async componentDidMount() {
-    //await this.loadInfo();
+    await this.loadInfo();
   }
 
   componentWillUnmount() {
@@ -213,7 +207,7 @@ export default class Step5 extends AbstractStep {
   }
 
   async loadInfo(){
-    const {props:{store}} = this;
+    const {props:{store,web3Service}} = this;
     let {query:{newContract,transactionHash}} = Router;
 
     console.log(newContract,transactionHash);
@@ -221,6 +215,7 @@ export default class Step5 extends AbstractStep {
     if(!newContract && !transactionHash)
       return false;
 
+    await web3Service.awaitInitialized();
     if(newContract){
       this.setState( Object.assign(this._state.contractInstance,{address:newContract}) );
       await this.fetchContractData(newContract);

@@ -66,12 +66,7 @@ export default class Step5 extends AbstractStep {
 
 
     async componentDidMount(){
-
-    }
-
-    async componentWillMount(){
-        await this.loadInfo();
-
+      await this.loadInfo();
     }
 
     fetchUpdates = () =>{
@@ -86,12 +81,13 @@ export default class Step5 extends AbstractStep {
     }
 
     async loadInfo(){
-      const {props:{store}} =  this;
+      const {props:{store,web3Service}} =  this;
       let {query:{newContract,transactionHash}} = Router;
 
       if(!newContract && !transactionHash)
           return false;
 
+      await web3Service.awaitInitialized();
       if(newContract){
           this.setState( Object.assign(this._state.contractInstance,{address:newContract}) );
           await this.fetchContractData(newContract);
@@ -139,11 +135,11 @@ export default class Step5 extends AbstractStep {
         const refunded = await web3Service.refundLoan(this._state.contractInstance.address);
         this.setState( {refunded:refunded});
     }
+
     async fetchContractData (contractAddress){
         const {web3Service} = this.props;
         const data = await web3Service.getContractData(contractAddress);
         this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
-
     }
 
     async awaitMined (transaction){

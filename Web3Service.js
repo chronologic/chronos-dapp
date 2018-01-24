@@ -315,10 +315,24 @@ export default class Web3Service {
         return result.valueOf() >= MIN_FEE;
     }
 
+    async awaitInitialized(){
+        const that = this;
+        if(!this.initialized){
+          let Promises = new Promise((resolve, reject) => {
+              setTimeout(async function () {
+                  resolve(await that.awaitInitialized());
+              }, 2000);
+            })
+            return Promises;
+          }
+          else
+            return true;
+    }
+
     async trackTransaction(hash) {
         //let {deployerInstance,trackTransaction} = this;
         let receipt;
-        var that = this;
+        const that = this;
 
         if (!(receipt = await this.fetchReceipt(hash))) {
             let Promises = new Promise((resolve, reject) => {
@@ -607,7 +621,7 @@ export default class Web3Service {
 
         const data = {
             creationCode: (await Bb.fromCallback(callback => web3.eth.getTransaction(transaction, callback))).input,
-            abi: this.deployerAbis[this.activeApp],
+            abi: JSON.stringify(this.deployerAbis[this.activeApp]),
         }
         return data;
     }

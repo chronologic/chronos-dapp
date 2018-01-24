@@ -29,7 +29,8 @@ export default class AbstractStep extends React.Component {
   }
 
   async componentDidMount () {
-    const{web3Service:{web3} } = await this.props;
+    const{web3Service} = await this.props;
+    await web3Service.awaitInitialized();
     this.validatePrevState();
   }
 
