@@ -286,8 +286,7 @@ export default class Web3Service {
     }
 
     finePrint = value =>{
-      console.log(value,new RegExp('^\\d+\\.?\\d{8,}$').test(value))
-      if( new RegExp('^\\d+\\.?\\d{8,}$').test(value) )
+      if( new RegExp('^\\d+\\.?\\d{8,}.*$').test(value) )
         return Number(value).toFixed(8)
       else
         return value;
@@ -573,26 +572,26 @@ export default class Web3Service {
                     address: contract,
                     tokenName: (await Bb.fromCallback(callback => childContract.name.call(callback))).valueOf(),
                     symbol: (await Bb.fromCallback(callback => childContract.symbol.call(callback))).valueOf(),
-                    totalSupply: (await Bb.fromCallback(callback => childContract.totalSupply.call(callback))).valueOf(),
+                    totalSupply: this.finePrint((await Bb.fromCallback(callback => childContract.totalSupply.call(callback))).valueOf()),
                     decimal: (await Bb.fromCallback(callback => childContract.decimals.call(callback))).valueOf(),
-                    mintingPeriod: (await Bb.fromCallback(callback => childContract.DayInSecs.call(callback))).valueOf(),
+                    mintingPeriod: this.finePrint((await Bb.fromCallback(callback => childContract.DayInSecs.call(callback))).valueOf()),
                     totalDays: (await Bb.fromCallback(callback => childContract.getDayCount.call(callback))).valueOf(),
-                    halvingCycle: (await Bb.fromCallback(callback => childContract.halvingCycle.call(callback))).valueOf(),
+                    halvingCycle: this.finePrint((await Bb.fromCallback(callback => childContract.halvingCycle.call(callback))).valueOf()),
                     dayTokenActivated: (await Bb.fromCallback(callback => childContract.isDayTokenActivated.call(callback))).valueOf().toString(),
-                    maxAddresses: (await Bb.fromCallback(callback => childContract.maxAddresses.call(callback))).valueOf(),
-                    firstContributorId: (await Bb.fromCallback(callback => childContract.firstContributorId.call(callback))).valueOf(),
-                    firstPostIcoContributorId: (await Bb.fromCallback(callback => childContract.firstPostIcoContributorId.call(callback))).valueOf(),
-                    firstTeamContributorId: (await Bb.fromCallback(callback => childContract.firstTeamContributorId.call(callback))).valueOf(),
+                    maxAddresses: this.finePrint((await Bb.fromCallback(callback => childContract.maxAddresses.call(callback))).valueOf()),
+                    firstContributorId: this.finePrint((await Bb.fromCallback(callback => childContract.firstContributorId.call(callback))).valueOf()),
+                    firstPostIcoContributorId: this.finePrint((await Bb.fromCallback(callback => childContract.firstPostIcoContributorId.call(callback))).valueOf()),
+                    firstTeamContributorId: this.finePrint((await Bb.fromCallback(callback => childContract.firstTeamContributorId.call(callback))).valueOf()),
                     minMintingPower: this.finePrint(this.convertMiningPower((await Bb.fromCallback(callback => childContract.minMintingPower.call(callback))).valueOf(), true)),
                     maxMintingPower: this.finePrint(this.convertMiningPower((await Bb.fromCallback(callback => childContract.maxMintingPower.call(callback))).valueOf(), true)),
                     initialBlockTimestamp: (await Bb.fromCallback(callback => childContract.initialBlockTimestamp.call(callback))).valueOf(),
-                    teamLockPeriodInSec: (await Bb.fromCallback(callback => childContract.teamLockPeriodInSec.call(callback))).valueOf(),
-                    totalNormalContributorIds: (await Bb.fromCallback(callback => childContract.totalNormalContributorIds.call(callback))).valueOf(),
-                    totalNormalContributorIdsAllocated: (await Bb.fromCallback(callback => childContract.totalNormalContributorIdsAllocated.call(callback))).valueOf(),
-                    totalTeamContributorIds: (await Bb.fromCallback(callback => childContract.totalTeamContributorIds.call(callback))).valueOf(),
-                    totalTeamContributorIdsAllocated: (await Bb.fromCallback(callback => childContract.totalTeamContributorIdsAllocated.call(callback))).valueOf(),
-                    totalPostIcoContributorIds: (await Bb.fromCallback(callback => childContract.totalPostIcoContributorIds.call(callback))).valueOf(),
-                    totalPostIcoContributorIdsAllocated: (await Bb.fromCallback(callback => childContract.totalPostIcoContributorIdsAllocated.call(callback))).valueOf(),
+                    teamLockPeriodInSec: this.finePrint((await Bb.fromCallback(callback => childContract.teamLockPeriodInSec.call(callback))).valueOf()),
+                    totalNormalContributorIds: this.finePrint((await Bb.fromCallback(callback => childContract.totalNormalContributorIds.call(callback))).valueOf()),
+                    totalNormalContributorIdsAllocated: this.finePrint((await Bb.fromCallback(callback => childContract.totalNormalContributorIdsAllocated.call(callback))).valueOf()),
+                    totalTeamContributorIds: this.finePrint((await Bb.fromCallback(callback => childContract.totalTeamContributorIds.call(callback))).valueOf()),
+                    totalTeamContributorIdsAllocated: this.finePrint((await Bb.fromCallback(callback => childContract.totalTeamContributorIdsAllocated.call(callback))).valueOf()),
+                    totalPostIcoContributorIds: this.finePrint((await Bb.fromCallback(callback => childContract.totalPostIcoContributorIds.call(callback))).valueOf()),
+                    totalPostIcoContributorIdsAllocated: this.finePrint((await Bb.fromCallback(callback => childContract.totalPostIcoContributorIdsAllocated.call(callback))).valueOf()),
                     isReleased: (await Bb.fromCallback(callback => childContract.released.call(callback))).valueOf(),
                 }
                 break;
@@ -602,11 +601,11 @@ export default class Web3Service {
                     address: contract,
                     tokenName: (await Bb.fromCallback(callback => debtContract.name.call(callback))).valueOf(),
                     symbol: (await Bb.fromCallback(callback => debtContract.symbol.call(callback))).valueOf(),
-                    dayLength: (await Bb.fromCallback(callback => debtContract.dayLength.call(callback))).valueOf(),
-                    loanTerm: (await Bb.fromCallback(callback => debtContract.loanTerm.call(callback))).valueOf(),
-                    exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
-                    interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
-                    interestRate: (await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf(),
+                    dayLength: this.finePrint((await Bb.fromCallback(callback => debtContract.dayLength.call(callback))).valueOf()),
+                    loanTerm: this.finePrint((await Bb.fromCallback(callback => debtContract.loanTerm.call(callback))).valueOf()),
+                    exchangeRate: this.finePrint((await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf()),
+                    interestCycle: this.finePrint((await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf()),
+                    interestRate: this.finePrint((await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf()),
                     initialLoanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), true)),
                     loanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(), true)),
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
