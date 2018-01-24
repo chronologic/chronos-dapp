@@ -36,11 +36,6 @@
     background-size: 960px 161px, 960px 161px;
   }
 
-  &.centered-button {
-    padding-left: 56px;
-    padding-right: 56px;
-  }
-
   &.step_token-setup {
     @include image-2x($backend-url+'/static/step-icons/token_setup_header2.jpg', 960px, 161px);
     background-image: url($backend-url+'/static/step-icons/token_setup_header2.jpg'), url($backend-url+'/static/step_overlay.svg');

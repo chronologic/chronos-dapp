@@ -208,23 +208,24 @@ export default class Step5 extends AbstractStep {
                   {!this._state.loadingData && this._state.contractInstance &&
                     <div>
                         <div className="input-block-container center text-center">
-                            <button className="button button_btn" onClick={this.updateInterest}>UPDATE INTEREST</button>&nbsp;&nbsp;
-                            <button className="button button_btn" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button className="button button_btn button_mullayer space_right greyed min-centered-button" onClick={this.updateInterest} disabled={this._state.contractInstance.isLoanFunded}>UPDATE INTEREST</button>&nbsp;&nbsp;
+                            <button className="button button_btn button_mullayer space_left greyed min-centered-button" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
-
-                            { this._state.contractInstance && this.isBorrower() &&
-                              <button className="button button_fill button_mullayer steps-content-centered-button" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
-                                ReFund
-                              </button>
-                            }
-                            { this._state.contractInstance && this.isLender() &&
-                              <button className="button button_fill button_mullayer centered-button" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >
-                                Fund
-                              </button>
-                            }
+                            <div className='buttons'>
+                              { this._state.contractInstance && this.isBorrower() &&
+                                <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
+                                  ReFund
+                                </button>
+                              }
+                              { this._state.contractInstance && this.isLender() &&
+                                <button className="button button_fill button_mullayer" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >
+                                  Fund
+                                </button>
+                              }
+                            </div>
                         </div>
                     </div>
                   }

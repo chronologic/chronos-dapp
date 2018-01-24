@@ -13,6 +13,11 @@
   text-transform: uppercase;
   font-weight: bold;
 
+  &.greyed:disabled{
+    border-color: #bbb;
+    color: #999;
+  }
+
   &-container {
     text-align: center;
   }
@@ -40,6 +45,16 @@
   &_mullayer {
     margin-top: 25px !important;
     margin-bottom:32px !important;
+  }
+
+  &.centered-button {
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+
+  &.min-centered-button {
+    padding-left: 28px;
+    padding-right: 28px;
   }
 }
 
@@ -116,5 +131,14 @@
 
   &:focus {
     border-color: $accent-color;
+  }
+}
+
+.space{
+  &_left{
+    margin-left:56px;
+  }
+  &_right{
+    margin-right:56px;
   }
 }
