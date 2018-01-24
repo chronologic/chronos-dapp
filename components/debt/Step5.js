@@ -31,7 +31,7 @@ const ContractData = data => {
         else
             Data.push(<div className={'col col-3'} key={d}>
                 <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
-                <p className='' >{ data[d] }</p>
+                <p className='' >{ String(data[d]) }</p>
             </div>);
         index++;
     }
@@ -67,6 +67,10 @@ export default class Step5 extends AbstractStep {
 
     async componentDidMount(){
       await this.loadInfo();
+    }
+
+    componentWillUnmount() {
+      this.clearUpdater();
     }
 
     fetchUpdates = () =>{
@@ -208,7 +212,7 @@ export default class Step5 extends AbstractStep {
                   {!this._state.loadingData && this._state.contractInstance &&
                     <div>
                         <div className="input-block-container center text-center">
-                            <button className="button button_btn button_mullayer space_right greyed min-centered-button" onClick={this.updateInterest} disabled={this._state.contractInstance.isLoanFunded}>UPDATE INTEREST</button>&nbsp;&nbsp;
+                            <button className="button button_btn button_mullayer space_right greyed min-centered-button" onClick={this.updateInterest} disabled={!this._state.contractInstance.isLoanFunded}>UPDATE INTEREST</button>&nbsp;&nbsp;
                             <button className="button button_btn button_mullayer space_left greyed min-centered-button" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div className="steps-content contract_info">
