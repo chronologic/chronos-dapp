@@ -213,8 +213,10 @@ export default class Web3Service {
 
     async fundLoan(contract) {
         const {web3} = this;
+
         const childContract = web3.eth.contract(debtTokenABI).at(contract);
-        const txn = await Bb.fromCallback(callback => childContract.fundLoan(callback));
+        const loanAmount = await childContract.loanAmount.call();
+        const txn = await Bb.fromCallback(callback => childContract.fundLoan(callback,{from:accounts[0],value: loanAmount}));
         return txn;
     }
 
@@ -241,11 +243,13 @@ export default class Web3Service {
     async refundLoan(contract) {
         const {web3} = this;
         const childContract = web3.eth.contract(debtTokenABI).at(contract);
-        const txn = await Bb.fromCallback(callback => childContract.refundLoan(callback));
+        const loanAmount = await childContract.loanAmount.call();
+        const txn = await Bb.fromCallback(callback => childContract.refundLoan(callback,{from: accounts[0],value:loanAmount}));
         return txn;
     }
 
     async allocateNormalTimeMints(data) {
+        const {web3} = this;
         const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
         const allocateNormal = await Bb.fromCallback(callback => childContract.allocateNormalTimeMints(
             data.receiverAddress,
@@ -259,6 +263,7 @@ export default class Web3Service {
     }
 
     async postAllocateAuctionTimeMints(data) {
+        const {web3} = this;
         const childContract = web3.eth.contract(dayTokenABI).at(data.contract);
         const postAllocate = await Bb.fromCallback(callback => childContract.postAllocateAuctionTimeMints(
             data.receiverAddress,
@@ -282,6 +287,7 @@ export default class Web3Service {
     }
 
     async fetchGasPrice() {
+        const {web3} = this;
         const result = await Bb.fromCallback(callback =>
             web3.eth.getGasPrice(callback)
         );
@@ -554,11 +560,9 @@ export default class Web3Service {
         });
     }
 
-    async updateInterest() {
-
-    }
 
     async getContractData(contract) {
+        const {web3} = this;
         console.log('Contract: ', contract)
         let data;
         switch (this.activeApp) {
@@ -578,8 +582,8 @@ export default class Web3Service {
                     firstContributorId: (await Bb.fromCallback(callback => childContract.firstContributorId.call(callback))).valueOf(),
                     firstPostIcoContributorId: (await Bb.fromCallback(callback => childContract.firstPostIcoContributorId.call(callback))).valueOf(),
                     firstTeamContributorId: (await Bb.fromCallback(callback => childContract.firstTeamContributorId.call(callback))).valueOf(),
-                    minMintingPower: this.convertMiningPower((await Bb.fromCallback(callback => childContract.minMintingPower.call(callback))).valueOf(), true),
-                    maxMintingPower: this.convertMiningPower((await Bb.fromCallback(callback => childContract.maxMintingPower.call(callback))).valueOf(), true),
+                    minMintingPower: this.convertMiningPower((await Bb.fromCallback(callback => childContract.minMintingPower.call(callback))).valueOf(), true).toFixed(8),
+                    maxMintingPower: this.convertMiningPower((await Bb.fromCallback(callback => childContract.maxMintingPower.call(callback))).valueOf(), true).toFixed(8),
                     initialBlockTimestamp: (await Bb.fromCallback(callback => childContract.initialBlockTimestamp.call(callback))).valueOf(),
                     teamLockPeriodInSec: (await Bb.fromCallback(callback => childContract.teamLockPeriodInSec.call(callback))).valueOf(),
                     totalNormalContributorIds: (await Bb.fromCallback(callback => childContract.totalNormalContributorIds.call(callback))).valueOf(),
@@ -602,7 +606,7 @@ export default class Web3Service {
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
                     interestRate: (await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf(),
-                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(),
+                    initialLoanAmount: this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), reverse).toFilter(8),
 
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
