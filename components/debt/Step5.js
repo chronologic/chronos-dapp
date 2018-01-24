@@ -220,12 +220,12 @@ export default class Step5 extends AbstractStep {
                             <div className='contract_clear bottom-margin'></div>
 
                             { this._state.contractInstance && this.isBorrower() &&
-                              <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
+                              <button className="button button_fill button_mullayer steps-content-centered-button" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
                                 ReFund
                               </button>
                             }
                             { this._state.contractInstance && this.isLender() &&
-                              <button className="button button_fill button_mullayer" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >
+                              <button className="button button_fill button_mullayer centered-button" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >
                                 Fund
                               </button>
                             }

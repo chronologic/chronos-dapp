@@ -22,6 +22,8 @@
   }
 }
 
+
+
 .steps-content {
   padding: 30px 30px 0;
   border-radius: 8px;
@@ -32,6 +34,11 @@
     background-image: url($backend-url+'/static/step_overlay.svg');
     background-repeat: no-repeat;
     background-size: 960px 161px, 960px 161px;
+  }
+
+  &.centered-button {
+    padding-left: 56px;
+    padding-right: 56px;
   }
 
   &.step_token-setup {
