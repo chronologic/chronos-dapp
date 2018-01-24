@@ -59,29 +59,39 @@ export default class Step5 extends AbstractStep {
         refunded:'',
         //lender:false,
         //borrower:false,
-        update:''
+        update:'',
+        updateFetcher:''
 
       }
 
+    componentWillMount() {
+      this._ismounted = true;
+    }
 
+    componentWillUnmount() {
+      this._ismounted = false;
+    }
 
     async componentDidMount(){
       await this.loadInfo();
     }
 
-    componentWillUnmount() {
-      this.clearUpdater();
-    }
+    fetchUpdates = (delay) =>{
+        if(!this._ismounted)
+          return;
 
-    fetchUpdates = () =>{
-        /*const that = this;
-        const newContract = this._state.contractInstance.address;
-        this.setState({updateFetcher: setInterval( ()=>{
-            console.log('updating...')
-            that.fetchContractData(newContract);
-        }, 10000)
-        });
-        this.clearUpdater()*/
+        const that = this;
+        
+        if(!delay){
+          console.log('updating...')
+          const newContract = this._state.contractInstance.address;
+          this.fetchContractData(newContract);
+        }
+
+        this.setState(Object.assign(that._state,{updateFetcher: setTimeout( ()=>{
+              that.fetchUpdates();
+          }, 10000)
+        }));
     }
 
     async loadInfo(){
@@ -100,7 +110,7 @@ export default class Step5 extends AbstractStep {
           await this.fetchDeploymentData(transactionHash);
       }
       ReactTooltip.rebuild();
-      this.fetchUpdates();
+      this.fetchUpdates(true);
     }
 
     async fetchDeploymentData (transaction){
@@ -169,10 +179,6 @@ export default class Step5 extends AbstractStep {
             this.setState( Object.assign(this._state,{loadingData:true}) );
             return confirmations;
           }
-    }
-
-    clearUpdater(){
-        clearInterval(this.state.updateFetcher);
     }
 
     goNext = () => {
