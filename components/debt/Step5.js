@@ -221,21 +221,23 @@ export default class Step5 extends AbstractStep {
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
-                            { this._state.contractInstance && this.isBorrower() &&
-                              <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
-                                ReFund
-                              </button>
-                            }
-                            { this._state.contractInstance && this.isLender() &&
-                              <button className="button button_fill button_mullayer" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >
-                                Fund
-                              </button>
-                            }
-                        </div>
-                    </div>
-                  }
-                </div>
-            </StepLayout>
+                            <div className='buttons'>
+                              { this._state.contractInstance && this.isBorrower() &&
+                                <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
+                                  ReFund
+                                </button>
+                              }
+                              { this._state.contractInstance && this.isLender() &&
+                                <button className="button button_fill button_mullayer" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >
+                                  Fund
+                                </button>
+                              }
+                            </div>
+                          </div>
+                      </div>
+                    }
+                  </div>
+              </StepLayout>
         )
     }
 }
