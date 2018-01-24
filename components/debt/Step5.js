@@ -52,7 +52,8 @@ export default class Step5 extends AbstractStep {
         allocationHistory:{},
         funded:'',
         refunded:'',
-        lender:false
+        lender:false,
+        update:''
 
       }
 
@@ -101,7 +102,7 @@ async fetchUpdates(){
 async updateInterest(){
     const {web3Service} =  this.props;
     const updated = await web3Service.updateInterest(this._state.contractInstance.address);
-    this.setState( Object.assign(this._state,{contractInstance:data,loadingData:false}) );
+    this.setState( {update: updated G} );
 }
 
 async isLender(){
