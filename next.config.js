@@ -6,7 +6,7 @@ module.exports = {
   assetPrefix: env['process.env.BACKEND_URL'],
   exportPathMap: function() {
     return {
-      './': { page: '/' },
+      '/': { page: '/' },
       '/index': { page: '/index' },
       '/chronos': { page: '/chronos/index' },
       '/chronos/step-1': { page: '/chronos/step-1' },
