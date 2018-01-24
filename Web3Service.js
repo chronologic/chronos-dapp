@@ -38,11 +38,15 @@ export default class Web3Service {
                 topic: web3.sha3("DebtTokenCreated(address,address,uint256)"),
                 params: ['address', 'address', 'uint256'],
                 eventFxn: 'DebtTokenCreated',
+                eventContractPosition: 1,
+                eventContractTitle: '_debtTokenAddress',
             },
             chronos: {
                 topic: web3.sha3("LogChildCreated(address,address)"),
                 params: ['address', 'address'],
                 eventFxn: 'LogChildCreated',
+                eventContractPosition: 1,
+                eventContractTitle: 'child',
             }
         };
     }
@@ -363,6 +367,7 @@ export default class Web3Service {
     async fetchNewChild(hash) {
         const {web3} = this;
         const receipt = await this.fetchReceipt(hash);
+        const config = this.childTopics()[this.activeApp];
         const that = this;
 
         let foundLog;
@@ -370,14 +375,14 @@ export default class Web3Service {
             return false;
         receipt.logs.forEach(function (l) {
             if (l.address.toLowerCase() === DEPLOYER_ADDRESS.toLowerCase())
-                if (l.topics[0] == that.childTopics()[that.activeApp].topic)
+                if (l.topics[0] == config.topic)
                     foundLog = l.data;
         })
         if (!foundLog)
             return false;
-        let result = ethers.Interface.decodeParams(this.childTopics()[this.activeApp].params, foundLog);
-        console.log('New Contract', result[1])
-        return result[1];
+        let result = ethers.Interface.decodeParams(config.params, foundLog);
+        console.log('New Contract', result[ config.eventContractPosition ] )
+        return result[ config.eventContractPosition ];
     }
 
     async fetchCreationHash(contract) {
@@ -390,11 +395,12 @@ export default class Web3Service {
             toBlock: 'latest',
         }
 
-        const fn = this.childTopics()[this.activeApp].eventFxn;
+        const config = this.childTopics()[this.activeApp];
+        const fn = config.eventFxn;
 
         const created = await Bb.fromCallback(callback => this.deployerInstance[fn]({}, filterConfig).get(callback));
         created.forEach(log => {
-            if (log.args.child.toLowerCase() == contract.toLowerCase())
+            if (log.args[ config.eventContractTitle].toLowerCase() == contract.toLowerCase())
                 foundLog = log.transactionHash;
         })
         return foundLog;
