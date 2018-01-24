@@ -90,9 +90,7 @@ export default class Step5 extends AbstractStep {
     receiverAddress: true,
     tokens: true,
     weiAmount: true,
-    timemintId: true,``
-
-
+    timemintId: true,
     teamMember: true,
     isTest: true,
   };
