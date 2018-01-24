@@ -510,7 +510,7 @@ export default class Web3Service {
     async isLender(contract){
         const {web3} = this;
         const debtContract = web3.eth.contract(debtTokenABI).at(contract);
-        const lender = await BB.fromCallback(callback => debtContract.isLender.call(callback));
+        const lender = await Bb.fromCallback(callback => debtContract.isLender.call(callback));
         return lender;
     }
     async getAllocationHistory(contract) {
@@ -588,7 +588,7 @@ export default class Web3Service {
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
                     interestRate: (await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf(),
-                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.initialSupply.call(callback))).valueOf(),
+                    initialLoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(),
 
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),

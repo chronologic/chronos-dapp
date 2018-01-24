@@ -65,7 +65,6 @@ export default class Step5 extends AbstractStep {
 
     async componentWillMount(){
         await this.loadInfo();
-        await this.isLender();
     }
 
     fetchUpdates = () =>{
@@ -74,7 +73,6 @@ export default class Step5 extends AbstractStep {
         this.setState({updateFetcher: setInterval( ()=>{
             console.log('updating...')
             that.fetchContractData(newContract);
-            that.fetchAllocationHistory(newContract);
         }, 10000)
         });
         this.clearUpdater()
@@ -206,10 +204,10 @@ async fundLoan(){
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
                             { this._state.contractInstance && this._state.contractInstance.borrower &&
-                            <button className="button button_fill" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >ReFund</button>
+                            <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >ReFund</button>
                             }
                             { this._state.contractInstance && this._state.contractInstance.lender &&
-                            <button className="button button_fill" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >Fund</button>
+                            <button className="button button_fill button_mullayer" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >Fund</button>
                             }
                         </div>
 
