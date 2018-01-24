@@ -581,9 +581,9 @@ export default class Web3Service {
                     loanTerm: (await Bb.fromCallback(callback => debtContract.loanTerm.call(callback))).valueOf(),
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
-                    interestRate: (await Bb.fromCallback(callback => debtContract.interestRate.call(callback))).valueOf(),
+                    interestRate: (await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf(),
                     initialLoanAmount: (await Bb.fromCallback(callback => debtContract.initialSupply.call(callback))).valueOf(),
-                    LoanAmount: (await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(),
+
                     LoanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
                     isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf(),
