@@ -14,14 +14,19 @@ import {Boxloader} from '../../lib/loader';
 
 const ContractData = data => {
     const explorer = data.explorer;
+    const addressFields = ['address','borrower','lender'];
     data = data.data;
     let Data = [],
         index = 0;
     for(let d in data){
-        if(d=='address')
+        if(addressFields.indexOf(d) > -1)
             Data.push(<div className={'col col-3'} key={d}>
                 <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
-                <p className='' ><a target="_blank" href={explorer+'address/'+data[d]}>{ data[d] }</a></p>
+                <p className='' >
+                  <a target="_blank" href={explorer+'address/'+data[d]}>
+                    { data[d] }
+                  </a>
+                </p>
             </div>);
         else
             Data.push(<div className={'col col-3'} key={d}>
@@ -52,7 +57,8 @@ export default class Step5 extends AbstractStep {
         allocationHistory:{},
         funded:'',
         refunded:'',
-        lender:false,
+        //lender:false,
+        //borrower:false,
         update:''
 
       }
@@ -65,11 +71,11 @@ export default class Step5 extends AbstractStep {
 
     async componentWillMount(){
         await this.loadInfo();
-        await this.isLender();
+        //await this.isLender();
     }
 
     fetchUpdates = () =>{
-        const that = this;
+        /*const that = this;
         const newContract = this._state.contractInstance.address;
         this.setState({updateFetcher: setInterval( ()=>{
             console.log('updating...')
@@ -77,51 +83,60 @@ export default class Step5 extends AbstractStep {
             that.fetchAllocationHistory(newContract);
         }, 10000)
         });
-        this.clearUpdater()
+        this.clearUpdater()*/
     }
 
-async loadInfo(){
-    const {props:{store}} =  this;
-    let {query:{newContract,transactionHash}} = Router;
+    async loadInfo(){
+      const {props:{store}} =  this;
+      let {query:{newContract,transactionHash}} = Router;
 
-    if(!newContract && !transactionHash)
-        return false;
+      if(!newContract && !transactionHash)
+          return false;
 
-    if(newContract){
-        this.setState( Object.assign(this._state.contractInstance,{address:newContract}) );
-        await this.fetchContractData(newContract);
+      if(newContract){
+          this.setState( Object.assign(this._state.contractInstance,{address:newContract}) );
+          await this.fetchContractData(newContract);
+      }
+      if(transactionHash){
+          await this.fetchDeploymentData(transactionHash);
+      }
+      ReactTooltip.rebuild();
+      this.fetchUpdates();
     }
-    if(transactionHash){
-        await this.fetchDeploymentData(transactionHash);
-    }
-    ReactTooltip.rebuild();
-    this.fetchUpdates();
-}
 
     async fetchDeploymentData (transaction){
-        const {web3Service} = this.props;
-        this.setState( Object.assign(this._state.deploymentData,{transactionHash:transaction}) );
-        const data = await web3Service.getDeploymentData(transaction);
-        this.setState( Object.assign(this._state,{deploymentData:data}) );
+      const {web3Service} = this.props;
+      this.setState( Object.assign(this._state.deploymentData,{transactionHash:transaction}) );
+      const data = await web3Service.getDeploymentData(transaction);
+      this.setState( Object.assign(this._state,{deploymentData:data}) );
     }
 
 
-async updateInterest(){
-    const {web3Service} =  this.props;
-    const updated = await web3Service.updateInterest(this._state.contractInstance.address);
-    this.setState( {update: updated} );
-}
+    async updateInterest(){
+      const {web3Service} =  this.props;
+      const updated = await web3Service.updateInterest(this._state.contractInstance.address);
+      this.setState( {update: updated} );
+    }
 
-async isLender(){
-    const {web3Service} =  this.props;
-    const lender = await web3Service.isLender(this._state.contractInstance.address);
-    this.setState({lender:true});
-}
-async fundLoan(){
-    const {web3Service} =  this.props;
-    const funded = await web3Service.fundLoan(this._state.contractInstance.address);
-    this.setState( {funded:funded});
-}
+    isBorrower(){
+      const {web3Service} =  this.props;
+      const {web3Service:{web3}} =  this.props;
+      const isBorrower =  (web3.eth.defaultAccount == this._state.contractInstance.borrower);
+      return isBorrower;
+    }
+
+    isLender(){
+      const {web3Service} =  this.props;
+      const {web3Service:{web3}} =  this.props;
+      const isLender =  (web3.eth.defaultAccount == this._state.contractInstance.lender);
+      return isLender;
+    }
+
+    async fundLoan(){
+      const {web3Service} =  this.props;
+      const funded = await web3Service.fundLoan(this._state.contractInstance.address);
+      this.setState( {funded:funded});
+    }
     async refundLoan(){
         const {web3Service} =  this.props;
         const refunded = await web3Service.refundLoan(this._state.contractInstance.address);
@@ -156,7 +171,7 @@ async fundLoan(){
         else{
             this.setState( Object.assign(this._state,{loadingData:true}) );
             return confirmations;
-        }
+          }
     }
 
     clearUpdater(){
@@ -180,8 +195,8 @@ async fundLoan(){
             nextTitle={null}
             web3Disabled={this.web3Disabled(web3Service) || this._state.notReady}
             >
-                <div>
-                    {(this._state.loadingData || !this._state.contractInstance ) &&
+              <div>
+                  {(this._state.loadingData || !this._state.contractInstance ) &&
                     <div className="steps-content bottom-margin">
                         <div className="input-block-container center text-center">
                             <Propagatesloader {...{color:'#123abc',loading: true, size:16,msg:'loading Contract data ...'}}/>
@@ -190,34 +205,35 @@ async fundLoan(){
                         <div className="input-block-container value center text-center">
                             <label className="label">Contract :</label>
                             {this._state.contractInstance && this._state.contractInstance.address &&
-                            <a target="_blank" href={EXPLORER+'/address/'+this._state.contractInstance.address}>{this._state.contractInstance.address}</a>
+                              <a target="_blank" href={EXPLORER+'/address/'+this._state.contractInstance.address}>
+                                {this._state.contractInstance.address}
+                              </a>
                             }
                         </div>
                     </div>
-                        }
-                    { !this._state.loadingData && this._state.contractInstance &&
+                  }
+                  {!this._state.loadingData && this._state.contractInstance &&
                     <div>
                         <div className="input-block-container center text-center">
                             <button className="button button_btn" onClick={this.updateInterest}>UPDATE INTEREST</button>
-
                             <button className="button button_btn" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
-                            { this._state.contractInstance && this._state.contractInstance.borrower &&
-                            <button className="button button_fill" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >ReFund</button>
+                            { this._state.contractInstance && this.isBorrower() &&
+                              <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
+                                ReFund
+                              </button>
                             }
-                            { this._state.contractInstance && this._state.contractInstance.lender &&
-                            <button className="button button_fill" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >Fund</button>
+                            { this._state.contractInstance && this.isLender() &&
+                              <button className="button button_fill button_mullayer" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >
+                                Fund
+                              </button>
                             }
                         </div>
-
                     </div>
-
-                    }
-
-
+                  }
                 </div>
             </StepLayout>
         )
