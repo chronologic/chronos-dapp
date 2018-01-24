@@ -615,11 +615,11 @@ export default class Web3Service {
     async isLoanRefunded(contract) {
         let {web3} = this;
         const block = await web3.eth.getBlock("latest");
+        const debtToken = await web3.eth.contract(debtTokenABI).at(contract);
+        const loanActivation = await debtToken.loanActivation.call();
+        const isLoanFunded = await debtToken.isLoanFunded.call()
 
-        if (this.getContractData(contract).loanActivation < block.timestamp && !this.getContractData(contract).isLoanRefunded()) {
-            return true;
-        }
-        return false;
+        return loanActivation > 0 && block.timestamp > loanActivation && !isLoanFunded;
     }
 }
 

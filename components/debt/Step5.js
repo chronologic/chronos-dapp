@@ -140,6 +140,13 @@ async fundLoan(){
         return mined;
     }
 
+    async isLoanRefunded (){
+        const {web3Service} = this.props;
+        const isRefunded = await web3Service.isLoanRefunded(this._state.contractInstance);
+        this.setState({refunded: isRefunded});
+        return isRefunded;
+    }
+
     async checkConfirmations (transaction){
         const {web3Service} = this.props;
         const confirmations = await web3Service.fetchConfirmations(transaction);
@@ -198,10 +205,12 @@ async fundLoan(){
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
-                            { this._state.contractInstance && !this._state.lender &&
+                            { this._state.contractInstance && this._state.contractInstance.borrower &&
+                            <button className="button button_fill" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >ReFund</button>
+                            }
+                            { this._state.contractInstance && this._state.contractInstance.lender &&
                             <button className="button button_fill" onClick={this.fundLoan} disabled={this._state.contractInstance.isLoanFunded} >Fund</button>
                             }
-
                         </div>
 
                     </div>
