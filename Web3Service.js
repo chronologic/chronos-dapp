@@ -213,9 +213,8 @@ export default class Web3Service {
 
     async fundLoan(contract) {
         const {web3} = this;
-
         const childContract = web3.eth.contract(debtTokenABI).at(contract);
-        const loanAmount = await childContract.loanAmount.call();
+        const loanAmount = await childContract.getLoanValue.call(true);
         const txn = await Bb.fromCallback(callback => childContract.fundLoan(callback,{from:accounts[0],value: loanAmount}));
         return txn;
     }
@@ -243,7 +242,7 @@ export default class Web3Service {
     async refundLoan(contract) {
         const {web3} = this;
         const childContract = web3.eth.contract(debtTokenABI).at(contract);
-        const loanAmount = await childContract.loanAmount.call();
+        const loanAmount = await childContract.getLoanValue.call(true);
         const txn = await Bb.fromCallback(callback => childContract.refundLoan(callback,{from: accounts[0],value:loanAmount}));
         return txn;
     }
@@ -606,8 +605,7 @@ export default class Web3Service {
                     exchangeRate: (await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf(),
                     interestCycle: (await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf(),
                     interestRate: (await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf(),
-                    initialLoanAmount: this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), reverse).toFilter(8),
-
+                    initialLoanAmount: this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), reverse).toFixed(8),
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
                     isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf(),

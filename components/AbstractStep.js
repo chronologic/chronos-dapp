@@ -111,7 +111,8 @@ export default class AbstractStep extends React.Component {
       errorMessage,
       name,
       title,
-      description
+      description,
+      defaultField
     } = propertyData;
     return (
       <InputField
@@ -123,6 +124,7 @@ export default class AbstractStep extends React.Component {
         info = {description}
         onBlur={() => this.validate(name)}
         onChange={e => this.change(name, e)}
+        defaultField={defaultField}
         {...otherProps}
       />
     );
