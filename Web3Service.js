@@ -211,11 +211,17 @@ export default class Web3Service {
         return txn;
     }
 
-    async fundLoan(contract) {
+    async fundLoan(contract,loanAmount) {
         const {web3} = this;
         const childContract = web3.eth.contract(debtTokenABI).at(contract);
-        const loanAmount = await childContract.getLoanValue.call(true);
-        const txn = await Bb.fromCallback(callback => childContract.fundLoan(callback,{from:accounts[0],value: loanAmount}));
+        const txn = await Bb.fromCallback(callback => childContract.fundLoan({value: loanAmount},callback));
+        return txn;
+    }
+
+    async refundLoan(contract,loanAmount) {
+        const {web3} = this;
+        const childContract = web3.eth.contract(debtTokenABI).at(contract);
+        const txn = await Bb.fromCallback(callback => childContract.refundLoan({value:loanAmount},callback));
         return txn;
     }
 
@@ -237,14 +243,6 @@ export default class Web3Service {
             callback
         ));
         return allocateTeam;
-    }
-
-    async refundLoan(contract) {
-        const {web3} = this;
-        const childContract = web3.eth.contract(debtTokenABI).at(contract);
-        const loanAmount = await childContract.getLoanValue.call(true);
-        const txn = await Bb.fromCallback(callback => childContract.refundLoan(callback,{from: accounts[0],value:loanAmount}));
-        return txn;
     }
 
     async allocateNormalTimeMints(data) {
@@ -290,6 +288,14 @@ export default class Web3Service {
         return Number(value).toFixed(8)
       else
         return value;
+    }
+
+    async fetchLoanValue(contract,initial) {
+        const {web3} = this;
+        initial = typeof initial === 'undefined'?false:initial;
+        const childContract = web3.eth.contract(debtTokenABI).at(contract);
+        const loanAmount = await Bb.fromCallback(callback => childContract.getLoanValue.call(initial,callback));
+        return loanAmount;
     }
 
     async fetchGasPrice() {
@@ -632,12 +638,11 @@ export default class Web3Service {
 
     async isLoanRefunded(contract) {
         let {web3} = this;
-        const block = await web3.eth.getBlock("latest");
+        const block = await Bb.fromCallback(callback => web3.eth.getBlock("latest",callback) );
         const debtToken = await web3.eth.contract(debtTokenABI).at(contract);
-        const loanActivation = await debtToken.loanActivation.call();
-        const isLoanFunded = await debtToken.isLoanFunded.call()
-
-        return loanActivation > 0 && block.timestamp > loanActivation && !isLoanFunded;
+        const loanActivation = (await Bb.fromCallback(callback =>  debtToken.loanActivation.call(callback) )).valueOf();
+        const isLoanFunded = (await Bb.fromCallback(callback =>  debtToken.isLoanFunded.call(callback) )).valueOf();
+        return Number(loanActivation) > 0 && Number(block.timestamp) > loanActivation && !isLoanFunded;
     }
 }
 

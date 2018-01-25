@@ -76,7 +76,7 @@ export default class Step5 extends AbstractStep {
       await this.loadInfo();
     }
 
-    fetchUpdates = (delay) =>{
+    async fetchUpdates(delay){
         if(!this._ismounted)
           return;
 
@@ -86,6 +86,7 @@ export default class Step5 extends AbstractStep {
           console.log('updating...')
           const newContract = this._state.contractInstance.address;
           this.fetchContractData(newContract);
+          await this.isLoanRefunded();
         }
 
         this.setState(Object.assign(that._state,{updateFetcher: setTimeout( ()=>{
@@ -109,6 +110,7 @@ export default class Step5 extends AbstractStep {
       if(transactionHash){
           await this.fetchDeploymentData(transactionHash);
       }
+      await this.isLoanRefunded();
       ReactTooltip.rebuild();
       this.fetchUpdates(true);
     }
@@ -138,15 +140,44 @@ export default class Step5 extends AbstractStep {
       return isLender;
     }
 
-    async fundLoan(){
+    async fundLoan(event){
+      const {target} = event;
       const {web3Service} =  this.props;
-      const funded = await web3Service.fundLoan(this._state.contractInstance.address);
-      this.setState( {funded:funded});
+      const amt = await web3Service.fetchLoanValue(this._state.contractInstance.address,true);
+      const prompt = await confirmProcess('Fund Loan',`Funding loan worth ${web3Service.finePrint(web3Service.convertEtherToWei(amt,true))} ETH`);
+      if(!prompt)
+        return;
+      target.disabled = true;
+      try{
+        const funded = await web3Service.fundLoan(this._state.contractInstance.address,amt);
+        showInfo('Loan Funded', ` ${funded}`);
+        this.setState( Object.assign(this._state,{funded:true}) );
+      }
+      catch(e){
+        target.disabled = true;
+        showError('Loan Funding Failed');
+        console.error(e);
+      }
     }
-    async refundLoan(){
-        const {web3Service} =  this.props;
-        const refunded = await web3Service.refundLoan(this._state.contractInstance.address);
-        this.setState( {refunded:refunded});
+
+    async refundLoan(event){
+      const {target} = event;
+      const {web3Service} =  this.props;
+      const amt = await web3Service.fetchLoanValue(this._state.contractInstance.address,false);
+      const prompt = await confirmProcess('Refund Loan',`Refunding loan and accrued interest worth ${web3Service.finePrint(web3Service.convertEtherToWei(amt,true))} ETH`);
+      if(!prompt)
+        return;
+      target.disabled = true;
+      try{
+        const refunded = await web3Service.refundLoan(this._state.contractInstance.address,amt);
+        showInfo('Loan Refunded', ` ${refunded}`);
+        this.setState( Object.assign(this._state,{refunded:true}) );
+      }
+      catch(e){
+        target.disabled = true;
+        showError('Loan Refunding Failed');
+        console.error(e);
+      }
     }
 
     async fetchContractData (contractAddress){
@@ -163,9 +194,8 @@ export default class Step5 extends AbstractStep {
 
     async isLoanRefunded (){
         const {web3Service} = this.props;
-        const isRefunded = await web3Service.isLoanRefunded(this._state.contractInstance);
-        this.setState({refunded: isRefunded});
-        return isRefunded;
+        const isRefunded = await web3Service.isLoanRefunded(this._state.contractInstance.address);
+        this.setState( Object.assign(this._state,{refunded:isRefunded}) );
     }
 
     async checkConfirmations (transaction){
