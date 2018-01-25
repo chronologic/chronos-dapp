@@ -46,6 +46,10 @@ import {Propagatesloader} from "../../lib/loader";
 export default class Step5 extends AbstractStep {
     constructor(props) {
         super('DEBT_WATCH', 'debt', props);
+        this.fundLoan = this.fundLoan.bind(this);
+        this.refundLoan = this.refundLoan.bind(this);
+        this.updateInterest = this.updateInterest.bind(this);
+        this.scheduleUpdate = this.scheduleUpdate.bind(this);
     }
 
     @observable
@@ -126,6 +130,11 @@ export default class Step5 extends AbstractStep {
       const {web3Service} =  this.props;
       const updated = await web3Service.updateInterest(this._state.contractInstance.address);
       this.setState( {update: updated} );
+    }
+
+    async scheduleUpdate(){
+      await showInfo('Coming Soon !!!','Stay tuned to the blog to know when this is available');
+      return;
     }
 
     isBorrower(){
@@ -248,14 +257,14 @@ export default class Step5 extends AbstractStep {
                     <div>
                         <div className="input-block-container center text-center">
                             <button className="button button_btn button_mullayer space_right greyed min-centered-button" onClick={this.updateInterest} disabled={!this._state.contractInstance.isLoanFunded}>UPDATE INTEREST</button>&nbsp;&nbsp;
-                            <button className="button button_btn button_mullayer space_left greyed min-centered-button" disabled={true}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button className="button button_btn button_mullayer space_left greyed min-centered-button" onClick={this.scheduleUpdate} disabled={!this._state.contractInstance.isLoanFunded}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
                             <div className='contract_clear bottom-margin'></div>
                             <div className='buttons'>
                               { this._state.contractInstance && this.isBorrower() &&
-                                <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this.isLoanRefunded} >
+                                <button className="button button_fill button_mullayer" onClick={this.refundLoan} disabled={!this._state.contractInstance.isLoanFunded || this._state.isLoanRefunded} >
                                   ReFund
                                 </button>
                               }
