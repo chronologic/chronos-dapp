@@ -28,19 +28,20 @@ export default class AbstractStep extends React.Component {
     ), {});
   }
 
-  async componentDidMount () {
-    const{web3Service} = await this.props;
+  async componentDidMount() {
+    const {web3Service} = await this.props;
     await web3Service.awaitInitialized();
     this.validatePrevState();
   }
 
-  web3Disabled (web3Service){
-    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
-  }
 
   getValidations() {
     throw new Error('Implement me');
   }
+
+  web3Disabled(web3Service) {
+    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
+    }
 
   validatePrevState() {
     const prevProps = [];

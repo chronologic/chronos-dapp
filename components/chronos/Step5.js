@@ -155,7 +155,7 @@ export default class Step5 extends AbstractStep {
     }
     catch(e){
       console.error(e);
-      showError("Transaction Failed !!!");
+      showError('Transaction Failed !!!');
       target.disabled = false;
     }
   }
