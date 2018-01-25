@@ -19,6 +19,8 @@ const ContractData = data => {
     let Data = [],
         index = 0;
     for(let d in data){
+        if(typeof DEBT_CONTRACT_LABELS[d] === 'undefined')
+          continue;
         if(addressFields.indexOf(d) > -1)
             Data.push(<div className={'col col-3'} key={d}>
                 <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>

@@ -19,7 +19,8 @@ const ContractData = data => {
   let Data = [],
   index = 0;
   for(let d in data){
-    if(skip.indexOf(d) > -1)continue;
+    if(skip.indexOf(d) > -1 || typeof DEBT_CONTRACT_LABELS[d] === 'undefined')
+      continue;
     if(d=='address')
       Data.push(<div className={'col col-3'} key={d}>
         <label className="label">{CONTRACT_LABELS[d]+' : '}</label>
@@ -251,7 +252,7 @@ export default class Step5 extends AbstractStep {
         return;
 
       const that = this;
-      
+
       if(!delay){
         console.log('updating...')
         const newContract = this._state.contractInstance.address;
