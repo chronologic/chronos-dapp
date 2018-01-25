@@ -126,17 +126,6 @@ export default class Step5 extends AbstractStep {
       this.setState( Object.assign(this._state,{deploymentData:data}) );
     }
 
-    async updateInterest(){
-      const {web3Service} =  this.props;
-      const updated = await web3Service.updateInterest(this._state.contractInstance.address);
-      this.setState( {update: updated} );
-    }
-
-    async scheduleUpdate(){
-      await showInfo('Coming Soon !!!','Stay tuned to the blog to know when this is available');
-      return;
-    }
-
     isBorrower(){
       const {web3Service:{web3}} =  this.props;
       const isBorrower =  (web3.eth.defaultAccount.toLowerCase() == this._state.contractInstance.borrower.toLowerCase());
@@ -187,6 +176,18 @@ export default class Step5 extends AbstractStep {
         showError('Loan Refunding Failed');
         console.error(e);
       }
+    }
+
+    async updateInterest(){
+      const {web3Service} =  this.props;
+      const updated = await web3Service.updateInterest(this._state.contractInstance.address);
+      showInfo('Intrest coins Minted!!!', ` ${updated}`);
+      this.setState( {update: updated} );
+    }
+
+    async scheduleUpdate(){
+      await showInfo('Coming Soon !!!','Stay tuned to the blog to know when this is available');
+      return;
     }
 
     async fetchContractData (contractAddress){
