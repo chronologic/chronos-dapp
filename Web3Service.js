@@ -607,7 +607,7 @@ export default class Web3Service {
                     address: contract,
                     tokenName: (await Bb.fromCallback(callback => debtContract.name.call(callback))).valueOf(),
                     symbol: (await Bb.fromCallback(callback => debtContract.symbol.call(callback))).valueOf(),
-                    totalSupply: this.finePrint((await Bb.fromCallback(callback => debtContract.totalSupply.call(callback))).valueOf()),
+                    totalSupply: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.totalSupply.call(callback))).valueOf(),true)),
                     dayLength: this.finePrint((await Bb.fromCallback(callback => debtContract.dayLength.call(callback))).valueOf()),
                     loanTerm: this.finePrint((await Bb.fromCallback(callback => debtContract.loanTerm.call(callback))).valueOf()),
                     exchangeRate: this.finePrint((await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf()),
