@@ -613,6 +613,7 @@ export default class Web3Service {
                     exchangeRate: this.finePrint((await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf()),
                     interestCycle: this.finePrint((await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf()),
                     interestRate: this.finePrint((await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf()),
+                    isInterestStatusUpdated: this.finePrint((await Bb.fromCallback(callback => debtContract.isInterestStatusUpdated.call(callback))).valueOf()),
                     initialLoanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), true)),
                     loanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(), true)),
                     loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
