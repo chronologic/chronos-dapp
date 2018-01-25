@@ -140,7 +140,7 @@ export default class Step5 extends AbstractStep {
     }
 
     async fundLoan(){
-      const {web3Service} =  this.props;
+        const {web3Service} = this.props;
       const funded = await web3Service.fundLoan(this._state.contractInstance.address);
       this.setState( {funded:funded});
     }
