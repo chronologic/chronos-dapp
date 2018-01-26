@@ -6,14 +6,20 @@ module.exports = {
   assetPrefix: env['process.env.BACKEND_URL'],
   exportPathMap: function() {
     return {
-      './': { page: '/' },
+      '/': { page: '/' },
       '/index': { page: '/index' },
-      '/chronos-home': { page: '/chronos-home' },
-      '/step-1': { page: '/step-1' },
-      '/step-2': { page: '/step-2' },
-      '/step-3': { page: '/step-3'},
-      '/step-4': { page: '/step-4'},
-      '/step-5': { page: '/step-5'}
+      '/chronos': { page: '/chronos/index' },
+      '/chronos/step-1': { page: '/chronos/step-1' },
+      '/chronos/step-2': { page: '/chronos/step-2' },
+      '/chronos/step-3': { page: '/chronos/step-3'},
+      '/chronos/step-4': { page: '/chronos/step-4'},
+      '/chronos/step-5': { page: '/chronos/step-5'},
+      '/debt': { page: '/debt/index' },
+      '/debt/step-1': { page: '/debt/step-1' },
+      '/debt/step-2': { page: '/debt/step-2' },
+      '/debt/step-3': { page: '/debt/step-3' },
+      '/debt/step-4': { page: '/debt/step-4' },
+      '/debt/step-5': { page: '/debt/step-5'}
     }
   },
   webpack: (config, { dev }) => {

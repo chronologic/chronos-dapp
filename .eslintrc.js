@@ -23,7 +23,7 @@ module.exports = {
     'jsx-a11y/label-has-for': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.js'] }],
     'react/prefer-stateless-function': 0,
-    'react/prop-types': ['error', { ignore: [], customValidators: [], skipUndeclared: true }],
+    'react/prop-types': ['error', { ignore: [], customValidators: [], skipUndeclared: true }], "prefer-destructuring": ["error", {"object": false, "array": false}],
   },
   parser: 'babel-eslint',
   parserOptions: {

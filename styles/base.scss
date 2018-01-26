@@ -118,6 +118,16 @@ body {
     padding: 20px 20px 0;
     margin-bottom: 52px;
     font-size: 0.8rem;
+    & .buttons{
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+    }
   }
   &_clear{
     clear:both;

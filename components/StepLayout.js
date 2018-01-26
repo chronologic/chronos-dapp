@@ -10,15 +10,15 @@ import StepNavigation from './StepNavigation';
 export default class StepLayout extends React.Component {
 
   render() {
-    const { props: { activeStepKey, onNext, nextTitle, web3Disabled } } = this;
+    const { props: { activeStepKey, onNext, nextTitle, web3Disabled, activeApp }} = this;
     const {
       title,
       description,
       className,
-    } = NAVIGATION_STEPS[activeStepKey];
+    } = NAVIGATION_STEPS[activeApp][activeStepKey];
     return (
       <section className="steps">
-        <StepNavigation activeStep={activeStepKey} />
+        <StepNavigation activeStep={activeStepKey} activeApp={activeApp} />
         <div className={`steps-content container ${className}`}>
           <div className="about-step">
             <p className="title">{title}</p>
@@ -34,7 +34,7 @@ export default class StepLayout extends React.Component {
             {nextTitle || 'Continue'}
           </button>}
           <span className="guide-span">
-            * If you need any additional help deploying your own version of the DAY token, refer to <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">this guide</a>.
+            * If you need any additional help, refer to <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">this guide</a>.
           </span>
         </div>
         <ReactTooltip />
