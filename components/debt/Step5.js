@@ -183,7 +183,7 @@ export default class Step5 extends AbstractStep {
     async updateInterest(){
         const {web3Service} =  this.props;
         const updated = await web3Service.updateInterest(this._state.contractInstance.address);
-        showInfo('Intrest coins Minted!!!', ` ${updated}`);
+        showInfo('Interest tokens Minted!!!', ` ${updated}`);
         this.setState( {update: updated} );
     }
 
