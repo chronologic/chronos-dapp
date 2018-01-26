@@ -19,7 +19,7 @@ const ContractData = data => {
   let Data = [],
   index = 0;
   for(let d in data){
-    if(skip.indexOf(d) > -1 || typeof DEBT_CONTRACT_LABELS[d] === 'undefined')
+    if(skip.indexOf(d) > -1 || typeof CONTRACT_LABELS[d] === 'undefined')
       continue;
     if(d=='address')
       Data.push(<div className={'col col-3'} key={d}>
