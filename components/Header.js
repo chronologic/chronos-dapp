@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default class Header extends Component {
   render() {
     let { activeApp } = this.props;
-    activeApp = (typeof activeApp === 'undefined' || !activeApp)?'':activeApp+'/';
+    activeApp = (typeof activeApp === 'undefined' || !activeApp)?'':activeApp;
     return (
       <header className="header">
         <div className="container">

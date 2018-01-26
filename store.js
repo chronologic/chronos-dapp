@@ -27,6 +27,16 @@ class Store {
   @observable teamMember = false;
   @observable isTest = false;
 
+  @observable interestRate =  '';
+  @observable interestCycle = '';
+  @observable loanTerm = '';
+  @observable dayLength = '';
+
+  @observable debtOwner =  '';
+  @observable initialAmount =  '';
+  @observable exchangeRate =  '';
+  @observable decimalUnits =  '';
+
   constructor(source) {
     Object.assign(this, source);
   }

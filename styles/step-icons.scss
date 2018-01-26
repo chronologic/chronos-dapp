@@ -2,6 +2,11 @@
   @include image-2x($backend-url+'/static/step-icons@2x.png', 120px, 600px);
   background-image: url($backend-url+'/static/step-icons.png');
 
+  &-debt{
+    @include image-2x($backend-url+'/static/debt-step-icons.png', 120px, 600px);
+    background-image: url($backend-url+'/static/debt-step-icons.png');
+  }
+
   &_token-setup {
     width: 120px;
     height: 120px;
@@ -27,6 +32,36 @@
   }
 
   &_watch {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -480px;
+  }
+
+  &_debt-token-setup {
+    width: 120px;
+    height: 120px;
+    background-position: 0 0;
+  }
+
+  &_interest-rate-setup {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -120px;
+  }
+
+  &_lender-setup {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -240px;
+  }
+
+  &_debt-publish {
+    width: 120px;
+    height: 120px;
+    background-position: 0 -360px;
+  }
+
+  &_debt-watch {
     width: 120px;
     height: 120px;
     background-position: 0 -480px;

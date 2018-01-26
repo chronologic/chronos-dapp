@@ -7,10 +7,14 @@ import { NAVIGATION_STEPS, PROPERTIES as ALL_PROPERTIES } from '../lib/consts';
 import InputField from './InputField';
 
 export default class AbstractStep extends React.Component {
-  constructor(activeStepKey, props) {
+  constructor(activeStepKey, activeApp, props) {
     super(props);
+
+
     this.activeStepKey = activeStepKey;
-    this.activeStep = NAVIGATION_STEPS[this.activeStepKey];
+    this.activeApp = activeApp;
+
+    this.activeStep = NAVIGATION_STEPS[this.activeApp][this.activeStepKey];
     if (!this.activeStep) {
       throw new Error('No steps with key', this.activeStepKey);
     }
@@ -24,22 +28,26 @@ export default class AbstractStep extends React.Component {
     ), {});
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const {web3Service} = await this.props;
+    await web3Service.awaitInitialized();
     this.validatePrevState();
   }
 
-  web3Disabled (web3Service){
-    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
-  }
 
   getValidations() {
     throw new Error('Implement me');
   }
 
+  web3Disabled(web3Service) {
+    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
+    }
+
   validatePrevState() {
     const prevProps = [];
+    const STEPS = NAVIGATION_STEPS[this.activeApp];
     for (let idx = this.activeStep.idx - 1; idx > 0; idx -= 1) {
-      const prevStep = Object.values(NAVIGATION_STEPS).find(step => step.idx === idx);
+      const prevStep = Object.values(STEPS).find(step => step.idx === idx);
       if (prevStep) {
         prevProps.push(...ALL_PROPERTIES.reduce((result, value) => {
           if (prevStep.propertyKeys.includes(value.name)) {
@@ -50,8 +58,9 @@ export default class AbstractStep extends React.Component {
       }
     }
     const { props: { store = {} } } = this;
-    if (prevProps.some(({ name, validator }) => !store[name] || !validator(store[name]))) {
-      Router.push('/');
+    const { props: { web3Service:{web3} } } = this;
+    if (prevProps.some(({ name, validator }) => !store[name] || !validator(store[name],web3))) {
+      Router.push('/'+this.activeApp);
     }
   }
 
@@ -103,7 +112,8 @@ export default class AbstractStep extends React.Component {
       errorMessage,
       name,
       title,
-      description
+      description,
+      defaultField
     } = propertyData;
     return (
       <InputField
@@ -115,6 +125,7 @@ export default class AbstractStep extends React.Component {
         info = {description}
         onBlur={() => this.validate(name)}
         onChange={e => this.change(name, e)}
+        defaultField={defaultField}
         {...otherProps}
       />
     );

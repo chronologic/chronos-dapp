@@ -13,6 +13,11 @@
   text-transform: uppercase;
   font-weight: bold;
 
+  &.greyed:disabled{
+    border-color: #bbb;
+    color: #999;
+  }
+
   &-container {
     text-align: center;
   }
@@ -21,6 +26,13 @@
     background-color: $accent-color;
     color: #fff;
   }
+  &_btn {
+    background: #ffffff;
+    border: solid $accent-color 2px;
+    text-decoration: none;
+  }
+
+
   &_secondary_fill{
     background-color: $secondary-accent-color;
     color: #fff;
@@ -34,11 +46,25 @@
     margin-top: 25px !important;
     margin-bottom:32px !important;
   }
+
+  &.centered-button {
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+
+  &.min-centered-button {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
 }
 
 .button:disabled{
      @include background-opacity($accent-color, 0.7);
      cursor: auto;
+}
+.button_btn:disabled{
+  @include background-opacity(#ffffff, 0.7);
+  cursor: auto;
 }
 .button_secondary_fill:disabled{
      @include background-opacity($secondary-accent-color, 0.7);
@@ -105,5 +131,14 @@
 
   &:focus {
     border-color: $accent-color;
+  }
+}
+
+.space{
+  &_left{
+    margin-left:56px;
+  }
+  &_right{
+    margin-right:56px;
   }
 }
