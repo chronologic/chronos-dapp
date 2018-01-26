@@ -614,7 +614,7 @@ export default class Web3Service {
                     interestCycle: this.finePrint((await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf()),
                     interestRate: (this.finePrint((await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf())).toString()+"%",
                     isInterestStatusUpdated: this.finePrint((await Bb.fromCallback(callback => debtContract.isInterestStatusUpdated.call(callback))).valueOf()),
-                    initialLoanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), true)),
+                    initialLoanAmount: (this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), true))).toString() +" ETH",
                     loanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(), true)).toString() +" ETH",
                     loanActivation: (new Date(1000*(await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf()).toISOString()),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
