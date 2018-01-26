@@ -259,8 +259,8 @@ export default class Step5 extends AbstractStep {
                     {!this._state.loadingData && this._state.contractInstance &&
                     <div>
                         <div className="input-block-container center text-center">
-                            <button className="button button_btn button_mullayer space_right greyed min-centered-button" onClick={this.updateInterest} disabled={!this._state.contractInstance.isLoanFunded || this._state.contractInstance.isInterestStatusUpdated}>UPDATE INTEREST</button>&nbsp;&nbsp;
-                            <button className="button button_btn button_mullayer space_left greyed min-centered-button" onClick={this.scheduleUpdate} disabled={!this._state.contractInstance.isLoanFunded}>SCHEDULE UPDATE</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button className="button button_btn button_mullayer space_right greyed min-centered-button" onClick={this.updateInterest} disabled={!this._state.contractInstance.isLoanFunded || this._state.contractInstance.isInterestStatusUpdated}>UPDATE INTEREST</button>
+                            <button className="button button_btn button_mullayer space_left greyed min-centered-button" onClick={this.scheduleUpdate} disabled={!this._state.contractInstance.isLoanFunded}>SCHEDULE UPDATE</button>
                         </div>
                         <div className="steps-content contract_info">
                             <ContractData {...{data:this._state.contractInstance,explorer:EXPLORER}} />
