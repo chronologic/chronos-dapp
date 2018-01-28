@@ -19,10 +19,10 @@ let TOKEN_CONTRACT_ADDRESS,
     MIN_FEE;
 
 export default class Web3Service {
-    initialized = false;
     web3 = null;
     tokenInstance = null;
     deployerInstance = null;
+    @observable initialized = false;
     @observable connectedToMetaMask = null;
     @observable accounts = null;
     @observable netId = null;
@@ -224,7 +224,6 @@ export default class Web3Service {
         const txn = await Bb.fromCallback(callback => childContract.refundLoan({value:loanAmount},callback));
         return txn;
     }
-
 
     async releaseTokens(contract) {
         const releasetime = Math.round((new Date()).getTime() / 1000);
