@@ -15,12 +15,28 @@ import {Boxloader} from '../../lib/loader';
 const ContractData = data => {
     const explorer = data.explorer;
     const addressFields = ['address','borrower','lender'];
+    const ethFields = ['initialLoanAmount','loanAmount'];
+    const tokenFields = ['totalSupply'];
+    const tokenRateFields = ['exchangeRate'];
+    const percentageFields = ['interestRate'];
+    const timeFields = ['loanActivation'];
     data = data.data;
     let Data = [],
         index = 0;
     for(let d in data){
         if(typeof DEBT_CONTRACT_LABELS[d] === 'undefined')
             continue;
+        let suffix = '';
+
+        if(ethFields.indexOf(d) > -1)
+          suffix = 'ETH';
+        else if(tokenFields.indexOf(d) > -1)
+          suffix = data['symbol'];
+        else if(tokenRateFields.indexOf(d) > -1)
+          suffix = data['symbol']+'/ETH';
+        else if(percentageFields.indexOf(d) > -1)
+          suffix = '%';
+
         if(addressFields.indexOf(d) > -1)
             Data.push(<div className={'col col-3'} key={d}>
                 <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
@@ -30,10 +46,17 @@ const ContractData = data => {
                     </a>
                 </p>
             </div>);
+        else if(timeFields.indexOf(d) > -1)
+            Data.push(<div className={'col col-3'} key={d}>
+                <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
+                <p className='' >
+                        { new Date(1000*data[d]).toISOString() }
+                </p>
+            </div>);
         else
             Data.push(<div className={'col col-3'} key={d}>
                 <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
-                <p className='' >{ String(data[d]) }</p>
+                <p className='' >{ String(data[d])+' '+suffix }</p>
             </div>);
         index++;
     }
