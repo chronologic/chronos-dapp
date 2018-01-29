@@ -50,6 +50,13 @@ export default class AbstractStep extends React.Component {
     return canDeploy;
   }
 
+  async checkDeployable(){
+    const{web3Service} = this.props;
+    const canDeploy = await this.canDeploy();
+    const web3Disabled = await this.web3Disabled(web3Service);
+    this.setState(Object.assign(this._state,{deployReady:canDeploy&&!web3Disabled}));
+  }
+
   validatePrevState() {
     const prevProps = [];
     const STEPS = NAVIGATION_STEPS[this.activeApp];

@@ -43,8 +43,14 @@ export default class Step4 extends AbstractStep {
   _state = {
     notReady: true,
     deploying: false,
+    deployReady:false,
     contractInstance:{},
     deploymentData:{}
+  }
+
+  async componentDidMount(){
+    super.componentDidMount();
+    await this.checkDeployable();
   }
 
   goNext = () => {
@@ -158,7 +164,7 @@ export default class Step4 extends AbstractStep {
         activeStepKey={this.activeStepKey}
         onNext={this.runDeploy}
         nextTitle="Deploy"
-        web3Disabled = { true || (!this.canDeploy() || this.web3Disabled(web3Service)) }
+        web3Disabled = { !this._state.deployReady }
       >
         {!this._state.deploying &&
           <div>
@@ -172,14 +178,11 @@ export default class Step4 extends AbstractStep {
             </div>
             <div className="input-block-container">
               {this.renderProperty(this.properties.loanTerm, { side: 'left' })}
-              {this.renderProperty(this.properties.dayLength, { side: 'right' })}
+              {this.renderProperty(this.properties.exchangeRate, { side: 'right' })}
             </div>
             <div className="input-block-container">
               {this.renderProperty(this.properties.debtOwner, { side: 'left' })}
               {this.renderProperty(this.properties.initialAmount, { side: 'right' })}
-            </div>
-            <div className="input-block-container">
-              {this.renderProperty(this.properties.exchangeRate, { side: 'left' })}
             </div>
           </div>
         }
