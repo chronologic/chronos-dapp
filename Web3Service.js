@@ -19,10 +19,10 @@ let TOKEN_CONTRACT_ADDRESS,
     MIN_FEE;
 
 export default class Web3Service {
-    initialized = false;
     web3 = null;
     tokenInstance = null;
     deployerInstance = null;
+    @observable initialized = false;
     @observable connectedToMetaMask = null;
     @observable accounts = null;
     @observable netId = null;
@@ -224,7 +224,6 @@ export default class Web3Service {
         const txn = await Bb.fromCallback(callback => childContract.refundLoan({value:loanAmount},callback));
         return txn;
     }
-
 
     async releaseTokens(contract) {
         const releasetime = Math.round((new Date()).getTime() / 1000);
@@ -607,20 +606,20 @@ export default class Web3Service {
                     address: contract,
                     tokenName: (await Bb.fromCallback(callback => debtContract.name.call(callback))).valueOf(),
                     symbol: (await Bb.fromCallback(callback => debtContract.symbol.call(callback))).valueOf(),
-                    totalSupply: (this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.totalSupply.call(callback))).valueOf(),true))).toString()+" "+(this.finePrint((await Bb.fromCallback(callback => debtContract.symbol.call(callback))).valueOf())).toString(),
+                    totalSupply: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.totalSupply.call(callback))).valueOf(),true)),
                     dayLength: this.finePrint((await Bb.fromCallback(callback => debtContract.dayLength.call(callback))).valueOf()),
                     loanTerm: this.finePrint((await Bb.fromCallback(callback => debtContract.loanTerm.call(callback))).valueOf()),
-                    exchangeRate: (this.finePrint((await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf())).toString()+" "+(this.finePrint((await Bb.fromCallback(callback => debtContract.symbol.call(callback))).valueOf())).toString()+"/ETH",
+                    exchangeRate: this.finePrint((await Bb.fromCallback(callback => debtContract.exchangeRate.call(callback))).valueOf()),
                     interestCycle: this.finePrint((await Bb.fromCallback(callback => debtContract.interestCycleLength.call(callback))).valueOf()),
-                    interestRate: (this.finePrint((await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf())).toString()+"%",
+                    interestRate: this.finePrint((await Bb.fromCallback(callback => debtContract.interestRatePerCycle.call(callback))).valueOf()),
                     isInterestStatusUpdated: this.finePrint((await Bb.fromCallback(callback => debtContract.isInterestStatusUpdated.call(callback))).valueOf()),
-                    initialLoanAmount: (this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), true))).toString() +" ETH",
-                    loanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(), true)).toString() +" ETH",
-                    loanActivation: (new Date(1000*(await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf()).toISOString()),
+                    initialLoanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(true,callback))).valueOf(), true)),
+                    loanAmount: this.finePrint(this.convertEtherToWei((await Bb.fromCallback(callback => debtContract.getLoanValue.call(false,callback))).valueOf(), true)),
+                    loanActivation: (await Bb.fromCallback(callback => debtContract.loanActivation.call(callback))).valueOf(),
                     isLoanFunded: (await Bb.fromCallback(callback => debtContract.isLoanFunded.call(callback))).valueOf(),
                     isTermOver: (await Bb.fromCallback(callback => debtContract.isTermOver.call(callback))).valueOf(),
                     lender: (await Bb.fromCallback(callback => debtContract.lender.call(callback))).valueOf(),
-                    borrower: (await Bb.fromCallback(callback => debtContract.borrower.call(callback))).valueOf()
+                    borrower: (await Bb.fromCallback(callback => debtContract.borrower.call(callback))).valueOf(),
                 }
                 break;
 

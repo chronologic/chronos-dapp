@@ -158,7 +158,7 @@ export default class Step4 extends AbstractStep {
         activeStepKey={this.activeStepKey}
         onNext={this.runDeploy}
         nextTitle="Deploy"
-        web3Disabled = {this.web3Disabled(web3Service) }
+        web3Disabled = { true || (!this.canDeploy() || this.web3Disabled(web3Service)) }
       >
         {!this._state.deploying &&
           <div>

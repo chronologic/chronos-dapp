@@ -41,7 +41,14 @@ export default class AbstractStep extends React.Component {
 
   web3Disabled(web3Service) {
     return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0)
-    }
+  }
+
+  async canDeploy() {
+    const {web3Service} = this.props;
+    await web3Service.awaitInitialized();
+    const canDeploy = await web3Service.checkBalance() && await web3Service.checkAllowance();
+    return canDeploy;
+  }
 
   validatePrevState() {
     const prevProps = [];

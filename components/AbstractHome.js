@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
+import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../lib/consts';
 import { confirmFeeWithdraw, showInsufficientBalalnce, showError, showInfo, showContractAddressRequest } from '../lib/alerts';
@@ -31,10 +32,11 @@ export default class AbstractHome extends Component {
     const { web3Service } = this.props;
     if(!await web3Service.checkBalance()){
       const preview = await showInsufficientBalalnce( (this.state.MIN_FEE/(1e+18)) );
+      this.setState({needsFaucet:true});
+      this.hasFaucet();
       if(preview == 'preview')
         return this.start();
       else
-        this.setState({needsFaucet:true});
         return target.disabled = false;
     }
     else{
@@ -50,6 +52,8 @@ export default class AbstractHome extends Component {
   };
 
   async onWatch(destination){
+    if(this.web3Disabled() )
+      return;
     const val = await showContractAddressRequest();
     if(!val)
       return;
@@ -136,7 +140,16 @@ export default class AbstractHome extends Component {
 
   web3Disabled (){
     const {web3Service} = this.props;
-    return !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0) || !this.state.MIN_FEE
+    return !web3Service.initialized || !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0) || !this.state.MIN_FEE ;
+  }
+
+  async hasFaucet(){
+    const {web3Service} = this.props;
+    await web3Service.awaitInitialized();
+    const {web3} = web3Service;
+    const hasFaucet = web3.isAddress( web3Config[this.activeApp][web3Service.network].FAUCET_ADDRESS );
+    this.setState({hasFaucet:hasFaucet});
+    return hasFaucet;
   }
 
   start() {
