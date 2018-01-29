@@ -45,7 +45,7 @@ export default class Home extends AbstractHome {
               <div className="buttons">
                 <button className="button button_fill button_mullayer" onClick={this.onStart} disabled={this.web3Disabled()} >Start</button>
                 <br/>
-                {this.state.needsFaucet &&
+                {this.state.needsFaucet && this.state.hasFaucet &&
                   <button className="button button_fill button_mullayer" onClick={this.getTestnetTokens} >Get Testnet DAY Tokens</button>
                 }
               </div>
