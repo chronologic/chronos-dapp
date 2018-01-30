@@ -53,6 +53,30 @@ export default class Step4 extends AbstractStep {
     await this.checkDeployable();
   }
 
+  findHCF(x, y) {
+     // If the input numbers are less than 1 return an error message.
+     if (x < 1 || y < 1) {
+        console.log("Please enter values greater than zero.");
+        return;
+     }
+     // If the input numbers are not integers return an error message.
+     if (x != Math.round(x) || y != Math.round(y)) {
+        console.log("Please enter whole numbers.");
+        return;
+     }
+     // Now apply Euclid's algorithm to the two numbers.
+     while (Math.max(x, y) % Math.min(x, y) != 0) {
+        if (x > y) {
+           x %= y;
+        }
+        else {
+           y %= x;
+        }
+     }
+     // When the while loop finishes the minimum of x and y is the HCF.
+     return Math.min(x, y);
+  }
+
   goNext = () => {
     const { props: { store } } = this;
     let that = this;
@@ -91,7 +115,14 @@ export default class Step4 extends AbstractStep {
     this.setState( Object.assign(this._state,{deploying:true}) );
     let newContract;
     try{
-      const transaction = await web3Service.deploy( this.fetchData() );
+      let contData = this.fetchData();
+      const dayLength = this.findHCF(contData.interestCycle,contData.loanTerm);
+
+      contData.interestCycle = contData.interestCycle/dayLength;
+      contData.loanTerm = contData.loanTerm/dayLength;
+      contData.dayLength = dayLength;
+
+      const transaction = await web3Service.deploy( contData );
       newContract = await this.contractDeployed(transaction);
       this.setState( Object.assign(this._state,{deploying:false}) );
     }
