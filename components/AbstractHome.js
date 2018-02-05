@@ -14,7 +14,6 @@ export default class AbstractHome extends Component {
     super(props);
 
     this.state = {
-      MIN_FEE:null,
       needsFaucet: false
     }
 
@@ -30,8 +29,9 @@ export default class AbstractHome extends Component {
     var target = eventInst.target
     target.disabled = true;
     const { web3Service } = this.props;
+    const MIN_FEE = web3Config[this.activeApp][web3Service.network].MIN_FEE;
     if(!await web3Service.checkBalance()){
-      const preview = await showInsufficientBalalnce( (this.state.MIN_FEE/(1e+18)) );
+      const preview = await showInsufficientBalalnce( (MIN_FEE/(1e+18)) );
       this.setState({needsFaucet:true});
       this.hasFaucet();
       if(preview == 'preview')
@@ -42,7 +42,7 @@ export default class AbstractHome extends Component {
     else{
       if (
         await web3Service.checkAllowance() ||
-        (await confirmFeeWithdraw(this.state.MIN_FEE) && await this.reserveTokens())
+        (await confirmFeeWithdraw(MIN_FEE) && await this.reserveTokens())
       ) {
         this.start();
       }
@@ -108,17 +108,6 @@ export default class AbstractHome extends Component {
 
 
   componentDidMount(){
-      this.getWeb3Fee();
-  }
-
-  async getWeb3Fee(){
-    const {web3Service} = this.props;
-    const that = this;
-    if( typeof web3Service.network !== 'undefined' && web3Service.network !== null)
-      return this.setState({MIN_FEE: web3Config[this.activeApp][web3Service.network].MIN_FEE });
-    setTimeout(function(){
-      return that.getWeb3Fee();
-    },200)
   }
 
   async getTestnetTokens (){
@@ -140,7 +129,9 @@ export default class AbstractHome extends Component {
 
   web3Disabled (){
     const {web3Service} = this.props;
-    return !web3Service.initialized || !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0) || !this.state.MIN_FEE ;
+    const MIN_FEE = web3Config[this.activeApp][web3Service.network].MIN_FEE;
+    const DEPLOYER_ADDRESS = web3Config[this.activeApp][web3Service.network].DEPLOYER_ADDRESS;
+    return !web3Service.initialized || !web3Service.connectedToMetaMask || !(typeof web3Service.accounts !== 'undefined' && web3Service.accounts.length > 0) || !DEPLOYER_ADDRESS || !MIN_FEE ;
   }
 
   async hasFaucet(){
