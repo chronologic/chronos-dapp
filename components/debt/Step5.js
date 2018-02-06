@@ -20,11 +20,13 @@ const ContractData = data => {
     const tokenRateFields = ['exchangeRate'];
     const percentageFields = ['interestRate'];
     const timeFields = ['loanActivation'];
+    const periodFields = ['interestCycle','loanTerm'];
+    const skipFields = ['dayLength'];
     data = data.data;
     let Data = [],
         index = 0;
     for(let d in data){
-        if(typeof DEBT_CONTRACT_LABELS[d] === 'undefined')
+        if(skipFields.indexOf(d) > -1 || typeof DEBT_CONTRACT_LABELS[d] === 'undefined')
             continue;
         let suffix = '';
 
@@ -51,6 +53,13 @@ const ContractData = data => {
                 <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
                 <p className='' >
                         { new Date(1000*data[d]).toISOString() }
+                </p>
+            </div>);
+        else if(periodFields.indexOf(d) > -1)
+            Data.push(<div className={'col col-3'} key={d}>
+                <label className="label">{DEBT_CONTRACT_LABELS[d]+' : '}</label>
+                <p className='' >
+                        {data[d] * data['dayLength'] }
                 </p>
             </div>);
         else
@@ -104,7 +113,7 @@ export default class Step5 extends AbstractStep {
     async componentDidMount(){
         await this.loadInfo();
     }
-
+    
     async fetchUpdates(delay){
         if(!this._ismounted)
             return;

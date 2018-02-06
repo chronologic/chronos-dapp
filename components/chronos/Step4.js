@@ -45,8 +45,14 @@ export default class Step4 extends AbstractStep {
   _state = {
     notReady: true,
     deploying: false,
+    deployReady:false,
     contractInstance:{},
     deploymentData:{}
+  }
+
+  async componentDidMount(){
+    super.componentDidMount();
+    await this.checkDeployable();
   }
 
   goNext = () => {
@@ -160,7 +166,7 @@ export default class Step4 extends AbstractStep {
         activeStepKey={this.activeStepKey}
         onNext={this.runDeploy}
         nextTitle="Deploy"
-        web3Disabled = { !this.canDeploy() || this.web3Disabled(web3Service)}
+        web3Disabled = { !this._state.deployReady }
       >
         {!this._state.deploying &&
           <div>

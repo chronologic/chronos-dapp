@@ -18,7 +18,6 @@ export default class Step2 extends AbstractStep {
     interestRate: true,
     interestCycle: true,
     loanTerm:true,
-    dayLength:true,
   };
 
   getValidations() {
@@ -41,7 +40,6 @@ export default class Step2 extends AbstractStep {
         </div>
         <div className="input-block-container">
           {this.renderProperty(this.properties.loanTerm, { side: 'left' })}
-          {this.renderProperty(this.properties.dayLength, { side: 'right' })}
         </div>
       </StepLayout>
     );
