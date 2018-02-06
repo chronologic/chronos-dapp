@@ -3,6 +3,7 @@ import Router from 'next/router';
 import { inject, observer } from 'mobx-react';
 import { NAVIGATION_STEPS } from '../../lib/consts';
 
+import web3Config from '../../lib/web3Utils.js';
 import AbstractHome from '../AbstractHome';
 
 let STEPS = '';
@@ -27,6 +28,8 @@ export default class Home extends AbstractHome {
   }
 
   render() {
+    const { web3Service } = this.props;
+    const MIN_FEE = web3Config[this.activeApp][web3Service.network].MIN_FEE;
 
     return (
       <div>
@@ -52,7 +55,7 @@ export default class Home extends AbstractHome {
               <p className="description">
                 *This tool requires <b><a href="https://metamask.io/" target="_blank">MetaMask</a> </b> extension. Besides, the ETH address which will create
                 the smart contract has to have an amount of ETH for the contract deployment and
-                also {this.state.MIN_FEE/(1e+18)} DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.
+                also {MIN_FEE/(1e+18)} DAY for fees. For more information read these <a href="https://blog.chronologic.network/chronos-platform/home" target="_blank">articles</a>.
               </p>
             </div>
           </div>
