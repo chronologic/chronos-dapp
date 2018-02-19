@@ -99,6 +99,8 @@ export default class Web3Service {
                 this.network = 'Ropsten'
             else if (netId == 4)
                 this.network = 'Rinkeby';
+            else if (netId == 42)
+                this.network = 'Kovan';
             else
                 this.network = 'Private'
         });
