@@ -1,0 +1,28 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        },
+        "experimentalDecorators": true
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {"max-len": [1,150,2,{"ignoreComments": true}],
+    "semi": [ "error","always"],
+    "no-extra-semi":"error",
+    "object-curly-spacing":["error","always"],
+    "no-trailing-spaces":"error"
+}
+}

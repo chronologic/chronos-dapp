@@ -60,6 +60,11 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ['eslint-loader','babel-loader']
       }
     );
     return config;
