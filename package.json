@@ -46,6 +46,7 @@
     "react-tooltip": "^3.4.0",
     "reactstrap": "^5.0.0-alpha.4",
     "sass-loader": "^6.0.6",
+    "ssri": "^5.2.4",
     "sweetalert": "^2.0.8",
     "web3": "^0.20.2"
   },
