@@ -10,7 +10,7 @@ import StepLayout from '../StepLayout';
 @observer
 export default class Step1 extends AbstractStep {
   constructor(props) {
-    super('TOKEN_SETUP', 'chronos', props);
+    super('TOKEN_SETUP', 'daytoken', props);
   }
 
   @observable

@@ -11,7 +11,7 @@ import StepLayout from '../StepLayout';
 @observer
 export default class Step3 extends AbstractStep {
   constructor(props) {
-    super('CONTRACT_SETUP', 'chronos', props);
+    super('CONTRACT_SETUP', 'daytoken', props);
   }
 
   getValidations() {

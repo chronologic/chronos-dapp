@@ -42,7 +42,7 @@ export default class Home extends AbstractHome {
               <p className="description">
                 This DAPP (Decentralized App) allows anyone to deploy their own Debt Smart Contract easily,<br></br>
                  to serve as mediator between the two parties of a loan agreement..<br />
-               The steps ahead will help you set up the features of your very own Debt Dmart Contract.
+               The steps ahead will help you set up the features of your very own Debt Smart Contract.
                 <br></br><br></br>
                 * Click <a href='#' onClick={this.onWatch}>here</a>, if you already have a deployed contract.
               </p>

@@ -29,7 +29,7 @@ export default class Web3Service {
     @observable network = 'Rinkeby';
     deployerAbis = {
         debt: debtTokenDeployerABI,
-        chronos: deployerABI
+        daytoken: deployerABI
     }
     childTopics = () => {
         const {web3} = this;
@@ -41,7 +41,7 @@ export default class Web3Service {
                 eventContractPosition: 1,
                 eventContractTitle: '_debtTokenAddress',
             },
-            chronos: {
+            daytoken: {
                 topic: web3.sha3("LogChildCreated(address,address)"),
                 params: ['address', 'address'],
                 eventFxn: 'LogChildCreated',
@@ -72,8 +72,10 @@ export default class Web3Service {
     async connect(which) {
         let {web3} = this;
         if (!web3) {
-            if (typeof window.web3 !== 'undefined') {
-                web3 = new Web3(window.web3.currentProvider);
+            if (typeof window.ethereum !== 'undefined') {
+                this.accounts = await window.ethereum.enable();
+                const provider = window['ethereum'] || window.web3.currentProvider;
+                web3 = new Web3(provider);
                 this.connectedToMetaMask = true;
             } else {
                 web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
@@ -85,7 +87,6 @@ export default class Web3Service {
         if (!this.connectedToMetaMask || !this.web3.isConnected())//Do not proceed if not connected to metamask
             return;
 
-        this.accounts = web3.eth.accounts;
         web3.eth.defaultAccount = this.accounts[0];
         console.log('accounts', this.accounts);
         const netId =
@@ -138,7 +139,7 @@ export default class Web3Service {
         let hash;
 
         switch (this.activeApp) {
-            case 'chronos':
+            case 'daytoken':
                 hash = await Bb.fromCallback((callback) => {
                     deployerInstance.createCustomDayToken(
                         contractData.tokenName,
@@ -571,7 +572,7 @@ export default class Web3Service {
         console.log('Contract: ', contract)
         let data;
         switch (this.activeApp) {
-            case 'chronos':
+            case 'daytoken':
                 const childContract = web3.eth.contract(dayTokenABI).at(contract);
                 data = {
                     address: contract,

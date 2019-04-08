@@ -16,19 +16,19 @@ export default class Selector extends Component {
     this.choosePath = this.choosePath.bind(this);
 
     this.state = {
-      selected:'chronos',
+      selected:'daytoken',
     }
 
 
 
     this.routeLabels = {//Order determines how they are displayed
       debt:'Debt-Smart-Contract',
-      chronos:'Custom-Day-Token'
+      daytoken:'Custom-Day-Token'
     }
 
     this.cssGroup = {
       debt:'debt-contract',
-      chronos:'chronos-dapp'
+      daytoken:'chronos-dapp'
     }
   }
 
@@ -48,7 +48,7 @@ export default class Selector extends Component {
   }
 
   choosePath = path => event =>{
-    const available = ['chronos','debt'];
+    const available = ['daytoken','debt'];
     if(available.indexOf(path) < 0)
       return showInfo('Coming Soon !!!');
 

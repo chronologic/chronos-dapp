@@ -77,7 +77,7 @@ const AllocationData = data => {
 @observer
 export default class Step5 extends AbstractStep {
   constructor(props) {
-    super('WATCH', 'chronos', props);
+    super('WATCH', 'daytoken', props);
     this.allocateMints = this.allocateMints.bind(this);
     this.doRelease = this.doRelease.bind(this);
   }
