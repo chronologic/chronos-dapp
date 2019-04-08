@@ -17,7 +17,7 @@ import {Boxloader} from '../../lib/loader';
 @observer
 export default class Step4 extends AbstractStep {
   constructor(props) {
-    super('PUBLISH', 'chronos', props);
+    super('PUBLISH', 'daytoken', props);
     this.runDeploy = this.runDeploy.bind(this);
   }
 

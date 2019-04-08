@@ -1,17 +1,17 @@
 import React from 'react';
 
 import Layout from '../../components/Layout';
-import Step2 from '../../components/chronos/Step2';
+import Step1 from '../../components/daytoken/Step1';
 
-export default class Step2Page extends React.Component {
+export default class Step1Page extends React.Component {
   static async getInitialProps(props) {
     return Layout.getInitialProps(props);
   }
 
   render() {
     return (
-      <Layout {...Object.assign({},this.props,{activeApp:'chronos'})}>
-        <Step2 />
+      <Layout {...Object.assign({},this.props,{activeApp:'daytoken'})}>
+        <Step1 />
       </Layout>
     );
   }

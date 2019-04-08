@@ -12,19 +12,19 @@ let STEPS = '';
 @observer
 export default class Home extends AbstractHome {
   constructor(props){
-    super('chronos',props);
+    super('daytoken',props);
     STEPS = NAVIGATION_STEPS[this.activeApp];
   }
 
   onWatch = async() => {
-    super.onWatch('/chronos/step-5');
+    super.onWatch('/daytoken/step-5');
   }
 
   componentDidMount(){
     super.componentDidMount();
   }
   start() {
-    Router.push('/chronos/step-1');
+    Router.push('/daytoken/step-1');
   }
 
   render() {
@@ -36,7 +36,7 @@ export default class Home extends AbstractHome {
         <section className="home">
           <div className="crowdsale">
             <div className="container">
-              <h1 className="title">Welcome to Chronos DAPP </h1>
+              <h1 className="title">Welcome to DAY token DApp </h1>
               <p className="description">
                 This DAPP (Decentralized App) allows anyone to create his/hers own version of
                 minting token easily.<br />

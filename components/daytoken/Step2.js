@@ -10,7 +10,7 @@ import StepLayout from '../StepLayout';
 @observer
 export default class Step2 extends AbstractStep {
   constructor(props) {
-    super('TIMEMINT_SETUP', 'chronos', props);
+    super('TIMEMINT_SETUP', 'daytoken', props);
   }
 
   getValidations() {
